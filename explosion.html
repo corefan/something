@@ -5,6 +5,16 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 
+function _load2(){
+	var body = document.body;
+	body.addEventListener("mousedown", _mousedown, false);
+	body.div_style = document.getElementById("view").style;
+	body.img_style = document.getElementById("ex_img").style;
+	body.style.width = ( window.clientWidth ? window.clientWidth : window.innerWidth ) + "px";
+	body.style.height = ( window.clientHeight ? window.clientHeight : window.innerHeight) + "px";
+}
+
+
 function _load(){
 	var body = document.body;
 	body.addEventListener("mousedown", _mousedown, false);
