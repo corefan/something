@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .black {
+            background-color: #f00;
+            position: absolute;
+            width: 50px;
+            height: 40px;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 35px;
+        }
+
+        .gray {
+			background-color: #f00;
+            position: absolute;
+            width: 50px;
+            height: 40px;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 35px;
+        }
+
+        .pink {
+            background-color: #f00;
+            position: absolute;
+            width: 50px;
+            height: 40px;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 35px;
+        }
+    </style>
+</head>
+<div style="position: absolute; width:320px; height:400px; background-color: #ccc;">
+    <div style="position: absolute; top:50px; width:320px; height:350px;">
+        <input id="result" style="position: absolute; left:15px; top:20px; width: 285px; height: 50px; background-color: #f00; font-size: 30px; text-align:right; "/>
+
+        <div class="black" style="left: 15px; top: 100px;">OFF</div>
+        <div class="gray" style="left: 75px; top: 100px;">7</div>
+        <div class="gray" style="left: 135px; top: 100px;">8</div>
+        <div class="gray" style="left: 195px; top: 100px;">9</div>
+        <div class="black" style="left: 255px; top: 100px;">÷</div>
+
+        <div class="black" style="left: 15px; top: 155px;">√</div>
+        <div class="gray" style="left: 75px; top: 155px;">4</div>
+        <div class="gray" style="left: 135px; top: 155px;">5</div>
+        <div class="gray" style="left: 195px; top: 155px;">6</div>
+        <div class="black" style="left: 255px; top: 155px;">x</div>
+
+        <div class="pink" style="left: 15px; top: 210px;">C</div>
+        <div class="gray" style="left: 75px; top: 210px;">1</div>
+        <div class="gray" style="left: 135px; top: 210px;">2</div>
+        <div class="gray" style="left: 195px; top: 210px;">3</div>
+        <div class="black" style="left: 255px; top: 210px;">-</div>
+
+        <div class="pink" style="left: 15px; top: 265px;">AC</div>
+        <div class="gray" style="left: 75px; top: 265px;">0</div>
+        <div class="gray" style="left: 135px; top: 265px;">.</div>
+        <div class="black" style="left: 195px; top: 265px;">=</div>
+        <div class="black" style="left: 255px; top: 265px;">+</div>
+    </div>
+</div>
+</body>
+<script>
+    (function(win) {
+        var pre_num, post_num, operator, isFirst = true, isON = false;
+
+        function output_result(rs){
+            result.value = rs;
+            return rs;
+        }
+
+        function number_input(txt) {
+            if(isON) {
+                if (operator) {
+                    if (isFirst) {
+                        post_num = txt;
+                        isFirst = false;
+                    } else {
+                        post_num += txt;
+                    }
+                    output_result(post_num);
+                } else {
+                    if (isFirst) {
+                        pre_num = txt;
+                        isFirst = false;
+                    } else {
+                        pre_num += txt;
+                    }
+                    output_result(pre_num);
+                }
+            }
+        }
+
+        function point_input() {
+            if(isON && (pre_num + "").indexOf(".") < 0 ) {
+                isFirst = false;
+                number_input(".");
+            }
+        }
+
+        function operator_input(txt){
+            if(isON) {
+                if (pre_num != null) {
+                    if (operator && post_num) {
+                        switch (operator) {
+                            case "+":
+                                pre_num = output_result(+pre_num + +post_num);
+                                post_num = null;
+                                break;
+                            case "-":
+                                pre_num = output_result(+pre_num - +post_num);
+                                post_num = null;
+                                break;
+                            case "x":
+                                pre_num = output_result(+pre_num * +post_num);
+                                break;
+                            case "÷":
+                                pre_num = output_result(+pre_num / +post_num);
+                                break;
+                            case "%":
+                                // 이건... 모르겠다
+                                break;
+                        }
+                    }
+                    operator = txt;
+                    isFirst = true;
+                    if (txt == "√") {
+                        pre_num = output_result(Math.sqrt(+pre_num));
+                        operator = null;
+                    }
+                }
+            }
+        }
+
+        function calculate(){
+            if(isON) {
+                if (pre_num != null && operator) {
+                    switch (operator) {
+                        case "+":
+                        case "-":
+                            operator_input(null);
+                            break;
+                        default :
+                            operator_input(operator);
+                            break;
+                    }
+                }
+            }
+        }
+
+        function other_input(txt){
+            switch (txt){
+                case "C":
+                case "AC":
+                    output_result(0);
+                    isON = true;
+                    break;
+                case "OFF":
+                    output_result("");
+                    isON = false;
+                    break;
+            }
+        }
+
+        function button_down(evt) {
+            var txt = evt.srcElement.innerText;
+            switch (txt) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                    number_input(txt);
+                    break;
+                case ".":
+                    point_input();
+                    break;
+                case "+":
+                case "-":
+                case "x":
+                case "÷":
+                case "%":
+                case "√":
+                    operator_input(txt);
+                    break;
+                case "=":
+                    calculate();
+                    break;
+                default :
+                    other_input(txt);
+                    break;
+            }
+        }
+
+        win.addEventListener("mousedown", button_down, false);
+    })(this);
+</script>
+</html>
