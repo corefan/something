@@ -29,7 +29,7 @@
     <script src="./src/World.js"></script>
 </head>
 <body>
-<canvas id="gl_canvas" width="512" height="512" ></canvas><br>
+<canvas id="gl_canvas" width="256" height="256" ></canvas><br>
 <canvas id="myCanvas" width="570" height="100" style="display:none;"></canvas>
 
 </body>
@@ -251,7 +251,7 @@
 
 
         var world = new World("gl_canvas");
-        world.setAutoSize(true);
+//        world.setAutoSize(true);
         var scene = new Scene().setId("scene1");
         var camera = new Camera();
         camera.z = 1.92;
