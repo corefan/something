@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>calc</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+//            overflow: hidden;
+            height: 100%;
+        }
+    </style>
+    <script src="./src/MoGL.js"></script>
+    <script src="./src/BlendMode.js"></script>
+    <script src="./src/Filter.js"></script>
+    <script src="./src/Vertex.js"></script>
+    <script src="./src/VertexShaderFunctions.js"></script>
+    <script src="./src/Matrix.js"></script>
+    <script src="./src/Geometry.js"></script>
+    <script src="./src/Material.js"></script>
+    <script src="./src/Texture.js"></script>
+    <script src="./src/Mesh.js"></script>
+    <script src="./src/Group.js"></script>
+    <script src="./src/Camera.js"></script>
+    <script src="./src/Scene.js"></script>
+    <script src="./src/World.js"></script>
+</head>
+<body>
+<canvas id="gl_canvas" width="512" height="512" ></canvas><br>
+<canvas id="myCanvas" width="570" height="100" style="display:none;"></canvas>
+
+</body>
+<script>
+    (function(win){
+//        var op = {
+//            '+':function(a,b){return a+b;},
+//            '-':function(a,b){return a-b;},
+//            '*':function(a,b){return a*b;},
+//            '/':function(a,b){return a/b;},
+//            '%':function(a,b){return a%b;}
+//        };
+
+        var btList = {
+            'off': { posX : -0.75, posY: 0.153, fnName: "off" },
+            '7': { posX : -0.375, posY: 0.153, value: "7" },
+            '8': { posX : 0, posY: 0.153, value: "8" },
+            '9': { posX : 0.378, posY: 0.153, value: "9" },
+            'divi': { posX : 0.756, posY: 0.153, value: "/", fn: function(a,b){return a/b;} },
+
+            'root': { posX : -0.75, posY: -0.121, value: "√", fnName: "on" },
+            '4': { posX : -0.375, posY: -0.121, value: "4" },
+            '5': { posX : 0, posY: -0.121, value: "5" },
+            '6': { posX : 0.378, posY: -0.121, value: "6" },
+            'multi': { posX : 0.756, posY: -0.121, value: "*", fn: function(a,b){return a*b;} },
+
+            'c': { posX : -0.75, posY: -0.395, fnName: "on" },
+            '1': { posX : -0.375, posY: -0.395 , value: "1"},
+            '2': { posX : 0, posY: -0.395, value: "2" },
+            '3': { posX : 0.378, posY: -0.395, value: "3" },
+            'minus': { posX : 0.756, posY: -0.395, value: "-",  fn: function(a,b){return a-b;} },
+
+            'ac': { posX : -0.75, posY: -0.67, fnName: "on" },
+            '0': { posX : -0.375, posY: -0.67, value: "0" },
+            'dot': { posX : 0, posY: -0.67, value: "." },
+            'equal': { posX : 0.378, posY: -0.67, value: "=", fnName: "result"},
+            'plus': { posX : 0.756, posY: -0.67, value: "+",  fn: function(a,b){return a+b;} }
+        };
+
+        var model = {
+                display:'',
+                firstValue:0,
+                op:null,
+                secondValue:false,
+                target:'firstValue',
+                result:null,
+                addNumber:function(v){
+                    if( v === '.' && this.display.indexOf('.') > -1 ) return;
+                    this.result = null;
+                    this.display += v;
+                    this[this.target] = parseFloat(this.display);
+                },
+                operation:function(v){
+                    if( this.op === null ){
+                        this.op = v;
+                        this.target = 'secondValue';
+                        this.display = '';
+                        this.secondValue = false;
+                        if( this.result !== null ){
+                            this.firstValue = this.result;
+                            this.result = null;
+                        }
+                    }
+                },
+                calc:function(){
+                    if( this.result === null && this.op !== null && this.secondValue !== false ){
+                        this.result = btList[this.op].fn( this.firstValue, this.secondValue );
+                        this.target = 'firstValue';
+                        this.display = '';
+                        this.op = null;
+                    }
+                }
+            };
+            var ctrl = {
+                numpad:function(v){
+//                    return function(e){
+                        model.addNumber(v);
+                        view.out( model[model.target] );
+//                    };
+                },
+                op:function(v){
+//                    return function(e){
+                        model.operation(v);
+                        view.outOP(btList[v].value);
+//                    };
+                },
+                result:function(v){
+                    model.calc();
+                    view.out(model.result);
+                    view.outOP('');
+                },
+                off:function(v){
+                },
+                on:function(v){
+                }
+            };
+
+            var w = myCanvas.width, h = myCanvas.height;
+            var ctx = myCanvas.getContext('2d');
+            ctx.fillStyle = "#7a7";
+            ctx.fillRect(0, 0, w, h);
+            ctx.fill();
+            ctx.font = "40px aria";
+
+            var n = 0;
+            if(n == 1){
+                n = 0;
+            }
+
+            var view = {
+                out:function(v){
+                    // document.getElementById('display').value = v;
+                    var len = (v+"").length;
+                    ctx.fillStyle = "#7a7";
+                    ctx.fillRect(0, h/2, w, h/2);
+                    ctx.fill();
+                    ctx.fillStyle = "#333";
+                    ctx.fillText(v, w - len*22, 90);
+
+    //                //텍스쳐만 바꿔볼까? - 에러는 안나지만 적용 안됨
+    //                scene.getMaterial("rs").removeTexture("rs");
+    //                scene.removeTexture("rs");
+    //                scene.addTexture("rs", myCanvas.toDataURL());
+    //                scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs");
+
+
+    //                //메쉬를 지우고 해야 하나?
+    //                scene.removeChild("rs");
+    //                scene.removeMaterial("rs");
+    //                scene.removeTexture("rs");
+    //                scene.addTexture("rs1", myCanvas.toDataURL());
+    //                scene.addMaterial("rs", new Material());
+    //                scene.getMaterial("rs").addTexture(Texture.diffuse, "rs1");
+    //                mesh = new Mesh( "rect" , "rs");
+    //                mesh.setScale(540/640, 100/800, 0);
+    //                mesh.setPosition(-0.001, 0.485, 0.1);
+    //                scene.addChild( "rs" , mesh );
+
+    //                scene.addTexture("rs1", myCanvas.toDataURL());
+    //                scene.addMaterial("rs", new Material());
+    //                scene.getMaterial("rs").setTexture("rs1");
+    //                mesh = new Mesh( "rect" , "rs");
+    //                mesh.setScale(540/640, 100/800, 0);
+    //                mesh.setPosition(-0.001, 0.485, 0.1);
+    //                scene.addChild( "rs" , mesh );
+
+                     // 결국 텍스트 id가 같으면 바로는 안되는 걸로.. gl에 캐시같은게 남나
+//                    if(scene.getTexture("rs0")){
+//                        scene.getMaterial("rs").removeTexture("rs0");
+//                        scene.removeTexture("rs0");
+//                        scene.addTexture("rs1", myCanvas.toDataURL());
+//                        scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs1");
+//                    }else{
+//                        scene.getMaterial("rs").removeTexture("rs1");
+//                        scene.removeTexture("rs1");
+//                        scene.addTexture("rs0", myCanvas.toDataURL());
+//                        scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs0");
+//                    }
+
+                    scene.getMaterial("rs").removeTexture("rs" + n);
+                    scene.removeTexture("rs" + n++);
+                    scene.addTexture("rs" + n, myCanvas.toDataURL());
+                    scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs" + n);
+                },
+                outOP:function(v){
+                    // document.getElementById('op').value = v;
+                    var len = v.length;
+                    ctx.fillStyle = "#7a7";
+                    ctx.fillRect(0, 0, w, h/2);
+                    ctx.fill();
+                    ctx.fillStyle = "#333";
+                    ctx.fillText(v, w - len*22, 40);
+                    scene.getMaterial("rs").removeTexture("rs" + n);
+                    scene.removeTexture("rs" + n++);
+                    scene.addTexture("rs" + n, myCanvas.toDataURL());
+                    scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs" + n);
+                }
+            };
+
+
+            // view.init();
+            // var k = '.0123456789'.split(''), i=k.length;
+            // while(i--) view.add( 'pad'+k[i], ctrl.numpad(k[i]) );
+            // for( k in op ) view.add( 'pad'+k, ctrl.op(k) );
+            // view.add( 'pad=', ctrl.result );
+
+            var aaa = 0;
+
+            function _mousedown (evt){
+                // console.log(evt.x, evt.y);
+                // console.log(evt.clientX, evt.clientY);
+                var cv_rect = gl_canvas.getBoundingClientRect();
+
+                var x = evt.clientX/(cv_rect.width/2) - 1;
+                var y = 1 - evt.clientY/(cv_rect.height/2);
+
+
+    //            console.log(cv_rect.left, cv_rect.top);
+//                console.log(x, y);
+
+                for(var k in btList){
+                    var bt = btList[k];
+                    if(bt.posX - 0.15 < x && bt.posX + 0.15 > x && bt.posY - 0.1 < y && bt.posY + 0.1 > y ){
+                        if(bt.fn){
+                            ctrl.op(k);
+                        }else if(bt.fnName){
+                            ctrl[bt.fnName]();
+                        }else{
+                            ctrl.numpad(k);
+                        }
+                        break;
+                    }
+                }
+
+    //            world.render();
+            }
+        
+            gl_canvas.addEventListener("mousedown", _mousedown, false);
+
+
+        var world = new World("gl_canvas");
+//        world.setAutoSize(false);
+        var scene = new Scene().setId("scene1");
+        var camera = new Camera();
+        camera.z = 1.92;
+
+       var count = 22;
+//       var count = 3;
+        
+		function img_loaded(evt){
+			var target = evt.srcElement || evt.target;
+			scene.addTexture(target.name, target.src);
+//            console.log(target.name);
+			if(!--count){
+                start();
+            }
+		}
+
+		var img = new Image();
+		img.onload = img_loaded;
+		img.name = "calc";
+		img.src = "./calc/" + img.name + ".jpg"; 
+
+		img = new Image();
+		img.onload = img_loaded;
+		img.name = "rs0";
+		img.src = "./calc/" + img.name + ".jpg"; 
+
+		 for(var k in btList){
+		 	img = new Image();
+		 	img.onload = img_loaded;
+		 	img.name = k;
+		 	img.src = "./calc/" + img.name + ".jpg";
+		 }
+
+        world.addScene(scene);
+        scene.addChild("camera1", camera);
+        
+        function start(){            
+            scene.addGeometry("rect", new Geometry([-1.0, 1.0, 0.0, 0.0, 0.0,   1.0, 1.0, 0.0, 1.0, 0.0,    -1.0, -1.0, 0.0, 0.0, 1.0,     1.0, -1.0, 0.0, 1.0, 1.0],
+                [0, 1, 2, 1, 2, 3], [Vertex.x, Vertex.y, Vertex.z, Vertex.u, Vertex.v]));
+
+            scene.addMaterial( "calc" , new Material().addTexture(Texture.diffuse, "calc") );
+            scene.addMaterial( "rs" , new Material().addTexture(Texture.diffuse, "rs0") );
+
+
+            var mesh = new Mesh( "rect" , "calc");
+            scene.addChild( "calc" , mesh );
+            
+            mesh = new Mesh( "rect" , "rs");
+            mesh.setScale(540/640, 100/800, 0);
+            mesh.setPosition(-0.001, 0.485, 0.1);
+            scene.addChild( "rs" , mesh );
+
+            for(var k in btList){
+                scene.addMaterial( k , new Material().addTexture(Texture.diffuse, k) );
+                mesh = new Mesh( "rect" , k);
+                console.log(k);
+                mesh.setPosition(btList[k].posX, btList[k].posY, 0.001);
+                mesh.setScale(100/640, 80/800, 0);
+                scene.addChild( k , mesh );
+            }
+
+//            world.render();
+            world.start();
+        }
+    })(this);
+
+</script>
+</html>
