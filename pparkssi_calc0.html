@@ -103,10 +103,10 @@
                     }
                 },
                 setPower: function(v){
-                    isPowserOn = !!v;
+                    this.isPowserOn = !!v;
                 },
                 getPower: function(v){
-                    return isPowserOn;
+                    return this.isPowserOn;
                 },
                 init: function () {
                     this.display = '';
@@ -120,7 +120,7 @@
             var ctrl = {
                 numpad:function(v){
                     if(model.getPower()){
-                        model.addNumber(v);
+                        model.addNumber(btList[v].value);
                         view.out( model[model.target] );                        
                     }
                 },
