@@ -9,7 +9,6 @@
         body {
             margin: 0;
             padding: 0;
-//            overflow: hidden;
             height: 100%;
         }
     </style>
@@ -50,7 +49,7 @@
             '9': { posX : 0.378, posY: 0.153, value: "9" },
             'divi': { posX : 0.756, posY: 0.153, value: "/", fn: function(a,b){return a/b;} },
 
-            'root': { posX : -0.75, posY: -0.121, value: "√", fnName: "on" },
+            'root': { posX : -0.75, posY: -0.121, value: "√", fnName: "root" },
             '4': { posX : -0.375, posY: -0.121, value: "4" },
             '5': { posX : 0, posY: -0.121, value: "5" },
             '6': { posX : 0.378, posY: -0.121, value: "6" },
@@ -70,6 +69,7 @@
         };
 
         var model = {
+                isPowserOn: false,
                 display:'',
                 firstValue:0,
                 op:null,
@@ -101,42 +101,63 @@
                         this.display = '';
                         this.op = null;
                     }
+                },
+                setPower: function(v){
+                    isPowserOn = !!v;
+                },
+                getPower: function(v){
+                    return isPowserOn;
+                },
+                init: function () {
+                    this.display = '';
+                    this.firstValue = 0;
+                    this.op = null;
+                    this.secondValue = false;
+                    this.target = 'firstValue';
+                    this.result = null;
                 }
             };
             var ctrl = {
                 numpad:function(v){
-//                    return function(e){
+                    if(model.getPower()){
                         model.addNumber(v);
-                        view.out( model[model.target] );
-//                    };
+                        view.out( model[model.target] );                        
+                    }
                 },
                 op:function(v){
-//                    return function(e){
+                    if(model.getPower()){
                         model.operation(v);
                         view.outOP(btList[v].value);
-//                    };
+                    }
                 },
                 result:function(v){
-                    model.calc();
-                    view.out(model.result);
-                    view.outOP('');
+                    if(model.getPower()){
+                        model.calc();
+                        view.out(model.result);
+                        view.outOP('');
+                    }
+                },
+                root:function(v){
+                    if(model.getPower()){
+                        // TO DO
+                        model.init();
+                        view.out('// TO DO');
+                    }
                 },
                 off:function(v){
+                    model.setPower(false);
+                    view.onoff(false);
                 },
                 on:function(v){
+                    model.setPower(true);
+                    model.init();
+                    view.onoff(true);
                 }
             };
 
-            var w = myCanvas.width, h = myCanvas.height;
-            var ctx = myCanvas.getContext('2d');
-            ctx.fillStyle = "#7a7";
-            ctx.fillRect(0, 0, w, h);
-            ctx.fill();
-            ctx.font = "40px aria";
-
-            var n = 0;
-            if(n == 1){
-                n = 0;
+            var rsNum = 0; //tempResultTextureNumber
+            if(rsNum == 1){
+                rsNum = 0;
             }
 
             var view = {
@@ -148,8 +169,30 @@
                     ctx.fill();
                     ctx.fillStyle = "#333";
                     ctx.fillText(v, w - len*22, 90);
-
-    //                //텍스쳐만 바꿔볼까? - 에러는 안나지만 적용 안됨
+                    this.drawResult();
+                },
+                outOP:function(v){
+                    // document.getElementById('op').value = v;
+                    var len = v.length;
+                    ctx.fillStyle = "#7a7";
+                    ctx.fillRect(0, 0, w, h/2);
+                    ctx.fill();
+                    ctx.fillStyle = "#333";
+                    ctx.fillText(v, w - len*22, 40);
+                    this.drawResult();
+                },
+                onoff:function(isOn) {
+                    if(isOn){
+                        ctx.fillStyle = "#7a7";
+                    }else{
+                        ctx.fillStyle = "#787";
+                    }
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.fill();
+                    this.drawResult();
+                },
+                drawResult: function(){
+                        //                //텍스쳐만 바꿔볼까? - 에러는 안나지만 적용 안됨
     //                scene.getMaterial("rs").removeTexture("rs");
     //                scene.removeTexture("rs");
     //                scene.addTexture("rs", myCanvas.toDataURL());
@@ -189,23 +232,10 @@
 //                        scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs0");
 //                    }
 
-                    scene.getMaterial("rs").removeTexture("rs" + n);
-                    scene.removeTexture("rs" + n++);
-                    scene.addTexture("rs" + n, myCanvas.toDataURL());
-                    scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs" + n);
-                },
-                outOP:function(v){
-                    // document.getElementById('op').value = v;
-                    var len = v.length;
-                    ctx.fillStyle = "#7a7";
-                    ctx.fillRect(0, 0, w, h/2);
-                    ctx.fill();
-                    ctx.fillStyle = "#333";
-                    ctx.fillText(v, w - len*22, 40);
-                    scene.getMaterial("rs").removeTexture("rs" + n);
-                    scene.removeTexture("rs" + n++);
-                    scene.addTexture("rs" + n, myCanvas.toDataURL());
-                    scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs" + n);
+                    scene.getMaterial("rs").removeTexture("rs" + rsNum);
+                    scene.removeTexture("rs" + rsNum++);
+                    scene.addTexture("rs" + rsNum, myCanvas.toDataURL());
+                    scene.getMaterial("rs").addTexture(Texture.diffuse ,"rs" + rsNum);
                 }
             };
 
@@ -216,17 +246,10 @@
             // for( k in op ) view.add( 'pad'+k, ctrl.op(k) );
             // view.add( 'pad=', ctrl.result );
 
-            var aaa = 0;
-
             function _mousedown (evt){
-                // console.log(evt.x, evt.y);
-                // console.log(evt.clientX, evt.clientY);
                 var cv_rect = gl_canvas.getBoundingClientRect();
-
                 var x = evt.clientX/(cv_rect.width/2) - 1;
                 var y = 1 - evt.clientY/(cv_rect.height/2);
-
-
     //            console.log(cv_rect.left, cv_rect.top);
 //                console.log(x, y);
 
@@ -243,12 +266,18 @@
                         break;
                     }
                 }
-
     //            world.render();
             }
         
             gl_canvas.addEventListener("mousedown", _mousedown, false);
 
+
+        var w = myCanvas.width, h = myCanvas.height;
+        var ctx = myCanvas.getContext('2d');
+        ctx.fillStyle = "#787";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fill();
+        ctx.font = "40px aria";
 
         var world = new World("gl_canvas");
 //        world.setAutoSize(true);
@@ -276,7 +305,8 @@
 		img = new Image();
 		img.onload = img_loaded;
 		img.name = "rs0";
-		img.src = "./calc/" + img.name + ".jpg"; 
+		// img.src = "./calc/" + img.name + ".jpg"; 
+        img.src = myCanvas.toDataURL();
 
 		 for(var k in btList){
 		 	img = new Image();
