@@ -1,45 +1,35 @@
-#MoGL
+#Material
+* parent : [MoGL](MoGL.md)
 * [constructor](#constructor)
 
 
 **field**
 
-* [uuid](#uuid) - 현재 인스턴스의 고유한 uuid
-* [isUpdated](#isUpdated) - 현재 인스턴스의 업데이트여부를 관리하...
-* [id](#id) - 사용자가 임의로 정의한 id
-* [className](#className) - 인스턴스의 클래스이름
-* [classId](#classId) - 인스턴스의 클래스uuid
+* [wireFrameColor](#wireFrameColor) - Field of Material
+* [wireFrame](#wireFrame) - Field of Material
+* [shading](#shading) - Field of Material
+* [lambert](#lambert) - Field of Material
+* [isLoaded](#isLoaded) - Field of Material
+* [diffuse](#diffuse) - Field of Material
+* [count](#count) - Field of Material
+* [color](#color) - Field of Material
 
 **method**
 
-* [toString](#toString) - MoGL을 상속하는 모든 인스턴스는...
-* [setProperties](#setProperties) - vo로 넘어온 속성을 일시에 설정함...
-* [setId](#setId) - id는 본래 속성값이나 메서드체이닝목...
-* [removeEventListener](#removeEventListener) - 해당 이벤트에 리스너를 제거함
-* [error](#error) - MoGL 표준 예외처리를 함
-주어진...
-* [dispatch](#dispatch) - 해당 event의 리스너들에게 이벤트...
-* [destroy](#destroy) - 해당 event의 리스너들에게 이벤트...
-* [addEventListener](#addEventListener) - 해당 이벤트에 리스너를 추가함
+* [removeTexture](#removeTexture) - addTexture를 통해 등록된 텍...
+* [addTexture](#addTexture) - [Mesh](Mesh.md)를 통해...
 
 **static**
 
-* [totalCount](#totalCount) - 전체 인스턴스의 수를 반환함
 * [getMD](#getMD) - 해당 클래스를 마크다운 형식으로 문서...
 * [getInstance](#getInstance) - uuid 또는 id를 기반으로 인스턴...
 * [extend](#extend) - 이 클래스를 상속하는 자식클래스를 만...
 * [error](#error) - 정적함수에서 표준화된 예외를 처리함(...
 * [count](#count) - 이 클래스로 부터 만들어져 활성화된...
-* [classes](#classes) - MoGL로 생성된 모든 서브클래스를...
-
-**constant**
-
-* [ease](#ease) - setProperties의 애니메이션...
 
 **event**
 
-* [updated](#updated) - isUpdated 속성이 변경될 때마...
-* [propertyChanged](#propertyChanged) - setProperties 호출시 설정...
+* [changed](#changed) - Event of Material
 
 [top](#)
 
@@ -48,12 +38,13 @@
 
 **description**
 
-MoGL 라이브러리의 모든 클래스는 MoGL을 상속함
-* 보통 직접적으로 MoGL 클래스를 사용하는 경우는 없음
+모든 재질의 부모가 되는 클래스로 Material 자체는 아무런 빛의 속성을 적용받지 않는 재질임.
+* Material의 메서드는 대부분 메서드체이닝을 지원함.
 
 **param**
 
-none
+?color:string - 재질의 기본적인 색상. 생략하면 색상 없음. 다음과 같은 형태가 올 수 있음.
+r, g, b, a : 각각 0~1 사이의 소수를 받으며 각각 대응함.
 
 **exception**
 
@@ -62,48 +53,26 @@ none
 **sample**
 
 ```javascript
-var instance = new MoGL();
+var mat1 = new Material('#f00');
+var mat2 = new Material('#ff0000');
+var mat3 = new Material('#ff00000.8');
+var mat4 = new Material( 0xff/0xff, 0xaf/0xff, 0x45/0xff, 0.5 );
+
+//팩토리함수로도 사용가능
+var mat5 = Material('#ff00000.8');
 ```
 
 [top](#)
 
-<a name="uuid"></a>
-###uuid
+<a name="wireFrameColor"></a>
+###wireFrameColor
 
 _field_
 
 
 **description**
 
-현재 인스턴스의 고유한 uuid
-
-**setting**
-
-*writable*:undefined, *enumerable*:false, *configurable*:false
-
-**defaultValue**
-
-none
-
-**sample**
-
-```javascript
-var scene = new Scene();
-scene.uuid // 'uuid:24'
-```
-
-[top](#)
-
-<a name="isUpdated"></a>
-###isUpdated
-
-_field_
-
-
-**description**
-
-현재 인스턴스의 업데이트여부를 관리하는 플래그
-* 상태가 바뀌면 MoGL.updated 이벤트가 발생함
+Field of Material
 
 **setting**
 
@@ -111,30 +80,25 @@ _field_
 
 **defaultValue**
 
-false
+none
 
 **sample**
 
 ```javascript
-var scene = new Scene();
-scene.addEventListener( 'updated', function(v){
-  console.log(v); //2. 리스너가 발동함 - true
-} );
-console.log( scene.isUpdated ); //false
-scene.isUpdated = true; //1. 값을 바꾸면
+//none
 ```
 
 [top](#)
 
-<a name="id"></a>
-###id
+<a name="wireFrame"></a>
+###wireFrame
 
 _field_
 
 
 **description**
 
-사용자가 임의로 정의한 id
+Field of Material
 
 **setting**
 
@@ -142,31 +106,29 @@ _field_
 
 **defaultValue**
 
-null
+none
 
 **sample**
 
 ```javascript
-var scene = new Scene();
-scene.id = 'test1';
-console.log( scene.id ); //'test1'
+//none
 ```
 
 [top](#)
 
-<a name="className"></a>
-###className
+<a name="shading"></a>
+###shading
 
 _field_
 
 
 **description**
 
-인스턴스의 클래스이름
+Field of Material
 
 **setting**
 
-*writable*:undefined, *enumerable*:false, *configurable*:false
+*writable*:true, *enumerable*:false, *configurable*:false
 
 **defaultValue**
 
@@ -175,25 +137,24 @@ none
 **sample**
 
 ```javascript
-var scene = new Scene();
-scene.className // 'Scene'
+//none
 ```
 
 [top](#)
 
-<a name="classId"></a>
-###classId
+<a name="lambert"></a>
+###lambert
 
 _field_
 
 
 **description**
 
-인스턴스의 클래스uuid
+Field of Material
 
 **setting**
 
-*writable*:undefined, *enumerable*:false, *configurable*:false
+*writable*:true, *enumerable*:false, *configurable*:false
 
 **defaultValue**
 
@@ -202,56 +163,129 @@ none
 **sample**
 
 ```javascript
-var scene = new Scene();
-scene.classId // 'uuid:22'
+//none
 ```
 
 [top](#)
 
-<a name="toString"></a>
-###toString()
+<a name="isLoaded"></a>
+###isLoaded
 
-_method_
+_field_
 
 
 **description**
 
-MoGL을 상속하는 모든 인스턴스는 toString상황에서 'uuid:고유번호' 형태의 문자열을 반환함
+Field of Material
 
-**param**
+**setting**
+
+*writable*:false, *enumerable*:false, *configurable*:false
+
+**defaultValue**
 
 none
 
-**exception**
-
-
-**return**
-
-string - this - 메소드체이닝을 위해 자신을 반환함.uuid에 해당되는 'uuid:고유번호' 형태의 문자열
-
 **sample**
 
 ```javascript
-var mat = new Matrix();
-console.log( mat + '' ); // 'uuid:22'
+//none
 ```
 
 [top](#)
 
-<a name="setProperties"></a>
-###setProperties(vo:Object)
+<a name="diffuse"></a>
+###diffuse
+
+_field_
+
+
+**description**
+
+Field of Material
+
+**setting**
+
+*writable*:true, *enumerable*:false, *configurable*:false
+
+**defaultValue**
+
+none
+
+**sample**
+
+```javascript
+//none
+```
+
+[top](#)
+
+<a name="count"></a>
+###count
+
+_field_
+
+
+**description**
+
+Field of Material
+
+**setting**
+
+*writable*:false, *enumerable*:false, *configurable*:false
+
+**value**
+
+count
+
+**sample**
+
+```javascript
+//none
+```
+
+[top](#)
+
+<a name="color"></a>
+###color
+
+_field_
+
+
+**description**
+
+Field of Material
+
+**setting**
+
+*writable*:true, *enumerable*:false, *configurable*:false
+
+**defaultValue**
+
+none
+
+**sample**
+
+```javascript
+//none
+```
+
+[top](#)
+
+<a name="removeTexture"></a>
+###removeTexture(type, texture)
 
 _method_
 
 
 **description**
 
-vo로 넘어온 속성을 일시에 설정함
-* vo에 MoGL.time이 포함되면 애니메이션으로 간주하여 보간애니메이션으로 처리됨
+addTexture를 통해 등록된 텍스쳐를 제거함.
 
 **param**
 
-1. vo:Object
+1. type
+2. texture
 
 **exception**
 
@@ -259,36 +293,36 @@ none
 
 **return**
 
-this - 메소드체이닝을 위해 자신을 반환함
+this - 메소드체이닝을 위해 자신을 반환함 - 메서드체이닝을 위해 자신을 반환함.
 
 **sample**
 
 ```javascript
-var mat = Matrix();
-//즉시반영
-mat.setProperties( {x:10, y:20, z:30} );
-
-//보간애니메이션실행
-var vo = {x:0, y:0, z:0};
-var ani = {time:1, delay:2, repeat:1, ease:MoGL.easing.sineOut}
-mat.setProperties( vo, ani );
+var mat1 = new Material('#f00').addTexture('temp');
+mat.removeTexture('temp');
 ```
 
 [top](#)
 
-<a name="setId"></a>
-###setId(id:string)
+<a name="addTexture"></a>
+###addTexture(type:string, textureId:string, ?index:int, ?blendMode:string)
 
 _method_
 
 
 **description**
 
-id는 본래 속성값이나 메서드체이닝목적으로 사용하는 경우 setId를 쓰면 편리함
+[Mesh](Mesh.md)를 통해 최종적으로 포함될 [Scene](Scene.md)에 등록된 textureId를 사용함. 같은 textureId는 두번 등록되지 않음.
+* [Scene](Scene.md)에 직접 등록되는 경우는 id를 [addMaterial](Scene.md#addmaterial-idstring-materialmaterial-)시점에 평가함.
+* [Mesh](Mesh.md)에서 직접 생성하여 삽입하는 경우는 [addChild](Scene.md#addchild-idstring-meshmesh-)시점에 평가함.
+* 이미 직간접적으로 [Scene](Scene.md)에 포함된 경우는 메서드호출시점에 평가함.
 
 **param**
 
-1. id:string
+1. type:string
+2. textureId:string
+3. ?index:int
+4. ?blendMode:string
 
 **exception**
 
@@ -296,209 +330,39 @@ none
 
 **return**
 
-this - 메소드체이닝을 위해 자신을 반환함
+this - 메소드체이닝을 위해 자신을 반환함 - 메서드체이닝을 위해 자신을 반환함.
 
 **sample**
 
 ```javascript
-var city1 = Scene().setId('city1');
-```
+var lobby = world.getScene('lobby');
 
-[top](#)
+// 텍스쳐용 이미지 등록
+lobby.addTexture( 'floor', document.getElementById('img0') );
+lobby.addTexture( 'scratch', document.getElementById('img1') );
 
-<a name="removeEventListener"></a>
-###removeEventListener(event:string, ?listener:string or function)
+// Material 생성 및 Scene에 등록
+var mat = lobby.addMaterial( 'floor', new Material()).getMaterial('floor');
 
-_method_
-
-
-**description**
-
-해당 이벤트에 리스너를 제거함
-
-**param**
-
-1. event:string
-2. ?listener:string or function
-
-**exception**
-
-none
-
-**return**
-
-this - 메소드체이닝을 위해 자신을 반환함
-
-**sample**
-
-```javascript
-var scene = new Scene();
-scene.removeEventListener(MoGL.updated, listener);
-```
-
-[top](#)
-
-<a name="error"></a>
-###error(id:int)
-
-_method_
-
-
-**description**
-
-MoGL 표준 예외처리를 함
-주어진 인자에 따라 className + '.' + methodName + ':' + id 형태로 예외메세지가 출력됨
-클래스의 메서드 내에서 사용함
-
-**param**
-
-1. id:int
-
-**exception**
-
-
-**return**
-
-Object - 인자로보낸 context 또는 생략시 임의로 생성된 오브젝트
-
-**sample**
-
-```javascript
-fn.action = function(a){
-  if(!a) this.error(0);
+try{
+    //이미 Scene에 등록된 Material이므로 메서드 호출시점에 평가
+    mat.addTexture('floor1');  //floor1가 존재하지 않으므로 에러발생
+}catch(e){
+    console.log( e ); // 'Material.addTexture:0'
+    mat.addTexture('floor'); //floor는 존재하므로 문제없음.
 }
-```
+//다중 texture 등록
+mat.addTexture('scratch', null, BlendMode.multiply );
 
-[top](#)
+try{
+    //이미 등록된 textureId를 다시 등록하려고 하면 에러발생.
+    mat.addTexture('floor');
+}catch(e){
+    console.log(e); //'Material.addTexture:1'
+}
 
-<a name="dispatch"></a>
-###dispatch(event:string, ?...arg)
-
-_method_
-
-
-**description**
-
-해당 event의 리스너들에게 이벤트를 통지함. 추가인자를 기술하면 그 인자도 전달됨
-
-**param**
-
-1. event:string
-2. ?...arg
-
-**exception**
-
-none
-
-**return**
-
-this - 메소드체이닝을 위해 자신을 반환함
-
-**sample**
-
-```javascript
-var scene = new Scene();
-city1.dispatch( 'updated', city.isUpdated );
-```
-
-[top](#)
-
-<a name="destroy"></a>
-###destroy()
-
-_method_
-
-
-**description**
-
-해당 event의 리스너들에게 이벤트를 통지함. 추가인자를 기술하면 그 인자도 전달됨
-
-**param**
-
-
-**exception**
-
-none
-
-**return**
-
-none
-
-**sample**
-
-```javascript
-var city1 = Scene();
-city1.destroy();
-```
-
-[top](#)
-
-<a name="addEventListener"></a>
-###addEventListener(event:string, listener:function, ?context:*, ?...arg)
-
-_method_
-
-
-**description**
-
-해당 이벤트에 리스너를 추가함
-
-**param**
-
-1. event:string
-2. listener:function
-3. ?context:*
-4. ?...arg
-
-**exception**
-
-none
-
-**return**
-
-this - 메소드체이닝을 위해 자신을 반환함
-
-**sample**
-
-```javascript
-var city1 = Scene();
-city1.addEventListener( 'updated', function(v){
-  console.log(v);
-});
-var city2 = Scene();
-city1.addEventListener( 'updated', function(v, added){
-  this == city2
-  added == 10
-}, city2, 10);
-```
-
-[top](#)
-
-<a name="totalCount"></a>
-###totalCount()
-
-_static_
-
-
-**description**
-
-전체 인스턴스의 수를 반환함
-
-**param**
-
-
-**exception**
-
-none
-
-**return**
-
-int - 활성화된 인스턴스의 수
-
-**sample**
-
-```javascript
-console.log( MoGL.count() );
+//미등록된 Material이므로 무조건 통과됨.
+var mat1 = new Material('#f00').addTexture('temp');
 ```
 
 [top](#)
@@ -664,94 +528,15 @@ int - 활성화된 인스턴스의 수
 
 [top](#)
 
-<a name="classes"></a>
-###classes(context:Object)
-
-_static_
-
-
-**description**
-
-MoGL로 생성된 모든 서브클래스를 해당 객체에 키로 복사함
-* new MoGL.Mesh 등의 코드가 길고 귀찮은 경우 임의의 네임스페이스나 window에 복사하는 기능
-
-**param**
-
-1. context:Object
-
-**exception**
-
-none
-
-**return**
-
-Object - 인자로보낸 context 또는 생략시 임의로 생성된 오브젝트
-
-**sample**
-
-```javascript
-//특정객체로 복사
-var $ = MoGL.classes();
-var scene = new $.Scene();
-
-//전역에 복사
-MoGL.classes(window);
-var scene = new Scene();
-```
-
-[top](#)
-
-<a name="ease"></a>
-###ease
-
-_const_
-
-
-**description**
-
-setProperties의 애니메이션에 사용될 보간함수
-다음과 같은 값이 올 수 있음
-* MoGL.ease.linear
-* MoGL.ease.backIn
-* MoGL.ease.backOut
-* MoGL.ease.backInOut
-* MoGL.ease.bounceOut
-* MoGL.ease.sineIn
-* MoGL.ease.sineOut
-* MoGL.ease.sineInOut
-* MoGL.ease.circleIn
-* MoGL.ease.circleOut
-* MoGL.ease.circleInOut
-* MoGL.ease.quadraticIn
-* MoGL.ease.quadraticOut
-
-**setting**
-
-*writable*:false, *enumerable*:false, *configurable*:false
-
-**value**
-
-[object Object]
-
-**sample**
-
-```javascript
-var mat = new Matrix();
-mat.setProperties({x:50}, {time:1, ease:MoGL.ease.sineOut});
-```
-
-[top](#)
-
-<a name="updated"></a>
-###updated
+<a name="changed"></a>
+###changed
 
 _event_
 
 
 **description**
 
-isUpdated 속성이 변경될 때마다 발생함
-* 리스너에는 첫 번째 인자로 현재의 isUpdated상태가 주어짐
+Event of Material
 
 **setting**
 
@@ -759,47 +544,12 @@ isUpdated 속성이 변경될 때마다 발생함
 
 **value**
 
-updated
+changed
 
 **sample**
 
 ```javascript
-var scene = new Scene();
-scene.addEventListener( MoGL.updated, function(v){
-  console.log(v);
-} );
-```
-
-[top](#)
-
-<a name="propertyChanged"></a>
-###propertyChanged
-
-_event_
-
-
-**description**
-
-setProperties 호출시 설정이 완료되면 발생함
-* 애니메이션인 경우는 애니메이션 완료 후 발생
-* 리스너에 주어지는 인자는 없음
-
-**setting**
-
-*writable*:false, *enumerable*:false, *configurable*:false
-
-**value**
-
-propertyChanged
-
-**sample**
-
-```javascript
-var mat = new Matrix();
-mat.addEventListener( MoGL.propertyChanged, function(){
-  console.log('changed');
-} );
-mat.setProperties({x:50}, {time:1});
+//none
 ```
 
 [top](#)
