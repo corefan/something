@@ -5,8 +5,8 @@
 
 **field**
 
-* [material](#material) - Field of Mesh
-* [geometry](#geometry) - Field of Mesh
+* [material](#material) - 이 Mesh의 재질을 표현하는 [Ma...
+* [geometry](#geometry) - 이 Mesh의 기하구조 정보를 가지는...
 * [culling](#culling) - Field of Mesh
 
 **static**
@@ -52,14 +52,16 @@ none
 **sample**
 
 ```javascript
-var mesh1 = new Mesh( 'cube', 'mat1' );
-var mesh2 = new Mesh(
+var mesh1 = new Mesh(
    new Geometry( vertex, index ),
    new Material('#f00')
 );
 
+// 씬에 등록된 Geometry, Material 사용
+var mesh2 = new Mesh( scene.getGeometry(geometryID), scene.getMaterial(materialID) )
+
 //팩토리함수로도 사용가능
-var mesh3 = Mesh();
+var mesh3 = Mesh( scene.getGeometry(geometryID), scene.getMaterial(materialID) );
 ```
 
 [top](#)
@@ -72,7 +74,7 @@ _field_
 
 **description**
 
-Field of Mesh
+이 Mesh의 재질을 표현하는 [Material](Material.md) 객체
 
 **setting**
 
@@ -85,7 +87,11 @@ none
 **sample**
 
 ```javascript
-//none
+// 씬에 등록된 재질로 교체할수 있음 - set
+mesh1.material = scene.getMaterial(materialID);
+
+// 다른 Mesh에 재질 객체를 알려줄수 있음 - get
+mesh2.material = mesh1.material;
 ```
 
 [top](#)
@@ -98,7 +104,7 @@ _field_
 
 **description**
 
-Field of Mesh
+이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
 
 **setting**
 
@@ -111,7 +117,11 @@ none
 **sample**
 
 ```javascript
-//none
+// 씬에 등록된 기하구조로 교체할수 있음 - set
+mesh1.geometry = scene.getGeometry(geometryID);
+
+// 다른 Mesh에 기하구조 객체를 알려줄수 있음 - get
+mesh2.geometry = mesh1.geometry;
 ```
 
 [top](#)
