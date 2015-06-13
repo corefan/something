@@ -37,13 +37,13 @@
 **param**
 
 1. geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
-* string - Mesh가 등록될 [Scene](Scene.md)에 이미 등록되어있는 [Geometry](Geometry.md)의 id를 지정함.
-* [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
-* null - null로 지정되면 [Scene](Scene.md)의 렌더링 대상에서 제외됨.
+   * string - Mesh가 등록될 [Scene](Scene.md)에 이미 등록되어있는 [Geometry](Geometry.md)의 id를 지정함.
+   * [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
+   * null - null로 지정되면 [Scene](Scene.md)의 렌더링 대상에서 제외됨.
 2. material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
-* string - Mesh가 등록될 [Scene](Scene.md)에 이미 등록되어있는 [Material](Material.md)의 id를 지정함.
-* [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
-* null - null로 지정되면 [Scene](Scene.md)의 렌더링 대상에서 제외됨.
+   * string - Mesh가 등록될 [Scene](Scene.md)에 이미 등록되어있는 [Material](Material.md)의 id를 지정함.
+   * [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
+   * null - null로 지정되면 [Scene](Scene.md)의 렌더링 대상에서 제외됨.
 
 **exception**
 
