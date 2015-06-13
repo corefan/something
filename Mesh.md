@@ -31,8 +31,8 @@
 **description**
 
 기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.
-* id를 인자로 지정하면 Scene에 addChild하는 순간 id를 바인딩하며 실패하면 등록되지 않음.
-* 객체를 인자로 지정하면 Scene에 addChild하는 순간 Mesh내부의 Geometry나 Material이 임의의 id로 자동등록되며, shader Id가 존재하지 않으면 예외가 발생함( addChild 참조 )
+* id를 인자로 지정하면 [Scene](Scene.md)에 [addChild](Scene.md#addchild-idstring-meshmesh-)하는 순간 id를 바인딩하며 실패하면 등록되지 않음.
+* 객체를 인자로 지정하면 [Scene](Scene.md)에 [addChild](Scene.md#addchild-idstring-meshmesh-)하는 순간 Mesh내부의 [Geometry](Geometry.md)나 [Material](Material.md)이 임의의 id로 자동등록되며, shader Id가 존재하지 않으면 예외가 발생함( [addChild](Scene.md#addchild-idstring-meshmesh-) 참조 )
 
 **param**
 
