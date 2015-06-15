@@ -6,41 +6,41 @@
 </head>
 <body>
 <div id="mechine">
-    <div>
-        <div id="goodsname0"></div>
-        <button id="select0"></button>
+    <div style="position:absolute; left:0px; top:0px; width:100px; height:100px;">
+        <div id="goodsname0">준비중</div>
+        <button id="select0">품절</button>
     </div>
-    <div>
-        <div id="goodsname1"></div>
-        <button id="select1"></button>
+    <div style="position:absolute; left:110px; top:0px; width:100px; height:100px;">
+        <div id="goodsname1">준비중</div>
+        <button id="select1">품절</button>
     </div>
-    <div>
-        <div id="goodsname2"></div>
-        <button id="select2"></button>
+    <div style="position:absolute; left:220px; top:0px; width:100px; height:100px;">
+        <div id="goodsname2">준비중</div>
+        <button id="select2">품절</button>
     </div>
-    <div>
-        <div id="goodsname3"></div>
-        <button id="select3"></button>
+    <div style="position:absolute; left:0px; top:110px; width:100px; height:100px;">
+        <div id="goodsname3">준비중</div>
+        <button id="select3">품절</button>
     </div>
-    <div>
-        <div id="goodsname4"></div>
-        <button id="select4"></button>
+    <div style="position:absolute; left:110px; top:110px; width:100px; height:100px;">
+        <div id="goodsname4">준비중</div>
+        <button id="select4">품절</button>
     </div>
-    <div>
-        <div id="goodsname5"></div>
-        <button id="select5"></button>
+    <div style="position:absolute; left:220px; top:110px; width:100px; height:100px;">
+        <div id="goodsname5">준비중</div>
+        <button id="select5">품절</button>
     </div>
-    <div>
-        <div id="goodsname6"></div>
-        <button id="select6"></button>
+    <div style="position:absolute; left:0px; top:220px; width:100px; height:100px;">
+        <div id="goodsname6">준비중</div>
+        <button id="select6">품절</button>
     </div>
-    <div>
-        <div id="goodsname7"></div>
-        <button id="select7"></button>
+    <div style="position:absolute; left:110px; top:220px; width:100px; height:100px;">
+        <div id="goodsname7">준비중</div>
+        <button id="select7">품절</button>
     </div>
-    <div>
-        <div id="goodsname8"></div>
-        <button id="select8"></button>
+    <div style="position:absolute; left:220px; top:220px; width:100px; height:100px;">
+        <div id="goodsname8">준비중</div>
+        <button id="select8">품절</button>
     </div>        
 </div>
 </body>
@@ -48,8 +48,8 @@
     var goods = {
         "gum" : {value: 1000, count : 10, img : ""},
         "candy" : {value: 700, count : 10, img : ""},
-        "snack" : {value: 1200, count : 10, img : ""},
-        "cookie" : {value: 2000, count : 10, img : ""},
+        "snack" : {value: 1100, count : 10, img : ""},
+        "cookie" : {value: 1000, count : 10, img : ""},
         "chocolate" : {value: 1000, count : 10, img : ""},
         "can" : {value: 500, count : 10, img : ""}        
     };
@@ -78,12 +78,19 @@
     };
     var view = {
         init : function(){
-            
+            var i = 0;
+            for(var k in goods){
+                if(i < 9){
+                    document.getElementById("goodsname"+i).innerText = k;
+                    document.getElementById("select"+i).innerText = goods[k].count > 0 ? "판매중" : "품절";
+                    i++;
+                }
+            }
         }
     };
     
     (function (){
-        view.init();    
+        view.init();
     })();
     
 </script>
