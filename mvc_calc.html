@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>calc_mvc</title>
+</head>
+<body>
+<div id="stage"></div>
+</body>
+<script>
+    var op = {
+    '+':function(a,b){return a+b;},
+    '-':function(a,b){return a-b;},
+    '*':function(a,b){return a*b;},
+    '/':function(a,b){return a/b;},
+    '%':function(a,b){return a%b;}
+};
+var model = {
+    display:'',
+    firstValue:0,
+    op:null,
+    secondValue:false,
+    target:'firstValue',
+    result:null,
+    addNumber:function(v){
+        if( v === '.' && this.display.indexOf('.') > -1 ) return;
+        this.display += v;
+        this[this.target] = parseFloat(this.display);
+    },
+    operation:function(v){
+        if( this.op === null ){
+            this.op = v;
+            this.target = 'secondValue';
+            this.display = '';
+            this.secondValue = false;
+            if( this.result !== null ){
+                this.firstValue = this.result;
+                this.result = null;
+            }
+        }
+    },
+    calc:function(){
+        if( this.result === null && this.op !== null && this.secondValue !== false ){
+            this.result = op[this.op]( this.firstValue, this.secondValue );                
+            this.target = 'firstValue';
+            this.display = '';
+            this.op = null;
+        }
+    }
+};
+var ctrl = {
+    numpad:function(v){
+        return function(e){
+            model.addNumber(v);
+            view.out( model[model.target] );
+        };
+    },
+    op:function(v){
+        return function(e){
+            model.operation(v);
+            view.outOP(v);
+        };
+    },
+    result:function(v){
+        model.calc();
+        view.out(model.result);
+        view.outOP('');
+    }
+};
+var view = {
+    init:function(){
+       document.getElementById('stage').innerHTML = 
+            '<p><input type="text" id="display"/>'+
+             '   <input type="text" id="op"/>'+
+            '</p>'+
+            '<div style="float:left">'+
+            '<p><input type="button" id="pad7" value="7"/> '+
+            '<input type="button" id="pad8" value="8"/>'+
+            '<input type="button" id="pad9" value="9"/></p>'+
+            '<p><input type="button" id="pad4" value="4"/>'+
+            '<input type="button" id="pad5" value="5"/>'+
+            '<input type="button" id="pad6" value="6"/></p>'+
+            '<p><input type="button" id="pad1" value="1"/>'+
+            '<input type="button" id="pad2" value="2"/>'+
+            '<input type="button" id="pad3" value="3"/></p>'+
+            '<p><input type="button" id="pad0" value="0"/>'+
+            '<input type="button" id="pad." value="."/></p>'+
+            '</div>'+
+            '<div style="float:left">'+
+            '<input type="button" id="pad+" value="+"/><br>'+
+            '<input type="button" id="pad-" value="-"/><br>'+
+            '<input type="button" id="pad*" value="*"/><br>'+
+            '<input type="button" id="pad/" value="/"/><br>'+
+            '<input type="button" id="pad%" value="%"/><br>'+
+            '<input type="button" id="pad=" value="="/>'+
+            '</div>';
+    },
+    add:function( id, f ){
+        document.getElementById(id).addEventListener('click',f);
+    },
+    out:function(v){
+        document.getElementById('display').value = v;
+    },
+    outOP:function(v){
+        document.getElementById('op').value = v;
+    }
+};
+(function(){
+    view.init();
+    var k = '.0123456789'.split(''), i=k.length;
+    while(i--) view.add( 'pad'+k[i], ctrl.numpad(k[i]) );
+    for( k in op ) view.add( 'pad'+k, ctrl.op(k) );
+    view.add( 'pad=', ctrl.result );  
+})();
+
+
+/*
+var preloader = function(complete){
+    var i = 1, j = arguments.length, k = j - 1, loaded;
+    loaded = function(){
+        if( !--k ) complete();
+    };
+    for(;i<j;i++){
+        img = document.createElement('img');
+        img.addEventListener('load', loaded );
+        img.src = arguments[i];
+    }
+};
+
+preloader( function(){
+    console.log('complete loading');
+}, 'a.jpg', 'b.jpg', 'c.jpg' );
+*/
+</script>
+</html>

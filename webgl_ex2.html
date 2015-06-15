@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>webgl</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div style="position: absolute; left:30px; top:30px; width: 256px; height: 256px; border: 3px solid #eeeeee;">
+	<canvas id="gl_canvas" width="256" height="256">
+	</canvas>
+</div>
+</body>
+<script>
+    (function(win){
+               
+        var vertexShaderSource =    "" +
+                                    "attribute vec3 aVertexPosition;" +
+                                    "attribute vec3 aColor;" +
+                                    "varying vec3 vColor;" +
+                                    "" +
+                                    "void main(void){" +
+                                    "" +
+                                    "   gl_Position = vec4(aVertexPosition, 1.0);" +
+                                    "   vColor = aColor;" +
+                                    "" +
+                                    "}" +
+                                    "";
+                                
+        var fragmentShaderSource =  "" +
+                                    "precision mediump float;" +
+                                    "varying vec3 vColor;" + 
+                                    "void main(void){" +
+                                    "" +
+                                    // "   gl_FragColor = vec4(0.95, 0.95, 0.95, 1.0);" +
+                                    "   gl_FragColor = vec4(vColor, 1.0);" +
+                                    "}" +
+                                    "" +
+                                    "";
+
+        var gl = gl_canvas.getContext("webgl");
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, vertexShaderSource);
+        gl.compileShader(vertexShader);
+        
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, fragmentShaderSource);
+        gl.compileShader(fragmentShader);
+                                     
+                          
+        var drawProgram = gl.createProgram();
+        gl.attachShader(drawProgram, vertexShader);
+        gl.attachShader(drawProgram, fragmentShader);
+        gl.linkProgram(drawProgram);
+        gl.useProgram(drawProgram);
+        
+        drawProgram.aVertexPosition = gl.getAttribLocation(drawProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(drawProgram.aVertexPosition);
+        drawProgram.aColor = gl.getAttribLocation(drawProgram, "aColor");
+        gl.enableVertexAttribArray(drawProgram.aColor);
+        
+       
+        var rectVertex = [-1,1,0,
+                          1,1,0,
+                          -1,-1,0,
+                          1,-1,0];
+                          
+        var rectVertexIndex = [0,1,2, 1,2,3];
+        
+//        var rgbColor = [Math.random(), Math.random(), Math.random()];
+       
+       var rgbColor = [1,0,0, 0,1,0, 0,0,1, 1,1,0];
+       
+        gl.viewport(0, 0, gl_canvas.width, gl_canvas.height);
+        gl.clearColor(1, 1, 1, 1);       
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        
+        var vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rectVertex), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(drawProgram.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+
+        var colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rgbColor), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(drawProgram.aColor, 3, gl.FLOAT, false, 0, 0);
+                
+        var vertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(rectVertexIndex), gl.STATIC_DRAW);
+
+        gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+                                
+    })(this);
+</script>
+</html>

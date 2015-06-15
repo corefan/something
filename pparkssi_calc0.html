@@ -248,10 +248,13 @@
 
             function _mousedown (evt){
                 var cv_rect = gl_canvas.getBoundingClientRect();
-                var x = evt.clientX/(cv_rect.width/2) - 1;
-                var y = 1 - evt.clientY/(cv_rect.height/2);
+                // var x = evt.clientX / (cv_rect.width/2) - 1;
+                // var y = 1 - evt.clientY / (cv_rect.height/2);
+                var x = (document.body.scrollLeft + evt.clientX) / (cv_rect.width/2) - 1;
+                var y = 1 - (document.body.scrollTop + evt.clientY) / (cv_rect.height/2);
     //            console.log(cv_rect.left, cv_rect.top);
-//                console.log(x, y);
+                console.log(x, y);
+//                alert(x + " " + y);
 
                 for(var k in btList){
                     var bt = btList[k];
