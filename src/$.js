@@ -29,7 +29,7 @@
     }
 })();
 //전역에서 사용하는 공통함수
-var $setPrivate, $getPrivate, $writable, $readonly, $value, $getter, $setter, $color, $md, $ease,
+var $setPrivate, $getPrivate, $writable, $readonly, $getter, $setter, $color, $md, $ease,
     GLMAT_EPSILON, SIN, COS, TAN, ATAN, ATAN2, ASIN, SQRT, CEIL, ABS, PIH, PERPI;
 
 (function() {
@@ -49,19 +49,6 @@ var $setPrivate, $getPrivate, $writable, $readonly, $value, $getter, $setter, $c
 //defineProperty용 헬퍼
 $writable = {value:true, writable:true},
 $readonly = {value:null},
-$value = function(prop, key){
-    if (arguments.length == 3) {
-        return {
-            get:$getter(prop, key, arguments[2]),
-            set:$setter(prop, key)
-        };
-    } else {
-        return {
-            get:$getter(prop, key),
-            set:$setter(prop, key)
-        };
-    }
-},
 $getter = function(prop, key){
     var defaultValue = arguments.length == 3 ? arguments[2] : null;
     if (key) {
@@ -216,18 +203,21 @@ $md = function(classes){
         }
     },
     methodDetail = function(type, v, md){
-        var i, j, k, l, m, n;
+        var i, j, k, l, m, n, o;
         if (v.length) {
             for (i = 0, j = v.length; i < j; i++){
                 k = v[i];
                 md[md.length] = '\n[top](#)';
                 md[md.length] = '\n<a name="' + k.name + '"></a>';
                 if (k.param != 'none') {
+                    o = [];
                     l = k.param.split('\n');
                     for(m = 0, n = l.length; m < n ; m++){
-                        l[m] = l[m].split('-')[0].trim();
+                        if(l[m].charAt(0) != '*' || /[0-9]/.test(l[m].charAt(0))){
+                            o.push(l[m].split('-')[0].trim());
+                        }
                     }
-                    md[md.length] = '###' + k.name + '(' + l.join(', ') + ')';
+                    md[md.length] = '###' + k.name + '(' + o.join(', ') + ')';
                 } else {
                     md[md.length] = '###' + k.name + '()';
                 }
@@ -236,9 +226,14 @@ $md = function(classes){
                 md[md.length] = k.description;
                 md[md.length] = '\n**param**\n';
                 if (k.param != 'none' && n) {
-                    
                     for(m = 0; m < n ; m++){
-                        if (l[m].trim()) md[md.length] = (m + 1) + '. ' + l[m].trim();
+                        if (l[m] = l[m].trim()){
+                            if (l[m].charAt(0) == '*' || /[0-9]/.test(l[m].charAt(0))) {
+                                md[md.length] = '    ' + l[m];
+                            } else {
+                                md[md.length] = (m + 1) + '. ' + l[m];
+                            }
+                        }
                     }
                 } else {
                     md[md.length] = 'none';

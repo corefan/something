@@ -1,5 +1,5 @@
 var Camera = (function () {
-    var PERPIR, value, getter,
+    var PERPIR,
         prop;
 
     //lib
@@ -25,8 +25,14 @@ var Camera = (function () {
         this.z =10,
         this.lookAt(0,0,0);
     })
-    .field('clipPlaneNear', $value(prop, 'near'))
-    .field('clipPlaneFar', $value(prop, 'far'))
+    .field('clipPlaneNear', {
+        get:$getter(prop, 'near'),
+        set:$setter(prop, 'near')
+    })
+    .field('clipPlaneFar', {
+        get:$getter(prop, 'far'),
+        set:$setter(prop, 'far')
+    })
     .field('visible', {
         get: $getter(prop, 'visible'),
         set: function visibleSet(v) {
@@ -112,7 +118,7 @@ var Camera = (function () {
     })
     .field('cvs', {
         get:$getter(prop, 'cvs'),
-        set:function modeSet(v) {
+        set:function cvsSet(v) {
             prop[this].cvs = v;
         }
     })
@@ -120,16 +126,20 @@ var Camera = (function () {
         get: $getter(prop, 'renderArea'),
         set: function renderAreaSet(v) {
             var tw, th,c;
-            c = prop[this].cvs,
-            tw = c.width,
-            th = c.height,
-            //console.log(typeof x == 'string' ? tw * x.replace('%', '') : x);
-            prop[this].renderArea = [
-                typeof v[0] == 'string' ? tw * v[0].replace('%', '') * 0.01 : v[0],
-                typeof v[1] == 'string' ? th * v[1].replace('%', '') * 0.01 : v[1],
-                typeof v[2] == 'string' ? tw * v[2].replace('%', '') * 0.01 : v[2],
-                typeof v[3] == 'string' ? th * v[3].replace('%', '') * 0.01 : v[3],
-            ];
+            c = prop[this].cvs
+            if(c){
+                tw = c.width,
+                th = c.height,
+                //console.log(typeof x == 'string' ? tw * x.replace('%', '') : x);
+                prop[this].renderArea = [
+                    typeof v[0] == 'string' ? tw * v[0].replace('%', '') * 0.01 : v[0],
+                    typeof v[1] == 'string' ? th * v[1].replace('%', '') * 0.01 : v[1],
+                    typeof v[2] == 'string' ? tw * v[2].replace('%', '') * 0.01 : v[2],
+                    typeof v[3] == 'string' ? th * v[3].replace('%', '') * 0.01 : v[3],
+                ];
+            }else{
+                prop[this].renderArea = v
+            }
         }
     })
     .field('projectionMatrix', {
