@@ -7,7 +7,7 @@
 
 * [material](#material) - 이 Mesh의 재질을 표현하는 [Ma...
 * [geometry](#geometry) - 이 Mesh의 기하구조 정보를 가지는...
-* [culling](#culling) - 이 Mesh의 기하구조 정보를 가지는...
+* [culling](#culling) - 현재 Mesh의 Face Cullin...
 
 **static**
 
@@ -51,7 +51,7 @@ var mesh1 = new Mesh(
    new Material('#f00')
 );
 
-// 씬에 등록된 Geometry, Material 사용
+// scene에 등록된 Geometry, Material 사용
 var mesh2 = new Mesh( scene.getGeometry(geometryID), scene.getMaterial(materialID) )
 
 //팩토리함수로도 사용가능
@@ -81,7 +81,7 @@ none
 **sample**
 
 ```javascript
-// 씬에 등록된 재질로 교체할수 있음 - set
+// scene에 등록된 재질로 교체할수 있음 - set
 mesh1.material = scene.getMaterial(materialID);
 
 // 다른 Mesh에 재질 객체를 알려줄수 있음 - get
@@ -111,7 +111,7 @@ none
 **sample**
 
 ```javascript
-// 씬에 등록된 기하구조로 교체할수 있음 - set
+// scene에 등록된 기하구조로 교체할수 있음 - set
 mesh1.geometry = scene.getGeometry(geometryID);
 
 // 다른 Mesh에 기하구조 객체를 알려줄수 있음 - get
@@ -128,7 +128,7 @@ _field_
 
 **description**
 
-이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
+현재 Mesh의 Face Culling 정보
 
 **setting**
 
@@ -141,11 +141,16 @@ none
 **sample**
 
 ```javascript
-// 씬에 등록된 기하구조로 교체할수 있음 - set
-mesh1.geometry = scene.getGeometry(geometryID);
+// Mesh에 정의 된 상수 입력
+var mesh1 = new Mesh(geometry, material)
+mesh1.culling = Mesh.cullingNone; // 페이스 컬링을 하지않음
+mesh1.culling = Mesh.cullingFront; // 앞면 페이스 컬링을 함
+mesh1.culling = Mesh.cullingBack; // 뒷면 페이스 컬링을 함
 
-// 다른 Mesh에 기하구조 객체를 알려줄수 있음 - get
-mesh2.geometry = mesh1.geometry;
+// Mesh에 정의 된 상수의 값을 직접 입력
+mesh1.culling = "cullingNone" // 페이스 컬링을 하지않음
+mesh1.culling = "cullingFront" // 앞면 페이스 컬링을 함
+mesh1.culling = "cullingBack" // 뒷면 페이스 컬링을 함
 ```
 
 [top](#)
@@ -332,8 +337,8 @@ cullingNone
 **sample**
 
 ```javascript
-
-
+var mesh1 = new Mesh(geometry, material)
+mesh1.culling = Mesh.cullingNone;
 ```
 
 [top](#)
@@ -359,8 +364,8 @@ cullingFront
 **sample**
 
 ```javascript
-
-
+var mesh1 = new Mesh(geometry, material)
+mesh1.culling = Mesh.cullingFront;
 ```
 
 [top](#)
@@ -386,8 +391,8 @@ cullingBack
 **sample**
 
 ```javascript
-
-
+var mesh1 = new Mesh(geometry, material)
+mesh1.culling = Mesh.cullingBack;
 ```
 
 [top](#)
