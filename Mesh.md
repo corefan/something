@@ -191,7 +191,7 @@ uuid 또는 id를 기반으로 인스턴스를 얻어냄
 
 **param**
 
-1. uuid:string
+1. uuid:string - 얻고 싶은 인스턴스의 uuid 또는 id
 
 **exception**
 
@@ -232,8 +232,8 @@ _static_
 
 **param**
 
-1. className:string
-2. constructor:function
+1. className:string - 자식클래스의 이름
+2. constructor:function - 자식클래스의 생성자
 
 **exception**
 
@@ -263,8 +263,8 @@ _static_
 
 **param**
 
-1. method:string
-2. id:int
+1. method:string - 예외가 발생한 함수명
+2. id:int - 예외고유 id
 
 **exception**
 
