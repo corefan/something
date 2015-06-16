@@ -3,94 +3,185 @@
 <head lang="ko">
     <meta charset="UTF-8">
     <title>calc_mvc</title>
+    <style>
+        .bt {
+            margin: 0;
+            padding: 0;
+            position : absolute;
+            bottom : 0px;
+            width : 50px;
+            height : 25px;
+        }
+    </style>
 </head>
 <body>
 <div id="mechine">
-    <div style="position:absolute; left:0px; top:0px; width:100px; height:100px;">
+    <div style="position:absolute; left:0px; top:0px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname0">준비중</div>
-        <button id="select0">품절</button>
+        <button class="bt"  id="select0">품절</button>
     </div>
-    <div style="position:absolute; left:110px; top:0px; width:100px; height:100px;">
+    <div style="position:absolute; left:102px; top:0px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname1">준비중</div>
-        <button id="select1">품절</button>
+        <button class="bt"  id="select1">품절</button>
     </div>
-    <div style="position:absolute; left:220px; top:0px; width:100px; height:100px;">
+    <div style="position:absolute; left:204px; top:0px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname2">준비중</div>
-        <button id="select2">품절</button>
+        <button class="bt"  id="select2">품절</button>
     </div>
-    <div style="position:absolute; left:0px; top:110px; width:100px; height:100px;">
+    <div style="position:absolute; left:0px; top:102px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname3">준비중</div>
-        <button id="select3">품절</button>
+        <button class="bt"  id="select3">품절</button>
     </div>
-    <div style="position:absolute; left:110px; top:110px; width:100px; height:100px;">
+    <div style="position:absolute; left:102px; top:102px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname4">준비중</div>
-        <button id="select4">품절</button>
+        <button class="bt"  id="select4">품절</button>
     </div>
-    <div style="position:absolute; left:220px; top:110px; width:100px; height:100px;">
+    <div style="position:absolute; left:204px; top:102px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname5">준비중</div>
-        <button id="select5">품절</button>
+        <button class="bt"  id="select5">품절</button>
     </div>
-    <div style="position:absolute; left:0px; top:220px; width:100px; height:100px;">
+    <div style="position:absolute; left:0px; top:204px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname6">준비중</div>
-        <button id="select6">품절</button>
+        <button class="bt"  id="select6">품절</button>
     </div>
-    <div style="position:absolute; left:110px; top:220px; width:100px; height:100px;">
+    <div style="position:absolute; left:102px; top:204px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname7">준비중</div>
-        <button id="select7">품절</button>
+        <button class="bt"  id="select7">품절</button>
     </div>
-    <div style="position:absolute; left:220px; top:220px; width:100px; height:100px;">
+    <div style="position:absolute; left:204px; top:204px; width:100px; height:100px; border:1px solid green;">
         <div id="goodsname8">준비중</div>
-        <button id="select8">품절</button>
-    </div>        
+        <button class="bt"  id="select8">품절</button>
+    </div>   
+    <div style="position:absolute; left:306px; top:0px; width:100px; height:304px; border:1px solid green;">
+        <div id="display">판매중</div>
+        <button id="refund">환불</button>
+    </div>
+    <div style="position:absolute; left:500px; top:0px; width:60px; height:120px; border:1px solid green;">
+        <button id="m1000" style="width: 60px; height:40px;">1000</button><br>
+        <button id="m500" style="border-radius: 25px; height:40px;">500</button><br>
+        <button id="m100" style="border-radius: 25px; height:40px;">100</button>
+    </div>           
 </div>
 </body>
 <script>
+    var money = {
+        "1000" : {count : 0},
+        "500" : {count : 0},
+        "100" : {count : 0}       
+    };
     var goods = {
-        "gum" : {value: 1000, count : 10, img : ""},
-        "candy" : {value: 700, count : 10, img : ""},
-        "snack" : {value: 1100, count : 10, img : ""},
-        "cookie" : {value: 1000, count : 10, img : ""},
-        "chocolate" : {value: 1000, count : 10, img : ""},
-        "can" : {value: 500, count : 10, img : ""}        
+        "gum" : {value: 1000, count : 10, index : 0},
+        "candy" : {value: 700, count : 10, index : 0},
+        "snack" : {value: 1200, count : 10, index : 0},
+        "cookie" : {value: 1500, count : 10, index : 0},
+        "chocolate" : {value: 800, count : 10, index : 0},
+        "can" : {value: 600, count : 10, index : 0}
     };
     var model = {
-        display : "",
-        insertMoney : function (){
-    
+        display : 0,
+        miniumPrice : 0,
+        totalcount: 0,
+        insertMoney : function (v){
+            
         },
         refund: function (){
             
         },
-        release : function (){
-            
+        choice: function (cartagory){
+            var isChange = false;
+            var val = goods[cartagory].value;
+            if(this.display >= val){
+                this.display -= val;
+                isChange = true;
+            }
+            return isChange;
         },
-        calc : function (){
+        refill : function (traget, num){
             
-        }        
+        }       
     };
     var ctrl = {
-        push : function (){
-          
+        push : function (target_idx){
+            return function(evt){
+                for(var k in goods){
+                    var tmp = goods[k];
+                    if(target_idx == tmp.index){
+                        if(tmp.count > 0 && model.choice(k)){
+                            ctrl.statusChangeAll(model.display);
+                            tmp.count--;
+                            if(!tmp.count) 
+                                view.updateStatus(target_idx, "품절");
+                            view.displayMoney(model.display);
+                        }
+                        break;
+                    }
+                }
+            };
         },
         refund : function (){
-            
-        }           
+            return function(){
+                // TO DO
+                model.display = 0;
+                view.displayMoney("판매중");
+                ctrl.statusChangeAll(0);                                      
+            };
+        },
+        insert : function (v){
+            return function(e){
+                model.display += v;
+                ctrl.statusChangeAll(model.display);
+                view.displayMoney(model.display);
+            };
+        },
+        addCount : function(v){
+            model.totalcount += v;
+        },
+        statusChangeAll : function(money){
+            for(var k in goods){
+                if(goods[k].count > 0){
+                    if(money >= goods[k].value){
+                        view.updateStatus(goods[k].index, "▼");
+                    }else{
+                        view.updateStatus(goods[k].index, "");
+                    }
+                }
+            }
+        }
     };
     var view = {
         init : function(){
             var i = 0;
             for(var k in goods){
                 if(i < 9){
+                    goods[k].index = i;
                     document.getElementById("goodsname"+i).innerText = k;
-                    document.getElementById("select"+i).innerText = goods[k].count > 0 ? "판매중" : "품절";
+                    var count = goods[k].count;
+                    document.getElementById("select"+i).innerText = count > 0 ? "" : "품절";
+                    ctrl.addCount(count);    
                     i++;
                 }
             }
+        },
+        addChoiceEvent : function (v, fn){
+            document.getElementById(v).addEventListener("mousedown", fn, false);
+        },
+        addEvent : function(v, fn){
+            document.getElementById(v).addEventListener("click", fn, false);
+        },
+        displayMoney : function(v){
+            display.innerText = v;
+        },
+        updateStatus : function(idx, status){
+            document.getElementById("select"+idx).innerText = status;
         }
     };
     
     (function (){
         view.init();
+        var k = "012345678".split(''), i=k.length;
+        while(i--) view.addChoiceEvent("select"+k[i], ctrl.push(i));
+        for(k in money) view.addEvent("m"+k, ctrl.insert(+k));
+        view.addEvent("refund", ctrl.refund());
     })();
     
 </script>
