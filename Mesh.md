@@ -7,7 +7,7 @@
 
 * [material](#material) - 이 Mesh의 재질을 표현하는 [Ma...
 * [geometry](#geometry) - 이 Mesh의 기하구조 정보를 가지는...
-* [culling](#culling) - Field of Mesh
+* [culling](#culling) - 이 Mesh의 기하구조 정보를 가지는...
 
 **static**
 
@@ -19,9 +19,9 @@
 
 **constant**
 
-* [cullingNone](#cullingNone) - Const of Mesh
-* [cullingFront](#cullingFront) - Const of Mesh
-* [cullingBack](#cullingBack) - Const of Mesh
+* [cullingNone](#cullingNone) - Mesh Face Culling을 하...
+* [cullingFront](#cullingFront) - Mesh FrontFace를 그리지...
+* [cullingBack](#cullingBack) - Mesh BackFace를 그리지않음
 
 [top](#)
 
@@ -31,13 +31,19 @@
 **description**
 
 기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.
+* id를 인자로 지정하면 [Scene](Scene.md)에 [addChild](Scene.md#addchild-idstring-meshmesh-)하는 순간 id를 바인딩하며 실패하면 등록되지 않음.
+* 객체를 인자로 지정하면 [Scene](Scene.md)에 [addChild](Scene.md#addchild-idstring-meshmesh-)하는 순간 Mesh내부의 [Geometry](Geometry.md)나 [Material](Material.md)이 임의의 id로 자동등록되며, shader Id가 존재하지 않으면 예외가 발생함( [addChild](Scene.md#addchild-idstring-meshmesh-) 참조 )
 
 **param**
 
 1. geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
+   * string - Mesh가 등록될 [Scene](Scene.md)에 이미 등록되어있는 [Geometry](Geometry.md)의 id를 지정함.
    * [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
+   * null - null로 지정되면 [Scene](Scene.md)의 렌더링 대상에서 제외됨.
 2. material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
+   * string - Mesh가 등록될 [Scene](Scene.md)에 이미 등록되어있는 [Material](Material.md)의 id를 지정함.
    * [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
+   * null - null로 지정되면 [Scene](Scene.md)의 렌더링 대상에서 제외됨.
 
 **exception**
 
@@ -128,7 +134,7 @@ _field_
 
 **description**
 
-Field of Mesh
+이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
 
 **setting**
 
@@ -141,7 +147,11 @@ none
 **sample**
 
 ```javascript
-//none
+// 씬에 등록된 기하구조로 교체할수 있음 - set
+mesh1.geometry = scene.getGeometry(geometryID);
+
+// 다른 Mesh에 기하구조 객체를 알려줄수 있음 - get
+mesh2.geometry = mesh1.geometry;
 ```
 
 [top](#)
@@ -315,7 +325,7 @@ _const_
 
 **description**
 
-Const of Mesh
+Mesh Face Culling을 하지 않음.
 
 **setting**
 
@@ -328,7 +338,8 @@ cullingNone
 **sample**
 
 ```javascript
-//none
+
+
 ```
 
 [top](#)
@@ -341,7 +352,7 @@ _const_
 
 **description**
 
-Const of Mesh
+Mesh FrontFace를 그리지 않음.
 
 **setting**
 
@@ -354,7 +365,8 @@ cullingFront
 **sample**
 
 ```javascript
-//none
+
+
 ```
 
 [top](#)
@@ -367,7 +379,7 @@ _const_
 
 **description**
 
-Const of Mesh
+Mesh BackFace를 그리지않음
 
 **setting**
 
@@ -380,7 +392,8 @@ cullingBack
 **sample**
 
 ```javascript
-//none
+
+
 ```
 
 [top](#)
