@@ -34,7 +34,7 @@ var Mesh = (function () {
             "* 'Mesh.geometrySet:0' - 첫번째 인자가 geometry 객체가 아닌 경우",
             "* 'Mesh.materialSet:0' - 두번째 인자가 material 객체가 아닌 경우"
         ],
-        value: function Mesh(geometry, material) {
+        value:function Mesh(geometry, material) {
             this.geometry = geometry;
             this.material = material;
         }
@@ -78,6 +78,7 @@ var Mesh = (function () {
         set:function geometrySet(v) {
             if (v instanceof Geometry) {
                 geometry[this] = v;
+                this.dispatch('changed');
             } else {
                 this.error(0);
             }
@@ -97,6 +98,7 @@ var Mesh = (function () {
         set:function materialSet(v) {
             if (v instanceof Material) {
                 material[this] = v;
+                this.dispatch('changed');
             } else {
                 this.error(0);
             }
@@ -111,7 +113,7 @@ var Mesh = (function () {
             ],
             value:'cullingNone'
         })
-    .constant('cullingFront', {
+    .constant('cullingFront',  {
             description: "Mesh FrontFace를 그리지 않음.",
             type:'string',
             sample: [
@@ -129,5 +131,6 @@ var Mesh = (function () {
             ],
             value:'cullingBack'
         })
+    .event('changed', 'changed')
     .build();
 })();
