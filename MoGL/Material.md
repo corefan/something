@@ -16,7 +16,7 @@
 
 **method**
 
-* [removeTexture](#removeTexture) - addTexture를 통해 등록된 텍...
+* [removeTexture](#removeTexture) - removeTexture를 통해 등록...
 * [addTexture](#addTexture) - [Mesh](Mesh.md)를 통해...
 
 **static**
@@ -82,6 +82,10 @@ Field of Material
 
 none
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
@@ -105,6 +109,10 @@ Field of Material
 *writable*:true, *enumerable*:false, *configurable*:false
 
 **defaultValue**
+
+none
+
+**exception**
 
 none
 
@@ -134,6 +142,10 @@ Field of Material
 
 none
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
@@ -157,6 +169,10 @@ Field of Material
 *writable*:true, *enumerable*:false, *configurable*:false
 
 **defaultValue**
+
+none
+
+**exception**
 
 none
 
@@ -186,6 +202,10 @@ Field of Material
 
 none
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
@@ -209,6 +229,10 @@ Field of Material
 *writable*:true, *enumerable*:false, *configurable*:false
 
 **defaultValue**
+
+none
+
+**exception**
 
 none
 
@@ -238,6 +262,10 @@ Field of Material
 
 count
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
@@ -264,6 +292,10 @@ Field of Material
 
 none
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
@@ -273,19 +305,24 @@ none
 [top](#)
 
 <a name="removeTexture"></a>
-###removeTexture(type, texture)
+###removeTexture(type:string, [Texture](Texture.md))
 
 _method_
 
 
 **description**
 
-addTexture를 통해 등록된 텍스쳐를 제거함.
+removeTexture를 통해 등록된 텍스쳐를 제거함.
 
 **param**
 
-1. type
-2. texture
+1. type:string - 어떠한 타입에 텍스쳐가 제거 될 것인가를 결정함.
+    * [Texture.diffuse](Texture.md#diffuse) or 'diffuse' - 디퓨즈 맵으로 등록함.
+    * [Texture.specular](Texture.md#specular) or 'specular' - 스페큘러 맵으로 등록함.
+    * [Texture.diffuseWrap](Texture.md#diffusewrap) or 'diffuseWrap' - 디퓨즈랩 맵으로 등록함.
+    * [Texture.normal](Texture.md#normal) or 'normal' - 노말 맵으로 등록함.
+    * [Texture.specularNormal](Texture.md#specularNormal) or 'diffuse' - 스페큘러노말 맵으로 등록함.
+7. [Texture](Texture.md) - 제거 될 Texture instance.
 
 **exception**
 
@@ -298,35 +335,56 @@ this - 메소드체이닝을 위해 자신을 반환함 - 메서드체이닝을 
 **sample**
 
 ```javascript
-var mat1 = new Material('#f00').addTexture('temp');
-mat.removeTexture('temp');
+material.addTexture(Texture.diffuse, indexTexture3, null, BlendMode.darken);
+material.removeTexture(Texture.diffuse, indexTexture3);
 ```
 
 [top](#)
 
 <a name="addTexture"></a>
-###addTexture(type:string, textureId:string, ?index:int, ?blendMode:string)
+###addTexture(type:string, [Texture](Texture.md), index:int or [Texture](Texture.md), ?blendMode:string)
 
 _method_
 
 
 **description**
 
-[Mesh](Mesh.md)를 통해 최종적으로 포함될 [Scene](Scene.md)에 등록된 textureId를 사용함. 같은 textureId는 두번 등록되지 않음.
+[Mesh](Mesh.md)를 통해 최종적으로 포함될 Texture를 등록
 * [Scene](Scene.md)에 직접 등록되는 경우는 id를 [addMaterial](Scene.md#addmaterial-idstring-materialmaterial-)시점에 평가함.
 * [Mesh](Mesh.md)에서 직접 생성하여 삽입하는 경우는 [addChild](Scene.md#addchild-idstring-meshmesh-)시점에 평가함.
 * 이미 직간접적으로 [Scene](Scene.md)에 포함된 경우는 메서드호출시점에 평가함.
 
 **param**
 
-1. type:string
-2. textureId:string
-3. ?index:int
-4. ?blendMode:string
+1. type:string - 해당 텍스쳐가 어떠한 타입에 포함될 것인가를 결정함. 다음의 값이 올 수 있음.
+    * [Texture.diffuse](Texture.md#diffuse) or 'diffuse' - 디퓨즈 맵으로 등록함.
+    * [Texture.specular](Texture.md#specular) or 'specular' - 스페큘러 맵으로 등록함.
+    * [Texture.diffuseWrap](Texture.md#diffusewrap) or 'diffuseWrap' - 디퓨즈랩 맵으로 등록함.
+    * [Texture.normal](Texture.md#normal) or 'normal' - 노말 맵으로 등록함.
+    * [Texture.specularNormal](Texture.md#specularNormal) or 'diffuse' - 스페큘러노말 맵으로 등록함.
+7. [Texture](Texture.md) - 추가 될 Texture instance.
+8. index:int or [Texture](Texture.md) - 중첩되는 이미지의 경우 순번을 정의함. 생략하거나 null 이면 마지막 인덱스 + 1.
+9. ?blendMode:string - 중첩되는 이미지의 경우 아래의 이미지와 합성되는 속성을 정의함. 첫번째 텍스쳐는 적용되지 않고 기본값은 'alpha' 이고 다음과 같은 값이 올 수 있음.
+    * [BlendMode.add](BlendMode.md#add) or 'add' -  전면색을 배경색에 더하고 올림값 0xFF를 적용.
+    * [BlendMode.alpha](BlendMode.md#alpha) or 'alpha' - 전면색의 알파값에 따라 배경색을 덮어가는 가장 일반적인 중첩.
+    * [BlendMode.darken](BlendMode.md#darken) or 'darken' - 전면색과 배경색 중 보다 어두운 색상(값이 작은 색상)을 선택.
+    * [BlendMode.difference](BlendMode.md#difference)or 'difference' - 전면색과 배경색을 비교하여 둘 중 밝은 색상 값에서 어두운 색상 값을 뺌.
+    * [BlendMode.erase](BlendMode.md#erase) or 'erase' - 전면색의 알파만 적용하여 배경색을 지움.
+    * [BlendMode.hardlight](BlendMode.md#hardlight) or 'hardlight' - 전면색의 어두운 정도를 기준으로 배경색을 조정.
+    * [BlendMode.invert](BlendMode.md#invert) or 'invert' - 전면색을 이용하여 배경색을 반전시킴.
+    * [BlendMode.lighten](BlendMode.md#lighten) or 'lighten' - 전면색과 배경색 중 보다 밝은 색(값이 큰 색상)으로 선택.
+    * [BlendMode.multiply](BlendMode.md#multiply) or 'multiply' -  전면색에 배경색을 곱하고 0xFF로 나누어 정규화하여 보다 어두운 색을 만듬.
+    * [BlendMode.screen](BlendMode.md#screen) or 'screen' - 전면색의 보수(역수)에 배경색 보수를 곱하여 표백 효과를 냄.
+    * [BlendMode.subtract](BlendMode.md#subtract) or 'subtract' - 전면색의 값을 배경색에서 빼고 내림값 0을
 
 **exception**
 
-none
+* 'Material.addTexture:0' - 1번째 param 값이 Texture 타입이 아닐 경우.
+* 'Material.addTexture:1' - 2번째 param 값이 Texture 인스턴스가 아닐 경우.
+* 'Material.addTexture:2' - 2번째 param 값이 이미 등록 되어있는 Texture 일 경우.
+* 'Material.addTexture:3' - 3번째 param 값이 index:int or Texture 외 다른 형식이 들어오는 경우.
+* 'Material.addTexture:4' - 3번째 param 값이 index:int 일 경우 0 보다 작거나 등록되어 있는 Texture 수보다 많을 경우.
+* 'Material.addTexture:5' - 3번째 param 값이 Texture 일 경우 미리 등록된 Texture 가 아닐 경우.
 
 **return**
 
@@ -335,34 +393,20 @@ this - 메소드체이닝을 위해 자신을 반환함 - 메서드체이닝을 
 **sample**
 
 ```javascript
-var lobby = world.getScene('lobby');
+var indexTestMaterial = Material('#ffffff127.8');
 
-// 텍스쳐용 이미지 등록
-lobby.addTexture( 'floor', document.getElementById('img0') );
-lobby.addTexture( 'scratch', document.getElementById('img1') );
+var indexTexture1 = new Texture();
+indexTestMaterial.addTexture(Texture.diffuse, indexTexture1, null, BlendMode.add);
 
-// Material 생성 및 Scene에 등록
-var mat = lobby.addMaterial( 'floor', new Material()).getMaterial('floor');
+var indexTexture2 = new Texture()
+indexTestMaterial.addTexture(Texture.diffuse, indexTexture2, undefined, BlendMode.screen);
 
-try{
-    //이미 Scene에 등록된 Material이므로 메서드 호출시점에 평가
-    mat.addTexture('floor1');  //floor1가 존재하지 않으므로 에러발생
-}catch(e){
-    console.log( e ); // 'Material.addTexture:0'
-    mat.addTexture('floor'); //floor는 존재하므로 문제없음.
-}
-//다중 texture 등록
-mat.addTexture('scratch', null, BlendMode.multiply );
+var indexTexture3 = new Texture()
+indexTestMaterial.addTexture(Texture.diffuse, indexTexture3, 1, BlendMode.darken)
 
-try{
-    //이미 등록된 textureId를 다시 등록하려고 하면 에러발생.
-    mat.addTexture('floor');
-}catch(e){
-    console.log(e); //'Material.addTexture:1'
-}
+var indexTexture4 = new Texture()
+indexTestMaterial.addTexture(Texture.diffuse, indexTexture4)
 
-//미등록된 Material이므로 무조건 통과됨.
-var mat1 = new Material('#f00').addTexture('temp');
 ```
 
 [top](#)
@@ -408,11 +452,11 @@ uuid 또는 id를 기반으로 인스턴스를 얻어냄
 
 **param**
 
-1. uuid:string
+1. uuid:string - 얻고 싶은 인스턴스의 uuid 또는 id
 
 **exception**
 
-undefined.getInstance:u
+none
 
 **return**
 
@@ -449,8 +493,8 @@ _static_
 
 **param**
 
-1. className:string
-2. constructor:function
+1. className:string - 자식클래스의 이름
+2. constructor:function - 자식클래스의 생성자
 
 **exception**
 
@@ -480,8 +524,8 @@ _static_
 
 **param**
 
-1. method:string
-2. id:int
+1. method:string - 예외가 발생한 함수명
+2. id:int - 예외고유 id
 
 **exception**
 
@@ -545,6 +589,10 @@ Event of Material
 **value**
 
 changed
+
+**exception**
+
+none
 
 **sample**
 
