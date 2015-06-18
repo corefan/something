@@ -39,9 +39,9 @@
 **param**
 
 1. geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
-  *[Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
+* [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
 2. material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
-  *[Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
+* [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
 
@@ -84,7 +84,7 @@ none
 
 **exception**
 
-*'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
+* 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -118,7 +118,7 @@ none
 
 **exception**
 
- *'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
+* 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -152,7 +152,7 @@ none
 
 **exception**
 
- *'Mesh.cullingSet:0' - Mesh에 정의된 culling 상수 값이 아닌 경우
+* 'Mesh.cullingSet:0' - Mesh에 정의된 culling 상수 값이 아닌 경우
 
 **sample**
 
