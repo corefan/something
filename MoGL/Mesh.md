@@ -35,6 +35,7 @@
 **description**
 
 기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.
+* [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
 
 **param**
 
