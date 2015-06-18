@@ -39,9 +39,9 @@
 **param**
 
 1. geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
-* [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
+  *[Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
 2. material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
-* [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
+  *[Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
 
@@ -51,14 +51,14 @@ none
 
 ```javascript
 var mesh1 = new Mesh(
-*new Geometry( vertex, index ),
-*new Material('#f00')
+  new Geometry( vertex, index ),
+  new Material('#f00')
 );
 
 // scene에 등록된 Geometry, Material 사용
 var mesh2 = new Mesh( scene.getGeometry(geometryID), scene.getMaterial(materialID) )
 
-//팩토리함수로도 사용가능
+// 팩토리함수로도 사용가능
 var mesh3 = Mesh( scene.getGeometry(geometryID), scene.getMaterial(materialID) );
 ```
 
@@ -118,7 +118,7 @@ none
 
 **exception**
 
-*'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
+ *'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -152,7 +152,7 @@ none
 
 **exception**
 
-*'Mesh.cullingSet:0' - Mesh에 정의된 culling 상수 값이 아닌 경우
+ *'Mesh.cullingSet:0' - Mesh에 정의된 culling 상수 값이 아닌 경우
 
 **sample**
 
@@ -348,7 +348,7 @@ Mesh Face Culling을 하지 않음.
 
 **value**
 
-cullingNone
+'cullingNone'
 
 **exception**
 
@@ -379,7 +379,7 @@ Mesh FrontFace를 그리지 않음.
 
 **value**
 
-cullingFront
+'cullingFront'
 
 **exception**
 
@@ -410,7 +410,7 @@ Mesh BackFace를 그리지않음
 
 **value**
 
-cullingBack
+'cullingBack'
 
 **exception**
 
