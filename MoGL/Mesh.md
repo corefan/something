@@ -39,9 +39,9 @@
 
 **param**
 
-1. geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
+geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
 * [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
-2. material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
+material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
 * [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
