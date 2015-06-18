@@ -23,6 +23,10 @@
 * [cullingFront](#cullingFront) - Mesh FrontFace를 그리지...
 * [cullingBack](#cullingBack) - Mesh BackFace를 그리지않음
 
+**event**
+
+* [changed](#changed) - Event of Mesh
+
 [top](#)
 
 <a name="constructor"></a>
@@ -35,9 +39,9 @@
 **param**
 
 1. geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
-   * [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
+* [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
 2. material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
-   * [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
+* [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
 
@@ -47,8 +51,8 @@ none
 
 ```javascript
 var mesh1 = new Mesh(
-   new Geometry( vertex, index ),
-   new Material('#f00')
+*new Geometry( vertex, index ),
+*new Material('#f00')
 );
 
 // scene에 등록된 Geometry, Material 사용
@@ -77,6 +81,10 @@ _field_
 **defaultValue**
 
 none
+
+**exception**
+
+*'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -108,6 +116,10 @@ _field_
 
 none
 
+**exception**
+
+*'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
+
 **sample**
 
 ```javascript
@@ -137,6 +149,10 @@ _field_
 **defaultValue**
 
 none
+
+**exception**
+
+*'Mesh.cullingSet:0' - Mesh에 정의된 culling 상수 값이 아닌 경우
 
 **sample**
 
@@ -200,7 +216,7 @@ uuid 또는 id를 기반으로 인스턴스를 얻어냄
 
 **exception**
 
-undefined.getInstance:u
+none
 
 **return**
 
@@ -334,6 +350,10 @@ Mesh Face Culling을 하지 않음.
 
 cullingNone
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
@@ -360,6 +380,10 @@ Mesh FrontFace를 그리지 않음.
 **value**
 
 cullingFront
+
+**exception**
+
+none
 
 **sample**
 
@@ -388,11 +412,45 @@ Mesh BackFace를 그리지않음
 
 cullingBack
 
+**exception**
+
+none
+
 **sample**
 
 ```javascript
 var mesh1 = new Mesh(geometry, material)
 mesh1.culling = Mesh.cullingBack;
+```
+
+[top](#)
+
+<a name="changed"></a>
+###changed
+
+_event_
+
+
+**description**
+
+Event of Mesh
+
+**setting**
+
+*writable*:false, *enumerable*:false, *configurable*:false
+
+**value**
+
+changed
+
+**exception**
+
+none
+
+**sample**
+
+```javascript
+//none
 ```
 
 [top](#)
