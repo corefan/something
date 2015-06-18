@@ -35,14 +35,11 @@
 **description**
 
 기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.
-* [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
 
 **param**
 
-geometry:* - 기하구조체를 받으며 다음과 같은 형식이 올 수 있음.
- * [Geometry](Geometry.md) - 직접 [Geometry](Geometry.md)객체를 지정함.
-material:* - 해당 기하구조에 적용할 재질을 받으며 다음과 같은 형식이 올 수 있음.
- * [Material](Material.md) - 직접 [Material](Material.md) 객체를 지정함.
+1. geometry:* - 직접 [Geometry](Geometry.md)객체를 지정함.
+2. material:* - 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
 
@@ -153,7 +150,7 @@ none
 
 **exception**
 
-* 'Mesh.cullingSet:0' - Mesh에 정의된 culling 상수 값이 아닌 경우
+* 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
 
 **sample**
 
