@@ -17,44 +17,44 @@
 <body>
 <div id="mechine">
     <div style="position:absolute; left:0px; top:0px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname0">준비중</div>
-        <button class="bt"  id="select0">품절</button>
+        <div id="goodsname0">ready</div>
+        <button class="bt"  id="select0">sold out</button>
     </div>
     <div style="position:absolute; left:102px; top:0px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname1">준비중</div>
-        <button class="bt"  id="select1">품절</button>
+        <div id="goodsname1">ready</div>
+        <button class="bt"  id="select1">sold out</button>
     </div>
     <div style="position:absolute; left:204px; top:0px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname2">준비중</div>
-        <button class="bt"  id="select2">품절</button>
+        <div id="goodsname2">ready</div>
+        <button class="bt"  id="select2">sold out</button>
     </div>
     <div style="position:absolute; left:0px; top:102px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname3">준비중</div>
-        <button class="bt"  id="select3">품절</button>
+        <div id="goodsname3">ready</div>
+        <button class="bt"  id="select3">sold out</button>
     </div>
     <div style="position:absolute; left:102px; top:102px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname4">준비중</div>
-        <button class="bt"  id="select4">품절</button>
+        <div id="goodsname4">ready</div>
+        <button class="bt"  id="select4">sold out</button>
     </div>
     <div style="position:absolute; left:204px; top:102px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname5">준비중</div>
-        <button class="bt"  id="select5">품절</button>
+        <div id="goodsname5">ready</div>
+        <button class="bt"  id="select5">sold out</button>
     </div>
     <div style="position:absolute; left:0px; top:204px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname6">준비중</div>
-        <button class="bt"  id="select6">품절</button>
+        <div id="goodsname6">ready</div>
+        <button class="bt"  id="select6">sold out</button>
     </div>
     <div style="position:absolute; left:102px; top:204px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname7">준비중</div>
-        <button class="bt"  id="select7">품절</button>
+        <div id="goodsname7">ready</div>
+        <button class="bt"  id="select7">sold out</button>
     </div>
     <div style="position:absolute; left:204px; top:204px; width:100px; height:100px; border:1px solid green;">
-        <div id="goodsname8">준비중</div>
-        <button class="bt"  id="select8">품절</button>
+        <div id="goodsname8">ready</div>
+        <button class="bt"  id="select8">sold out</button>
     </div>   
     <div style="position:absolute; left:306px; top:0px; width:100px; height:304px; border:1px solid green;">
         <div id="display">판매중</div>
-        <button id="refund">환불</button>
+        <button id="refund">refund</button>
     </div>
     <div style="position:absolute; left:500px; top:0px; width:60px; height:120px; border:1px solid green;">
         <button id="m1000" style="width: 60px; height:40px;">1000</button><br>
@@ -110,7 +110,7 @@
                             ctrl.statusChangeAll(model.display);
                             tmp.count--;
                             if(!tmp.count) 
-                                view.updateStatus(target_idx, "품절");
+                                view.updateStatus(target_idx, "sold out");
                             view.displayMoney(model.display);
                         }
                         break;
@@ -156,7 +156,7 @@
                     goods[k].index = i;
                     document.getElementById("goodsname"+i).innerText = k;
                     var count = goods[k].count;
-                    document.getElementById("select"+i).innerText = count > 0 ? "" : "품절";
+                    document.getElementById("select"+i).innerText = count > 0 ? "" : "sold out";
                     ctrl.addCount(count);    
                     i++;
                 }
