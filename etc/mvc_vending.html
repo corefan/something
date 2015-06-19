@@ -53,8 +53,11 @@
         <button class="bt"  id="select8">sold out</button>
     </div>   
     <div style="position:absolute; left:306px; top:0px; width:100px; height:304px; border:1px solid green;">
-        <div id="display">판매중</div>
+        <div id="displayPanel">판매중</div>
         <button id="refund">refund</button>
+    </div>
+    <div style="position:absolute; left:306px; top:204px; width:100px; height:100px; border:1px solid green;">
+        <button class="bt" id="outsocket"></button>
     </div>
     <div style="position:absolute; left:500px; top:0px; width:60px; height:120px; border:1px solid green;">
         <button id="m1000" style="width: 60px; height:40px;">1000</button><br>
@@ -79,14 +82,9 @@
     };
     var model = {
         display : 0,
-        miniumPrice : 0,
+        miniumPrice : 10000000,
         totalcount: 0,
-        insertMoney : function (v){
-            
-        },
-        refund: function (){
-            
-        },
+
         choice: function (cartagory){
             var isChange = false;
             var val = goods[cartagory].value;
@@ -96,22 +94,27 @@
             }
             return isChange;
         },
-        refill : function (traget, num){
-            
-        }       
     };
+    
     var ctrl = {
         push : function (target_idx){
+            var pThis = this;
             return function(evt){
                 for(var k in goods){
                     var tmp = goods[k];
                     if(target_idx == tmp.index){
                         if(tmp.count > 0 && model.choice(k)){
-                            ctrl.statusChangeAll(model.display);
                             tmp.count--;
+                            model.totalcount--;
                             if(!tmp.count) 
                                 view.updateStatus(target_idx, "sold out");
-                            view.displayMoney(model.display);
+                                
+                            if(model.display < model.miniumPrice){
+                                pThis.refund();                                
+                            }else{
+                                pThis.statusChangeAll(model.display);
+                                view.display(model.display);                                
+                            }
                         }
                         break;
                     }
@@ -119,22 +122,24 @@
             };
         },
         refund : function (){
-            return function(){
-                // TO DO
-                model.display = 0;
-                view.displayMoney("판매중");
-                ctrl.statusChangeAll(0);                                      
-            };
+            outsocket.innerText = model.display ? model.display : ""; 
+            model.display = 0;
+            view.display("판매중");
+            this.statusChangeAll(0);           
         },
         insert : function (v){
+            var pThis = this;
             return function(e){
                 model.display += v;
-                ctrl.statusChangeAll(model.display);
-                view.displayMoney(model.display);
+                pThis.statusChangeAll(model.display);
+                view.display(model.display);
             };
         },
-        addCount : function(v){
-            model.totalcount += v;
+        init : function(count, value){
+            var pThis = this;
+            model.totalcount += count;
+            if(model.miniumPrice > value)
+                  model.miniumPrice = value;
         },
         statusChangeAll : function(money){
             for(var k in goods){
@@ -146,8 +151,16 @@
                     }
                 }
             }
+        },
+        refill : function (traget, num){
+            // TO DO
+        },
+        getRefund : function (){
+            // TO DO
+            outsocket.innerText = "";
         }
     };
+    
     var view = {
         init : function(){
             var i = 0;
@@ -157,7 +170,7 @@
                     document.getElementById("goodsname"+i).innerText = k;
                     var count = goods[k].count;
                     document.getElementById("select"+i).innerText = count > 0 ? "" : "sold out";
-                    ctrl.addCount(count);    
+                    ctrl.init(count, goods[k].value);    
                     i++;
                 }
             }
@@ -168,8 +181,8 @@
         addEvent : function(v, fn){
             document.getElementById(v).addEventListener("click", fn, false);
         },
-        displayMoney : function(v){
-            display.innerText = v;
+        display : function(v){
+            displayPanel.innerText = v;
         },
         updateStatus : function(idx, status){
             document.getElementById("select"+idx).innerText = status;
@@ -181,7 +194,8 @@
         var k = "012345678".split(''), i=k.length;
         while(i--) view.addChoiceEvent("select"+k[i], ctrl.push(i));
         for(k in money) view.addEvent("m"+k, ctrl.insert(+k));
-        view.addEvent("refund", ctrl.refund());
+        view.addEvent("refund", ctrl.refund);
+        view.addEvent("outsocket", ctrl.getRefund);
     })();
     
 </script>
