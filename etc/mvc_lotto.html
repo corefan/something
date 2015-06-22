@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>lottery</title>
+    <style type="text/css">
+        .ball {
+            position : absolute;
+            width : 128px;
+            height : 128px;
+            border-radius: 64px;
+            /*border :1px solid green;*/
+        }
+    </style>
+</head>
+<body>
+<!--<canvas id="imgPreload" width="128" height="128" style="display:none;"></canvas>-->
+<canvas id="imgPreload" width="128" height="128" style="border:1px solid red;"></canvas>
+<div id="machine" style="position:absolute; width:768px; height:768px; border:1px solid red;"></div>
+</body>
+<script>
+    (function (win){
+        var model = {
+            ball : {},
+            winning_num : []                      
+        };
+        
+        var ctrl = {
+            choice : function(){
+                
+            },
+            show : function(){
+              // TO DO  
+            },
+            init : function(){
+                var ctx = imgPreload.getContext('2d');
+                    //        ctx.fillStyle = "#787";
+        //        ctx.fillRect(0, 0, w, h);
+    //            ctx.fill();
+                var w = imgPreload.width, h = imgPreload.height;  
+                ctx.font = "100px aria";
+                for(var i = 1; i < 46; i++){
+                    ctx.fillStyle = "rgb(" + (Math.random()*255<<0) + "," + (Math.random()*255<<0) + "," + (Math.random()*255<<0) + ")";
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.fillStyle = "#000";
+                    // ctx.fillRect(0, 0, w, h);
+                    // ctx.fill();
+                    ctx.fillText(i, 35 - ((i+"").length-1)*25, 100);
+                    var img = document.createElement("img");
+                    img.className = "ball";
+                    img.src = imgPreload.toDataURL();
+                    img.style.left = parseInt(Math.random()*640) + "px";
+                    img.style.top = parseInt(Math.random()*640) + "px";
+                    machine.appendChild(img);
+                    model.ball[i] = img;
+                }
+            }
+        };
+        
+        var view = {
+            
+        };
+        
+        (function(){
+            ctrl.init();
+        })();
+        
+    })(this);
+</script>
+</html>
