@@ -5,17 +5,17 @@
 
 **field**
 
-* [material](#material) - 이 Mesh의 재질을 표현하는 [Ma...
-* [geometry](#geometry) - 이 Mesh의 기하구조 정보를 가지는...
 * [culling](#culling) - 현재 Mesh의 Face Cullin...
+* [geometry](#geometry) - 이 Mesh의 기하구조 정보를 가지는...
+* [material](#material) - 이 Mesh의 재질을 표현하는 [Ma...
 
 **static**
 
-* [getMD](#getMD) - 해당 클래스를 마크다운 형식으로 문서...
-* [getInstance](#getInstance) - uuid 또는 id를 기반으로 인스턴...
 * [extend](#extend) - 이 클래스를 상속하는 자식클래스를 만...
-* [error](#error) - 정적함수에서 표준화된 예외를 처리함(...
+* [getInstance](#getInstance) - uuid 또는 id를 기반으로 인스턴...
 * [count](#count) - 이 클래스로 부터 만들어져 활성화된...
+* [error](#error) - 정적함수에서 표준화된 예외를 처리함(...
+* [getMD](#getMD) - 해당 클래스를 마크다운 형식으로 문서...
 
 **constant**
 
@@ -34,16 +34,16 @@
 
 **description**
 
-기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.
+- 기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.
 
 **param**
 
-1. geometry:* - 직접 [Geometry](Geometry.md)객체를 지정함.
-2. material:* - 직접 [Material](Material.md) 객체를 지정함.
+- 1. geometry: 직접 [Geometry](Geometry.md)객체를 지정함.
+2. material: 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
 
-none
+- none
 
 **sample**
 
@@ -62,74 +62,6 @@ var mesh3 = Mesh( scene.getGeometry(geometryID), scene.getMaterial(materialID) )
 
 [top](#)
 
-<a name="material"></a>
-###material
-
-_field_
-
-
-**description**
-
-이 Mesh의 재질을 표현하는 [Material](Material.md) 객체
-
-**setting**
-
-*writable*:true, *enumerable*:false, *configurable*:false
-
-**defaultValue**
-
-none
-
-**exception**
-
-* 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
-
-**sample**
-
-```javascript
-// scene에 등록된 재질로 교체할수 있음 - set
-mesh1.material = scene.getMaterial(materialID);
-
-// 다른 Mesh에 재질 객체를 알려줄수 있음 - get
-mesh2.material = mesh1.material;
-```
-
-[top](#)
-
-<a name="geometry"></a>
-###geometry
-
-_field_
-
-
-**description**
-
-이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
-
-**setting**
-
-*writable*:true, *enumerable*:false, *configurable*:false
-
-**defaultValue**
-
-none
-
-**exception**
-
-* 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
-
-**sample**
-
-```javascript
-// scene에 등록된 기하구조로 교체할수 있음 - set
-mesh1.geometry = scene.getGeometry(geometryID);
-
-// 다른 Mesh에 기하구조 객체를 알려줄수 있음 - get
-mesh2.geometry = mesh1.geometry;
-```
-
-[top](#)
-
 <a name="culling"></a>
 ###culling
 
@@ -138,19 +70,21 @@ _field_
 
 **description**
 
-현재 Mesh의 Face Culling 정보
+- 현재 Mesh의 Face Culling 정보
 
 **setting**
 
-*writable*:true, *enumerable*:false, *configurable*:false
+- *writable*:true
+- *enumerable*:false
+- *configurable*:false
 
 **defaultValue**
 
-none
+- cullingNone
 
 **exception**
 
-* 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
+- * 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
 
 **sample**
 
@@ -169,26 +103,111 @@ mesh1.culling = "cullingBack" // 뒷면 페이스 컬링을 함
 
 [top](#)
 
-<a name="getMD"></a>
-###getMD()
+<a name="geometry"></a>
+###geometry
+
+_field_
+
+
+**description**
+
+- 이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
+
+**setting**
+
+- *writable*:true
+- *enumerable*:false
+- *configurable*:false
+
+**defaultValue**
+
+- none
+
+**exception**
+
+- * 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
+
+**sample**
+
+```javascript
+// scene에 등록된 기하구조로 교체할수 있음 - set
+mesh1.geometry = scene.getGeometry(geometryID);
+
+// 다른 Mesh에 기하구조 객체를 알려줄수 있음 - get
+mesh2.geometry = mesh1.geometry;
+```
+
+[top](#)
+
+<a name="material"></a>
+###material
+
+_field_
+
+
+**description**
+
+- 이 Mesh의 재질을 표현하는 [Material](Material.md) 객체
+
+**setting**
+
+- *writable*:true
+- *enumerable*:false
+- *configurable*:false
+
+**defaultValue**
+
+- none
+
+**exception**
+
+- * 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
+
+**sample**
+
+```javascript
+// scene에 등록된 재질로 교체할수 있음 - set
+mesh1.material = scene.getMaterial(materialID);
+
+// 다른 Mesh에 재질 객체를 알려줄수 있음 - get
+mesh2.material = mesh1.material;
+```
+
+[top](#)
+
+<a name="extend"></a>
+###extend(className:string, constructor:function)
 
 _static_
 
 
 **description**
 
-해당 클래스를 마크다운 형식으로 문서화하여 출력함
+- 이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Defineder)를 얻음
+-
+**Defineder class의 메소드**
+
+- * 각 메서드는 체이닝됨
+- * Matrix = MoGL.extend('Matrix', function(){..}).static(..).field(..).build(); 형태로 사용
+- * field('x',{value:30}) - 속성을 정의함
+- * method('rotate',{value:function(){}}) - 메서드를 정의함
+- * constant('normalX',{value:'normalX'}) - 상수를 정의함
+- * event('updated',{value:'updated'}) - 이벤트를 정의함
+- * static('toString',{value:function(){}}) - 정적메서드를 정의함
+- * build() - 입력된 결과를 종합하여 클래스를 생성함
 
 **param**
 
+1. className:string - 자식클래스의 이름
+2. constructor:function - 자식클래스의 생성자
 
 **exception**
 
-none
+- none
 
 **return**
 
-string - 클래스에 대한 문서 마크다운
+- Defineder - 클래스를 정의할 수 있는 생성전용객체
 
 **sample**
 
@@ -206,7 +225,7 @@ _static_
 
 **description**
 
-uuid 또는 id를 기반으로 인스턴스를 얻어냄
+- uuid 또는 id를 기반으로 인스턴스를 얻어냄
 
 **param**
 
@@ -214,84 +233,11 @@ uuid 또는 id를 기반으로 인스턴스를 얻어냄
 
 **exception**
 
-none
+- none
 
 **return**
 
-Object - 해당되는 인스턴스
-
-**sample**
-
-```javascript
-//none
-```
-
-[top](#)
-
-<a name="extend"></a>
-###extend(className:string, constructor:function)
-
-_static_
-
-
-**description**
-
-이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Defineder)를 얻음
-
-**Defineder class의 메소드**
-
-* 각 메서드는 체이닝됨
-* Matrix = MoGL.extend('Matrix', function(){..}).static(..).field(..).build(); 형태로 사용
-* field('x',{value:30}) - 속성을 정의함
-* method('rotate',{value:function(){}}) - 메서드를 정의함
-* constant('normalX',{value:'normalX'}) - 상수를 정의함
-* event('updated',{value:'updated'}) - 이벤트를 정의함
-* static('toString',{value:function(){}}) - 정적메서드를 정의함
-* build() - 입력된 결과를 종합하여 클래스를 생성함
-
-**param**
-
-1. className:string - 자식클래스의 이름
-2. constructor:function - 자식클래스의 생성자
-
-**exception**
-
-none
-
-**return**
-
-Defineder - 클래스를 정의할 수 있는 생성전용객체
-
-**sample**
-
-```javascript
-//none
-```
-
-[top](#)
-
-<a name="error"></a>
-###error(method:string, id:int)
-
-_static_
-
-
-**description**
-
-정적함수에서 표준화된 예외를 처리함(정적함수 내부에서 사용)
-
-**param**
-
-1. method:string - 예외가 발생한 함수명
-2. id:int - 예외고유 id
-
-**exception**
-
-none
-
-**return**
-
-none
+- Object - 해당되는 인스턴스
 
 **sample**
 
@@ -309,18 +255,80 @@ _static_
 
 **description**
 
-이 클래스로 부터 만들어져 활성화된 인스턴스의 수
+- 이 클래스로 부터 만들어져 활성화된 인스턴스의 수
 
 **param**
 
+none
 
 **exception**
 
-none
+- none
 
 **return**
 
-int - 활성화된 인스턴스의 수
+- int - 활성화된 인스턴스의 수
+
+**sample**
+
+```javascript
+//none
+```
+
+[top](#)
+
+<a name="error"></a>
+###error(method:string, id:int)
+
+_static_
+
+
+**description**
+
+- 정적함수에서 표준화된 예외를 처리함(정적함수 내부에서 사용)
+
+**param**
+
+1. method:string - 예외가 발생한 함수명
+2. id:int - 예외고유 id
+
+**exception**
+
+- none
+
+**return**
+
+- none
+
+**sample**
+
+```javascript
+//none
+```
+
+[top](#)
+
+<a name="getMD"></a>
+###getMD()
+
+_static_
+
+
+**description**
+
+- 해당 클래스를 마크다운 형식으로 문서화하여 출력함
+
+**param**
+
+none
+
+**exception**
+
+- none
+
+**return**
+
+- string - 클래스에 대한 문서 마크다운
 
 **sample**
 
@@ -338,19 +346,21 @@ _const_
 
 **description**
 
-Mesh Face Culling을 하지 않음.
+- Mesh Face Culling을 하지 않음.
 
 **setting**
 
-*writable*:false, *enumerable*:false, *configurable*:false
+- *writable*:false
+- *enumerable*:false
+- *configurable*:false
 
 **value**
 
-'cullingNone'
+cullingNone
 
 **exception**
 
-none
+- none
 
 **sample**
 
@@ -369,19 +379,21 @@ _const_
 
 **description**
 
-Mesh FrontFace를 그리지 않음.
+- Mesh FrontFace를 그리지 않음.
 
 **setting**
 
-*writable*:false, *enumerable*:false, *configurable*:false
+- *writable*:false
+- *enumerable*:false
+- *configurable*:false
 
 **value**
 
-'cullingFront'
+cullingFront
 
 **exception**
 
-none
+- none
 
 **sample**
 
@@ -400,19 +412,21 @@ _const_
 
 **description**
 
-Mesh BackFace를 그리지않음
+- Mesh BackFace를 그리지않음
 
 **setting**
 
-*writable*:false, *enumerable*:false, *configurable*:false
+- *writable*:false
+- *enumerable*:false
+- *configurable*:false
 
 **value**
 
-'cullingBack'
+cullingBack
 
 **exception**
 
-none
+- none
 
 **sample**
 
@@ -431,11 +445,13 @@ _event_
 
 **description**
 
-Event of Mesh
+- Event of Mesh
 
 **setting**
 
-*writable*:false, *enumerable*:false, *configurable*:false
+- *writable*:false
+- *enumerable*:false
+- *configurable*:false
 
 **value**
 
@@ -443,7 +459,7 @@ changed
 
 **exception**
 
-none
+- none
 
 **sample**
 
