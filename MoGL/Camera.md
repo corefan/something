@@ -697,7 +697,7 @@ none
 **sample**
 
 ```javascript
-var camera = new Camera();
+//none
 ```
 
 [top](#)
