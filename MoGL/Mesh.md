@@ -84,7 +84,7 @@ _field_
 
 **exception**
 
-- * 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
+- 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
 
 **sample**
 
@@ -125,7 +125,7 @@ _field_
 
 **exception**
 
-- * 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
+- 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -161,7 +161,7 @@ _field_
 
 **exception**
 
-- * 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
+- 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
