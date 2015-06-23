@@ -38,7 +38,8 @@
 
 **param**
 
-none
+- 1. geometry: 직접 [Geometry](Geometry.md)객체를 지정함.
+2. material: 직접 [Material](Material.md) 객체를 지정함.
 
 **exception**
 
@@ -69,21 +70,19 @@ _field_
 
 **description**
 
-- 이 Mesh의 재질을 표현하는 [Material](Material.md) 객체
+이 Mesh의 재질을 표현하는 [Material](Material.md) 객체
 
 **setting**
 
-- *writable*:true
-- *enumerable*:false
-- *configurable*:false
+*writable*:true *enumerable*:false *configurable*:false
 
 **defaultValue**
 
-- none
+none
 
 **exception**
 
-- * 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
+* 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -105,21 +104,19 @@ _field_
 
 **description**
 
-- 이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
+이 Mesh의 기하구조 정보를 가지는 [Geometry](Geometry.md) 객체
 
 **setting**
 
-- *writable*:true
-- *enumerable*:false
-- *configurable*:false
+*writable*:true *enumerable*:false *configurable*:false
 
 **defaultValue**
 
-- none
+none
 
 **exception**
 
-- * 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
+* 'Mesh.geometrySet:0' - geometry 아닌 값를 필드에 입력하려는 경우
 
 **sample**
 
@@ -141,21 +138,19 @@ _field_
 
 **description**
 
-- 현재 Mesh의 Face Culling 정보
+현재 Mesh의 Face Culling 정보
 
 **setting**
 
-- *writable*:true
-- *enumerable*:false
-- *configurable*:false
+*writable*:true *enumerable*:false *configurable*:false
 
 **defaultValue**
 
-- cullingNone
+cullingNone
 
 **exception**
 
-- * 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
+* 'Mesh.cullingSet:0' - Mesh에 정의된 culling상수값들과 다른 값을 입력 할 경우
 
 **sample**
 
@@ -182,18 +177,18 @@ _static_
 
 **description**
 
-- 해당 클래스를 마크다운 형식으로 문서화하여 출력함
+해당 클래스를 마크다운 형식으로 문서화하여 출력함
 
 **param**
 
 
 **exception**
 
-- none
+none
 
 **return**
 
-- string - 클래스에 대한 문서 마크다운
+string - 클래스에 대한 문서 마크다운
 
 **sample**
 
@@ -211,7 +206,7 @@ _static_
 
 **description**
 
-- uuid 또는 id를 기반으로 인스턴스를 얻어냄
+uuid 또는 id를 기반으로 인스턴스를 얻어냄
 
 **param**
 
@@ -219,11 +214,11 @@ _static_
 
 **exception**
 
-- none
+none
 
 **return**
 
-- Object - 해당되는 인스턴스
+Object - 해당되는 인스턴스
 
 **sample**
 
@@ -241,18 +236,18 @@ _static_
 
 **description**
 
-- 이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Defineder)를 얻음
-- 
+이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Defineder)를 얻음
+
 **Defineder class의 메소드**
 
-- * 각 메서드는 체이닝됨
-- * Matrix = MoGL.extend('Matrix', function(){..}).static(..).field(..).build(); 형태로 사용
-- * field('x',{value:30}) - 속성을 정의함
-- * method('rotate',{value:function(){}}) - 메서드를 정의함
-- * constant('normalX',{value:'normalX'}) - 상수를 정의함
-- * event('updated',{value:'updated'}) - 이벤트를 정의함
-- * static('toString',{value:function(){}}) - 정적메서드를 정의함
-- * build() - 입력된 결과를 종합하여 클래스를 생성함
+* 각 메서드는 체이닝됨
+* Matrix = MoGL.extend('Matrix', function(){..}).static(..).field(..).build(); 형태로 사용
+* field('x',{value:30}) - 속성을 정의함
+* method('rotate',{value:function(){}}) - 메서드를 정의함
+* constant('normalX',{value:'normalX'}) - 상수를 정의함
+* event('updated',{value:'updated'}) - 이벤트를 정의함
+* static('toString',{value:function(){}}) - 정적메서드를 정의함
+* build() - 입력된 결과를 종합하여 클래스를 생성함
 
 **param**
 
@@ -261,11 +256,11 @@ _static_
 
 **exception**
 
-- none
+none
 
 **return**
 
-- Defineder - 클래스를 정의할 수 있는 생성전용객체
+Defineder - 클래스를 정의할 수 있는 생성전용객체
 
 **sample**
 
@@ -283,7 +278,7 @@ _static_
 
 **description**
 
-- 정적함수에서 표준화된 예외를 처리함(정적함수 내부에서 사용)
+정적함수에서 표준화된 예외를 처리함(정적함수 내부에서 사용)
 
 **param**
 
@@ -292,11 +287,11 @@ _static_
 
 **exception**
 
-- none
+none
 
 **return**
 
-- none
+none
 
 **sample**
 
@@ -314,18 +309,18 @@ _static_
 
 **description**
 
-- 이 클래스로 부터 만들어져 활성화된 인스턴스의 수
+이 클래스로 부터 만들어져 활성화된 인스턴스의 수
 
 **param**
 
 
 **exception**
 
-- none
+none
 
 **return**
 
-- int - 활성화된 인스턴스의 수
+int - 활성화된 인스턴스의 수
 
 **sample**
 
@@ -343,13 +338,11 @@ _const_
 
 **description**
 
-- Mesh Face Culling을 하지 않음.
+Mesh Face Culling을 하지 않음.
 
 **setting**
 
-- *writable*:false
-- *enumerable*:false
-- *configurable*:false
+*writable*:false *enumerable*:false *configurable*:false
 
 **value**
 
@@ -357,7 +350,7 @@ cullingNone
 
 **exception**
 
-- none
+none
 
 **sample**
 
@@ -376,13 +369,11 @@ _const_
 
 **description**
 
-- Mesh FrontFace를 그리지 않음.
+Mesh FrontFace를 그리지 않음.
 
 **setting**
 
-- *writable*:false
-- *enumerable*:false
-- *configurable*:false
+*writable*:false *enumerable*:false *configurable*:false
 
 **value**
 
@@ -390,7 +381,7 @@ cullingFront
 
 **exception**
 
-- none
+none
 
 **sample**
 
@@ -409,13 +400,11 @@ _const_
 
 **description**
 
-- Mesh BackFace를 그리지않음
+Mesh BackFace를 그리지않음
 
 **setting**
 
-- *writable*:false
-- *enumerable*:false
-- *configurable*:false
+*writable*:false *enumerable*:false *configurable*:false
 
 **value**
 
@@ -423,7 +412,7 @@ cullingBack
 
 **exception**
 
-- none
+none
 
 **sample**
 
@@ -442,13 +431,11 @@ _event_
 
 **description**
 
-- Event of Mesh
+Event of Mesh
 
 **setting**
 
-- *writable*:false
-- *enumerable*:false
-- *configurable*:false
+*writable*:false *enumerable*:false *configurable*:false
 
 **value**
 
@@ -456,7 +443,7 @@ changed
 
 **exception**
 
-- none
+none
 
 **sample**
 
