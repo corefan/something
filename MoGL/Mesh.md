@@ -38,8 +38,7 @@
 
 **param**
 
-- 1. geometry: 직접 [Geometry](Geometry.md)객체를 지정함.
-2. material: 직접 [Material](Material.md) 객체를 지정함.
+none
 
 **exception**
 
