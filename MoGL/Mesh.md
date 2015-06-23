@@ -223,7 +223,7 @@ Object - 해당되는 인스턴스
 **sample**
 
 ```javascript
-//none
+var instance = Mesh.getInstance(uuid);
 ```
 
 [top](#)
@@ -236,9 +236,9 @@ _static_
 
 **description**
 
-이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Defineder)를 얻음
+이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Definer)를 얻음
 
-**Defineder class의 메소드**
+**Definer class의 메소드**
 
 * 각 메서드는 체이닝됨
 * Matrix = MoGL.extend('Matrix', function(){..}).static(..).field(..).build(); 형태로 사용
@@ -260,12 +260,12 @@ none
 
 **return**
 
-Defineder - 클래스를 정의할 수 있는 생성전용객체
+Definer - 클래스를 정의할 수 있는 생성전용객체
 
 **sample**
 
 ```javascript
-//none
+var classA = MoGL.extend('classA', function(){}).build();
 ```
 
 [top](#)
@@ -296,7 +296,11 @@ none
 **sample**
 
 ```javascript
-//none
+var classA = MoGL.extend('classA', function(){})
+    .static('test', function(){
+	     this.error('test', 0);
+    })
+    .build();
 ```
 
 [top](#)
@@ -325,7 +329,7 @@ int - 활성화된 인스턴스의 수
 **sample**
 
 ```javascript
-//none
+var meshCount = Mesh.count();
 ```
 
 [top](#)
