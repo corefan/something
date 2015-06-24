@@ -13,15 +13,15 @@
         });
     }
     //표준이름의 requestAnimationFrame가 없는 경우
-    if (!('requestAnimationFrame' in window)) window.requestAnimationFrame = webkitRequestAnimationFrame || mozRequestAnimationFrame || msRequestAnimationFrame;
+    if (!('requestAnimationFrame' in window)) window.requestAnimationFrame = window['webkitRequestAnimationFrame'] || window['mozRequestAnimationFrame'] || window['msRequestAnimationFrame'];
     //ios7,8 - performance.now가 지원되지 않는 경우
     var nowOffset;
     if (!('performance' in window)) window.performance = {};
     if (!('now' in Date)) Date.now = function () {return +new Date();};
     if (!('now' in window.performance)){
         nowOffset = Date.now();
-        if (performance.timing && performance.timing.navigationStart) {
-            nowOffset = performance.timing.navigationStart;
+        if (window.performance.timing && window.performance.timing.navigationStart) {
+            nowOffset = window.performance.timing.navigationStart;
         }
         window.performance.now = function now(){
             return Date.now() - nowOffset;
@@ -30,7 +30,7 @@
 })();
 //전역에서 사용하는 공통함수
 var $setPrivate, $getPrivate, $writable, $readonly, $getter, $setter, $color, $md, $ease,
-    GLMAT_EPSILON, SIN, COS, TAN, ATAN, ATAN2, ASIN, SQRT, CEIL, ABS, PIH, PERPI;
+    GLMAT_EPSILON, SIN, COS, TAN, ATAN, ATAN2, ASIN, SQRT, CEIL, ABS, PI, PIH, PID, D2R, R2D;
 
 (function() {
     var VAR = {}, value = {};
@@ -78,7 +78,8 @@ $color = (function(){
     return function(v){
         if (typeof v == 'string' && v.charAt(0) == '#') {
             if (v.length == 4) {
-                v += v.substr(1,3)
+                v = v.substr(1,3)
+                v = '#'+v[0]+v[0]+v[1]+v[1]+v[2]+v[2]
             }
             co[0] = parseInt(v.substr(1, 2), 16) / 255,
             co[1] = parseInt(v.substr(3, 2), 16) / 255,
@@ -100,22 +101,10 @@ $color = (function(){
 //수학함수
 GLMAT_EPSILON = 0.000001,
 SIN = Math.sin, COS = Math.cos, TAN = Math.tan, ATAN = Math.atan, ATAN2 = Math.atan2, ASIN = Math.asin,
-SQRT = Math.sqrt, CEIL = Math.ceil, ABS = Math.abs, PI = Math.PI, PIH = PI * 0.5, PERPI = 180 / PI;
+SQRT = Math.sqrt, CEIL = Math.ceil, ABS = Math.abs, PI = Math.PI, PIH = PI * 0.5, PID = PI * 2, D2R = PI / 180, R2D = 180 / PI;
 //markdown
 $md = function(classes){
-    var exception, list, val, func, sort, toStr, fieldDetail, methodDetail;
-    exception = function(f){
-        var temp, i, j, k;
-        f = Function.prototype.toString.call(f);
-        temp = [],
-        k = 0;
-        while ((i = f.indexOf('this.error(', k)) > -1) {
-            k = i + 'this.error('.length;
-            temp[temp.length] = f.substring(k, f.indexOf(')', k));
-        }
-        if (!temp.length) temp[temp.length] = 'none';
-        return temp;
-    },
+    var list, val, func, sort, toStr, fieldDetail, methodDetail;
     sort = function(a,b){
         return a.name < b.name;
     },
@@ -125,7 +114,7 @@ $md = function(classes){
             v.sort(sort);
             md[md.length] = '\n**' + type + '**\n';
             for (i = 0, j = v.length; i < j; i++){
-                md[md.length] = '* [' + v[i].name + '](#' + v[i].name + ') - ' + v[i].description.substr(0, 20).trim() + (v[i].description.length > 20 ? '...' : '');
+                md[md.length] = '* [' + v[i].name + '](#' + v[i].name + ') - ' + v[i].description.split('\n')[0].substr(0, 20).trim() + (v[i].description.length > 20 ? '...' : '');
             }
         }
     },
@@ -147,6 +136,7 @@ $md = function(classes){
                 temp[k].description = toStr(temp[k].description),
                 temp[k].enumerable = temp1[k] && temp1[k].enumerable ? true : false, 
                 temp[k].configurable = temp1[k] && temp1[k].configurable ? true : false;
+                temp[k].exception = toStr(temp[k].exception || 'none');
                 if (temp1[k]){
                     if ('writable' in temp1[k]) {
                         temp[k].writable = temp1[k].writable ? true : false;
@@ -155,7 +145,7 @@ $md = function(classes){
                     } else {
                         temp[k].writable = false;
                     }
-                }
+                };
                 v[v.length] = temp[k];
             }
             list(type, md, v);
@@ -164,19 +154,19 @@ $md = function(classes){
     func = function(type, md, ref){
         var v = [], temp = ref._info['_'+type], temp1 = ref['_'+type], k;
         for (k in temp) {
-            temp[k].name = k,
-            temp[k].param = toStr(temp[k].param || 'none'), 
-            temp[k].ret = toStr(temp[k].ret || 'none'), 
-            temp[k].sample = toStr(temp[k].sample || '//none'),
-            temp[k].exception = temp1[k] && k != 'toString' ? exception(temp1[k].value) : '',
-            temp[k].description = toStr(temp[k].description),
+            temp[k].name = k;
+            temp[k].param = toStr(temp[k].param || 'none');
+            temp[k].ret = toStr(temp[k].ret || 'none');
+            temp[k].sample = toStr(temp[k].sample || '//none');
+            temp[k].exception = toStr(temp[k].exception || 'none');
+            temp[k].description = toStr(temp[k].description);
             v[v.length] = temp[k];
         }
         list(type, md, v);
         return v;
     },
     fieldDetail = function(type, v, md) {
-        var i, j, k;
+        var i, j, k, m, n;
         if (v.length) {
             for (i = 0, j = v.length; i < j; i++){
                 k = v[i];
@@ -187,7 +177,7 @@ $md = function(classes){
                 md[md.length] = '\n**description**\n';
                 md[md.length] = k.description;
                 md[md.length] = '\n**setting**\n';
-                md[md.length] = '*writable*:' + k.writable + ', *enumerable*:' + k.enumerable + ', *configurable*:' + k.configurable;
+                md[md.length] = '*writable*:' + k.writable + ' *enumerable*:' + k.enumerable + ' *configurable*:' + k.configurable;
                 if ('value' in k) {
                     md[md.length] = '\n**value**\n';
                     md[md.length] = k.value;
@@ -195,6 +185,8 @@ $md = function(classes){
                     md[md.length] = '\n**defaultValue**\n';
                     md[md.length] = k.defaultValue;
                 }
+                md[md.length] = '\n**exception**\n';
+                md[md.length] = k.exception;
                 md[md.length] = '\n**sample**\n';
                 md[md.length] = '```javascript';
                 md[md.length] = k.sample;
@@ -239,15 +231,9 @@ $md = function(classes){
                     md[md.length] = 'none';
                 }
                 md[md.length] = '\n**exception**\n';
-                if (k.exception != 'none'){
-                    for(m = 0, n = k.exception.length; m < n ; m++){
-                        md[md.length] = this.className + '.' + k.name + ':' + k.param[m];
-                    }
-                } else {
-                    md[md.length] = 'none';
-                }
+                md[md.length] = k.exception;
                 md[md.length] = '\n**return**\n';
-                md[md.length] = k.ret.length ? k.ret.replace('this', 'this - 메소드체이닝을 위해 자신을 반환함') : 'none';
+                md[md.length] = (k.ret.length ? k.ret.replace('this', 'this - 메소드체이닝을 위해 자신을 반환함') : 'none');
                 md[md.length] = '\n**sample**\n';
                 md[md.length] = '```javascript';
                 md[md.length] = k.sample;
@@ -298,11 +284,11 @@ $md = function(classes){
         md[md.length] = '\n<a name="constructor"></a>';
         md[md.length] = '##Constructor';
         md[md.length] = '\n**description**\n';
-        md[md.length] = toStr(temp.description);
+        md[md.length] = '- '+toStr(temp.description);
         md[md.length] = '\n**param**\n';
-        md[md.length] = toStr(temp.param || 'none'),
+        md[md.length] = '- '+toStr(temp.param || 'none'),
         md[md.length] = '\n**exception**\n';
-        md[md.length] = exception(temp.value);
+        md[md.length] = '- '+toStr(temp.exception || 'none');
         md[md.length] = '\n**sample**\n';
         md[md.length] = '```javascript';
         md[md.length] = toStr(temp.sample || '//none');
@@ -320,7 +306,7 @@ Object.freeze($ease = {
     linear:function(a,c,b){return b*a+c},
     backIn:function(a,c,b){return b*a*a*(2.70158*a-1.70158)+c},
     backOut:function(a,c,b){a-=1;return b*(a*a*(2.70158*a+1.70158)+1)+c},
-    backInOut:bio = function(a,c,b){a*=2;if(1>a)return 0.5*b*a*a*(3.5949095*a-2.5949095)+c;a-=2;return 0.5*b*(a*a*(3.70158*a+2.70158)+2)+c},
+    backInOut:function(a,c,b){a*=2;if(1>a)return 0.5*b*a*a*(3.5949095*a-2.5949095)+c;a-=2;return 0.5*b*(a*a*(3.70158*a+2.70158)+2)+c},
     bounceOut:function(a,c,b){if(0.363636>a)return 7.5625*b*a*a+c;if(0.727272>a)return a-=0.545454,b*(7.5625*a*a+0.75)+c;if(0.90909>a)return a-=0.818181,b*(7.5625*a*a+0.9375)+c;a-=0.95454;return b*(7.5625*a*a+0.984375)+c},
     sineIn:function(a,c,b){return -b*Math.cos(a*PIH)+b+c},
     sineOut:function(a,c,b){return b*Math.sin(a*PIH)+c},

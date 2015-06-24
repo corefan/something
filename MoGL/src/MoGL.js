@@ -1,5 +1,6 @@
 var MoGL = (function() {
-    var Defineder, build, func, keys, val, init, param, checker,
+    'use strict';
+    var Definer, build, func, keys, val, param, checker,
         MoGL, idProp, destroy, classGet, totalCount, error;
     checker = {};
     param = function(v){
@@ -12,9 +13,9 @@ var MoGL = (function() {
             return v;
         }
     },
-    Defineder = function(k, v, parent, check){
+    Definer = function(k, v, parent, check){
         var p, i;
-        if (check !== checker) throw new Error('Defineder는 extend를 통해서만 사용할 수 있습니다');
+        if (check !== checker) throw new Error('Definer는 extend를 통해서만 사용할 수 있습니다');
         this.parent = parent;
         if (typeof v == 'function') {
             this._construct = {
@@ -59,7 +60,7 @@ var MoGL = (function() {
         md = {
             description:'해당 클래스를 마크다운 형식으로 문서화하여 출력함',
             ret:'string - 클래스에 대한 문서 마크다운'
-        }
+        };
         if ($md) {
             md.value = $md(classes);
         } else {
@@ -72,8 +73,8 @@ var MoGL = (function() {
                     'constructor:function - 자식클래스의 생성자'
                 ],
                 description:[
-                    '이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Defineder)를 얻음',
-                    '\n**Defineder class의 메소드**\n',
+                    '이 클래스를 상속하는 자식클래스를 만들 수 있는 정의자(Definer)를 얻음',
+                    '\n**Definer class의 메소드**\n',
                     '* 각 메서드는 체이닝됨',
                     "* Matrix = MoGL.extend('Matrix', function(){..}).static(..).field(..).build(); 형태로 사용",
                     "* field('x',{value:30}) - 속성을 정의함",
@@ -83,7 +84,10 @@ var MoGL = (function() {
                     "* static('toString',{value:function(){}}) - 정적메서드를 정의함",
                     "* build() - 입력된 결과를 종합하여 클래스를 생성함"
                 ],
-                ret:'Defineder - 클래스를 정의할 수 있는 생성전용객체',
+                ret:'Definer - 클래스를 정의할 수 있는 생성전용객체',
+				sample:[
+					"var classA = MoGL.extend('classA', function(){}).build();"
+				],
                 value:function extend(k) {
                     var v;
                     if(arguments.length == 1) {
@@ -91,13 +95,16 @@ var MoGL = (function() {
                     } else {
                         v = arguments[1];
                     }
-                    return new Defineder(k, v, this, checker);
+                    return new Definer(k, v, this, checker);
                 }
             },
             getInstance:{
                 param:'uuid:string - 얻고 싶은 인스턴스의 uuid 또는 id',
                 description:'uuid 또는 id를 기반으로 인스턴스를 얻어냄',
                 ret:'Object - 해당되는 인스턴스',
+				sample:[
+					"var instance = Mesh.getInstance(uuid);"
+				],
                 value:function getInstance(v) {
                     var inst, p, k;
                     if (v in allInstance) {
@@ -117,6 +124,9 @@ var MoGL = (function() {
             count:{
                 description:'이 클래스로 부터 만들어져 활성화된 인스턴스의 수',
                 ret:'int - 활성화된 인스턴스의 수',
+				sample:[
+					"var meshCount = Mesh.count();"
+				],
                 value:function count() {
                     return counter[this.uuid];
                 }
@@ -127,6 +137,13 @@ var MoGL = (function() {
                     'method:string - 예외가 발생한 함수명',
                     'id:int - 예외고유 id'
                 ],
+				sample:[
+					"var classA = MoGL.extend('classA', function(){})",
+					"    .static('test', function(){",
+					"	     this.error('test', 0);",
+					"    })",
+					"    .build();"
+				],
                 value:function error(method, id) {
                     throw new Error(this.className + '.' + method + ':' + id);
                 }
@@ -207,7 +224,7 @@ var MoGL = (function() {
             for (key in this) {
                 if (this.hasOwnProperty(key)) this[key] = null;
             }
-            if(ids[this.classId] && this.uuid in ids[this.classId][this]){//id파괴
+            if(ids[this.classId] && this.uuid in ids[this.classId]){//id파괴
                 key = ids[this.classId][this],
                 delete ids[this.classId][this],
                 delete ids[this.classId].ref[key];
@@ -218,7 +235,7 @@ var MoGL = (function() {
             total--;//전체인스턴스감소
         },
         classGet = function classGet(context) {
-            var i;
+            var k;
             if (!context) context = {};
             for (k in classes) {
                 if (classes.hasOwnProperty(k)) context[k] = classes[k].cls;
@@ -316,7 +333,8 @@ var MoGL = (function() {
                     description:v.description,
                     param:v.param || (!isdoc ? param(v.value) : ''),
                     ret:v.ret,
-                    sample:v.sample
+                    sample:v.sample,
+                    exception: v.exception
                 };
             }
             return this;
@@ -353,14 +371,15 @@ var MoGL = (function() {
                     type:v.type,
                     description:v.description || (type == '_constant' ? 'Const' : type == '_event' ? 'Event' : 'Field') + ' of ' + this._construct.value.name,
                     defaultValue:v.defaultValue,
-                    sample:v.sample
+                    sample:v.sample,
+                    exception: v.exception
                 };
             }
             if (!isdoc && 'value' in this[type][k]) this._info[type][k].value = this[type][k].value;
             return this;
         }};
     },
-    Object.defineProperties(Defineder.prototype, {
+    Object.defineProperties(Definer.prototype, {
         method:func('_method'),
         static:func('_static'),
         field:val('_field'),
@@ -368,19 +387,19 @@ var MoGL = (function() {
         event:val('_event'),
         build:{value:build}
     });
-    Object.freeze(Defineder),
-    Object.freeze(Defineder.prototype);
+    Object.freeze(Definer),
+    Object.freeze(Definer.prototype);
     MoGL = (function(){
         var init, updated, listener;
         listener = {},
         updated = {},
-        init = new Defineder('MoGL', {
+        init = new Definer('MoGL', {
             description:[
                 'MoGL 라이브러리의 모든 클래스는 MoGL을 상속함',
                 '* 보통 직접적으로 MoGL 클래스를 사용하는 경우는 없음'
             ],
             sample:"var instance = new MoGL();",
-            value:MoGL,
+            value:MoGL
         }, null, checker)
         .field('id', idProp)
         .field('isUpdated', {
@@ -410,7 +429,7 @@ var MoGL = (function() {
             type:'string',
             sample: [
                 "var scene = new Scene();",
-                "scene.uuid // 'uuid:24'"
+                "console.log(scene.uuid); // 'uuid:24'"
             ]
         }, true)
         .field('className', {
@@ -418,7 +437,7 @@ var MoGL = (function() {
             type:'string',
             sample: [
                 "var scene = new Scene();",
-                "scene.className // 'Scene'"
+                "console.log(scene.className); // 'Scene'"
             ]
         }, true)
         .field('classId', {
@@ -426,7 +445,7 @@ var MoGL = (function() {
             type:'string',
             sample: [
                 "var scene = new Scene();",
-                "scene.classId // 'uuid:22'"
+                "console.log(scene.classId); // 'uuid:22'"
             ]
         }, true)
         .method('error', {
@@ -440,7 +459,7 @@ var MoGL = (function() {
             sample:[
                 "fn.action = function(a){",
                 "  if(!a) this.error(0);",
-                "}"
+                "};"
             ],
         }, true)
         .method('toString', {
@@ -483,7 +502,7 @@ var MoGL = (function() {
                 "",
                 "//보간애니메이션실행",
                 "var vo = {x:0, y:0, z:0};",
-                "var ani = {time:1, delay:2, repeat:1, ease:MoGL.easing.sineOut}",
+                "var ani = {time:1, delay:2, repeat:1, ease:MoGL.easing.sineOut};",
                 "mat.setProperties( vo, ani );"
             ],
             value:(function(){
@@ -513,7 +532,7 @@ var MoGL = (function() {
                                     inst.dispatch(MoGL.propertyChanged);
                                 }
                             } else {//진행중
-                                ease = ani.ease,
+                                var ease = ani.ease,
                                 rate = (t - ani.start) / ani.term;
                                 for(k1 in prop){
                                     inst[k1] = ease(rate, init[k1], prop[k1] - init[k1]);
@@ -566,8 +585,8 @@ var MoGL = (function() {
                 "});",
                 "var city2 = Scene();",
                 "city1.addEventListener( 'updated', function(v, added){",
-                "  this == city2",
-                "  added == 10",
+                "  console.log(this == city2);",
+                "  console.log(added == 10);",
                 "}, city2, 10);"
             ],
             value:function addEventListener(ev, f) {

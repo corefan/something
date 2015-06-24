@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>calc</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+//            overflow: hidden;
+            height: 100%;
+        }
+    </style>
+    <script src="./src/MoGL.js"></script>
+    <script src="./src/BlendMode.js"></script>
+    <script src="./src/Filter.js"></script>
+    <script src="./src/Vertex.js"></script>
+    <script src="./src/VertexShaderFunctions.js"></script>
+    <script src="./src/Matrix.js"></script>
+    <script src="./src/Geometry.js"></script>
+    <script src="./src/Material.js"></script>
+    <script src="./src/Texture.js"></script>
+    <script src="./src/Mesh.js"></script>
+    <script src="./src/Group.js"></script>
+    <script src="./src/Camera.js"></script>
+    <script src="./src/Scene.js"></script>
+    <script src="./src/World.js"></script>
+</head>
+<body>
+<canvas id="gl_canvas" width="320" height="400" ></canvas>
+</body>
+<script>
+
+    (function(win){
+        function _mousedown (evt){
+//        console.log(evt.x);
+//        console.log(evt.y);
+            console.log(evt.clientX, evt.clientY);
+            console.log("camera.z : ", camera.z);
+//            console.log("mesh.x : ", mesh.x);
+//            console.log("mesh.y : ", mesh.y);
+//            console.log("mesh.z : ", mesh.z);
+
+//            var w = 10/win.innerWidth;
+//            var h = 10/win.innerHeight;
+//            console.log(w, h);
+
+
+//            mesh.scaleX = 0.5;
+//            mesh.scaleY = 0.5;
+
+//            mesh.x++;
+//            mesh.y++;
+//            mesh.z++;
+//            if(mesh.z > 10){
+//                camera.lookAt(0,0, 20);
+//            }
+            world.render();
+        }
+        gl_canvas.addEventListener("mousedown", _mousedown, false);
+
+		
+        var img_list = ["off",      "7",        "8",        "9",        "op3", 
+                        "op4",      "4",        "5",        "6",        "op2",
+                        "c",        "1",        "2",        "3",        "op1",
+                        "ac",       "0",        "dot",      "equal",    "op0"];
+
+        var pos_list = [-0.5,0.153,     -0.375,0.153,       0,0.153,        0.378,0.153,        0.5,0.153,
+                        -0.5,-0.121,    -0.375,-0.121,      0,-0.121,       0.378,-0.121,       0.5,-0.121,
+                        -0.5,-0.395,    -0.375,-0.395,      0,-0.395,       0.3798,-0.395,      0.5,-0.395,
+                        -0.5,-0.67,     -0.375,-0.67,       0,-0.67,        0.3790,-0.67,       0.5,-0.67];
+
+
+        var world = new World("gl_canvas");
+//        world.setAutoSize(false);
+        var scene = new Scene().setId("scene1");
+        var camera = new Camera();
+        camera.z = 3;
+
+        var count = img_list.length;
+        // var count = img_list.length + 4;
+//        var count = 4;
+        
+		function img_loaded(evt){
+			var target = evt.srcElement || evt.target;
+			scene.addTexture(target.name, target.src);
+            console.log(target.name);
+			if(!--count){
+                start();
+            }
+		}
+
+        // ["rs", "operate", "calc", "num"];
+
+		// var img = new Image();
+		// img.onload = img_loaded;
+		// img.name = "calc";
+		// img.src = "./calc/" + img.name + ".jpg"; 
+
+		// img = new Image();
+		// img.onload = img_loaded;
+		// img.name = "operate";
+		// img.src = "./calc/" + img.name + ".jpg"; 
+
+		// img = new Image();
+		// img.onload = img_loaded;
+		// img.name = "rs";
+		// img.src = "./calc/" + img.name + ".jpg"; 
+
+		// img = new Image();
+		// img.onload = img_loaded;
+		// img.name = "num";
+		// img.src = "./calc/" + img.name + ".jpg"; 
+
+		for(var i = 0, len = img_list.length; i < len; i++){
+			img = new Image();
+			img.onload = img_loaded;
+			img.name = img_list[i];
+			img.src = "./calc/" + img.name + ".jpg"; 
+		}
+
+        world.addScene(scene);
+        scene.addChild("camera1", camera);
+        
+        function start(){            
+            scene.addGeometry("rect", new Geometry([-1.0, 1.0, 0.0, 0.0, 0.0,   1.0, 1.0, 0.0, 1.0, 0.0,    -1.0, -1.0, 0.0, 0.0, 1.0,     1.0, -1.0, 0.0, 1.0, 1.0],
+                [0, 1, 2, 1, 2, 3], [Vertex.x, Vertex.y, Vertex.z, Vertex.u, Vertex.v]));
+
+            scene.addMaterial( "calc" , new Material().addTexture(Texture.diffuse, "calc") );
+            scene.addMaterial( "operate" , new Material().addTexture(Texture.diffuse, "operate") );
+            scene.addMaterial( "num" , new Material().addTexture(Texture.diffuse, "num") );
+            scene.addMaterial( "rs" , new Material().addTexture(Texture.diffuse, "rs") );
+            
+
+//             var mesh = new Mesh( "rect" , "calc");
+// //            mesh.setScale(1, 1, 0);
+//             scene.addChild( "calc" , mesh );
+//             mesh = new Mesh( "rect" , "operate");
+//             scene.addChild( "operate" , mesh );
+//             mesh = new Mesh( "rect" , "num");
+//             scene.addChild( "num" , mesh );
+//             mesh = new Mesh( "rect" , "rs");
+//             scene.addChild( "rs" , mesh );
+                        
+       		for(var i = 0, len = img_list.length; i < len; i++){
+                scene.addMaterial( img_list[i] , new Material().addTexture(Texture.diffuse, img_list[i]) );
+                mesh = new Mesh( "rect" , img_list[i]);
+                mesh.setPosition(pos_list[2*i], pos_list[2*i+1], 0);
+                mesh.setScale(100/640, 80/800, 0);
+                scene.addChild( img_list[i] , mesh );
+    		}
+
+            
+            // scene.addMaterial("lightgray", new Material("#ccc"));
+            // scene.addMaterial("darkgray", new Material("#555"));
+            // scene.addMaterial("black", new Material("#000"));
+            // scene.addMaterial("hotpink", new Material("#f55"));
+            // scene.addGeometry("rect", new Geometry([-1.0, 1.0, 0.0,  1.0, 1.0, 0.0,  -1.0, -1.0, 0.0,  1.0, -1.0, 0.0], [0, 1, 2, 1, 2, 3]));
+
+
+            // var mesh = new Mesh("rect", "lightgray");
+    //        mesh.setScale("50%","80%",0); 
+    //      	mesh.setScale(1, 1, 0);
+            // scene.addChild("mesh1", mesh);
+    
+    //        var mesh2 = new Mesh("rect", "hotpink");
+            
+    //        mesh2.x = 3;
+    //        mesh2.y = 3;
+    //        mesh2.z = 5;
+    
+    //		mesh2.setScale(0.1, 0.1, 0);
+    //        scene.addChild("mesh2", mesh2);
+
+
+
+            world.render();
+        }
+    })(this);
+
+</script>
+</html>

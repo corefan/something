@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>jellyfish</title>
+    <meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .FPS {
+            color: #FFF;
+            left: 0px;
+            top: 0px;
+            position: absolute
+        }
+    </style>
+    <script src="../src/MoGL.js"></script>
+    <script src="../src/BlendMode.js"></script>
+    <script src="../src/Filter.js"></script>
+    <script src="../src/Vertex.js"></script>
+	<script src="../src/Shading.js"></script>
+    <script src="../src/VertexShaderFunctions.js"></script>
+    <script src="../src/Matrix.js"></script>
+    <script src="../src/Geometry.js"></script>
+    <script src="../src/Material.js"></script>
+    <script src="../src/Texture.js"></script>
+    <script src="../src/Mesh.js"></script>
+    <script src="../src/Group.js"></script>
+    <script src="../src/Camera.js"></script>
+    <script src="../src/Scene.js"></script>
+    <script src="../src/World.js"></script>
+
+</head>
+<body>
+<canvas id="glcanvas"></canvas>
+<div class="FPS">
+	Current FPS: <span id="currentFPS"></span>
+	Average FPS: <span id="averageFPS"></span>
+</div>
+<script>
+//	var trace = window.console.log;
+	window.console.log = function(){};
+	
+	(function(_win){
+		
+		var divCurrentFPS = document.getElementById( 'currentFPS' );
+		var divAverageFPS = document.getElementById( 'averageFPS' );
+		var prevTime = 0;		
+		glcanvas.width = _win.innerWidth;
+		glcanvas.height = _win.innerHeight;
+		
+// ------------------- contents ------------------- 
+		
+		
+		var world = new World("glcanvas");
+		var scene1 = new Scene();
+		var camera1 = new Camera();
+		camera1.setBackgroundColor(0.2, 0.3, 0.5, 1);
+
+		world.addScene("scene1", scene1);
+		scene1.addChild("camera1", camera1);
+		
+		world.addRender("scene1", "camera1");
+		
+		var texture_loaded = false;			
+		function img_loaded(evt){
+			var target = evt.srcElement || evt.target;
+			scene1.addTexture(target.name, target.src);
+			if(target.name == "jellyfish"){
+				texture_loaded = true;
+				if(mesh_datas.length > 3){
+					makeMesh();
+				}
+			}
+		}
+		
+		var img = new Image();
+		img.onload = img_loaded;
+		img.name = "jellyfish";
+		img.src = "./jellyfish/" + img.name + ".png";
+		
+		
+		img = new Image();
+		img.onload = img_loaded;
+		img.name = "luminescence";
+		img.src = "./jellyfish/" + img.name + ".png";
+		
+		for(var i = 1; i < 32; i++){
+			img = new Image();
+			img.onload = img_loaded;
+			img.name = "caustics7." + ( i < 10 ? "0"+i : i );
+			img.src = "./jellyfish/" + img.name + ".jpg"; 
+		}
+		
+		
+		
+	    /*
+	    scene1.addGeometry('rect', new Geometry(
+	                    [
+	                        1.0, 1.0, 0.0, 0.0, 0.0,
+	                        -1.0, 1.0, 0.0, 1.0, 0.0,
+	                        1.0, -1.0, 0.0, 0.0, 1.0,
+	                        -1.0, -1.0, 0.0, 1.0, 1.0
+	                    ],
+	                    [
+	                        0, 1, 2, 1, 2, 3
+	                    ],
+	                    [
+	                        Vertex.x, Vertex.y, Vertex.z, Vertex.u, Vertex.v
+	                    ]
+	            )
+	    ); 
+	    
+
+	    scene1.addMaterial('bitmapMat', new Material());
+//		scene1.addTexture('texture1', '../src/ohno.png')
+		function start(){
+		    scene1.getMaterial('bitmapMat').addTexture(Texture.diffuse,'jellyfish');
+		    scene1.addChild('mesh1', new Mesh('rect', 'bitmapMat'));
+//			world.addRender("scene1", "camera1");
+			scene1.upade = 1;
+			world.render();
+		}
+		*/
+		
+	    
+	    
+		
+		loadMeshInfo("./jellyfish/jellyfish0.json");
+		loadMeshInfo("./jellyfish/jellyfish1.json");
+		loadMeshInfo("./jellyfish/jellyfish2.json");
+		loadMeshInfo("./jellyfish/jellyfish3.json");
+		
+
+		var mesh_datas = [];
+		
+		function loadMeshInfo (fileurl){			
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("get", fileurl, true);
+			xmlhttp.onreadystatechange = function(){
+				if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+					mesh_datas.push( JSON.parse(xmlhttp.responseText) );
+					if(mesh_datas.length > 3 && texture_loaded){
+						makeMesh();						
+					}
+				}
+			};
+			xmlhttp.send();
+		}	
+		
+		function makeMesh(){
+	 		var jelfish_mater = new Material();
+	 		jelfish_mater.addTexture(Texture.diffuse, "jellyfish");
+//  	 		jelfish_mater.addTexture(Texture.diffuse, "luminescence");
+//  			for(var i = 1; i < 32; i++){
+//  		 		jelfish_mater.addTexture(Texture.diffuse, "caustics7." + ( i < 10 ? "0"+i : i ));
+//  			}
+	 		scene1.addMaterial("fish_mater", jelfish_mater);
+						
+			for(var j = 0; j < 4; j++){
+				var mesh_dt = mesh_datas[j];
+				var fix_buffer = [];
+				for(var i = 0, len = mesh_dt.vertexPositions.length; i < len; i += 3){
+					fix_buffer.push( mesh_dt.vertexPositions[i] );
+					fix_buffer.push( mesh_dt.vertexPositions[i+1] );
+					fix_buffer.push( mesh_dt.vertexPositions[i+2] );
+	
+					fix_buffer.push( mesh_dt.vertexColors[i] );
+					fix_buffer.push( mesh_dt.vertexColors[i+1] );
+					fix_buffer.push( mesh_dt.vertexColors[i+2] );
+					
+					fix_buffer.push( mesh_dt.vertexNormals[i] );
+					fix_buffer.push( mesh_dt.vertexNormals[i+1] );
+					fix_buffer.push( mesh_dt.vertexNormals[i+2] );
+					
+					fix_buffer.push( mesh_dt.vertexTextureCoords[i] );
+					fix_buffer.push( mesh_dt.vertexTextureCoords[i+1] );
+				}
+			
+
+				scene1.addGeometry("fish_geo"+j, new Geometry(fix_buffer, mesh_dt.indices, [Vertex.x, Vertex.y, Vertex.z, Vertex.r, Vertex.g, Vertex.b, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]) );
+		 		var mesh = new Mesh("fish_geo"+j, "fish_mater");
+		 		mesh.setScale(0.0001, 0.0001, 0.0001);			
+		 		scene1.addChild("fish_mesh" + j, new Mesh("fish_geo0", "fish_mater") );
+			}
+			
+			scene1.getChild("fish_mesh0").setPosition(-4, 4, 0);
+			scene1.getChild("fish_mesh1").setPosition(4, 4, 0);
+			scene1.getChild("fish_mesh2").setPosition(4, -4, 0);
+			scene1.getChild("fish_mesh3").setPosition(-4, -4, 0);
+			
+			var sum = 0, count = 1;
+			function render( currTime ) {
+				var currentFPS = 1000 / ( currTime - prevTime );
+				prevTime = currTime;
+				divCurrentFPS.textContent = currentFPS.toFixed( 2 );
+				divAverageFPS.textContent = ( ( sum += currentFPS ) / count++ ).toFixed( 2 );
+				// ------------------- contents ------------------- 
+				
+				world.render();
+				requestAnimationFrame( render );
+			}
+			
+			requestAnimationFrame( render );
+		}
+
+	})(window);
+
+</script>
+</body>
+</html>
