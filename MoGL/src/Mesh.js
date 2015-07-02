@@ -1,16 +1,27 @@
 var Mesh = (function () {
     'use strict';
-    var geometry, material, culling;
+    var geometry, material, culling,pickingColors,pickingMeshs;
     //private
     geometry = {},
     material = {},
     culling = {};
+    pickingColors = {}
+    pickingMeshs = {}
     //shared private
     $setPrivate('Mesh', {
         geometry : geometry,
         material : material,
-        culling : culling
+        culling : culling,
+        pickingColors : pickingColors,
+        pickingMeshs : pickingMeshs
     });
+    var getUniqueColor = (function () {
+        var color = 1677215, r = 0, g = 0, b = 0, r1 = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i, r, g, b, t0;
+        return function () {
+            return t0 = r1.exec(color.toString(16)), color--, r = parseInt(t0[1], 16), g = parseInt(t0[2], 16), b = parseInt(t0[3], 16),
+                [r/255, g/255 , b/255, 1]
+        }
+    })()
     return Matrix.extend('Mesh', {
         description: "기하구조와 재질을 포함할 수 있는 하나의 렌더링 단위인 Mesh를 생성함.",
         param: [
@@ -34,8 +45,29 @@ var Mesh = (function () {
             "* 'Mesh.materialSet:0' - 두번째 인자가 material 객체가 아닌 경우"
         ],
         value:function Mesh(geometry, material) {
-            this.geometry = geometry;
-            this.material = material;
+            this.geometry = geometry,
+            this.material = material,
+            pickingColors[this] = getUniqueColor()
+
+            var self = this;
+            (function () {
+                var result = 0
+                self.addEventListener(MoGL.eventChanged, function (ev, cnt, allCnt) {
+                    //console.log('테스트', ev, cnt, allCnt);
+                    var t = pickingColors[self]
+                    var temp = pickingMeshs[[t[0] * 255, t[1] * 255, t[2] * 255, 255].join('')]
+                    result=0
+                    for(var k in allCnt){
+                        result += allCnt[k]
+                    }
+                    if(result<3){
+                        //console.log('마우스이벤트를 그리면안됨',result)
+                        delete pickingMeshs[[t[0] * 255, t[1] * 255, t[2] * 255, 255].join('')]
+                    }else{
+                        pickingMeshs[[t[0] * 255, t[1] * 255, t[2] * 255, 255].join('')] = {mesh: this}
+                    }
+                });
+            })()
         }
     })
     .field('culling', {
@@ -130,6 +162,89 @@ var Mesh = (function () {
         ],
         value:"cullingBack"
     })
-    .event('changed', 'changed')
+    .event('changed', {
+        description:[
+            '체인지 이벤트',
+            '* 메쉬의 재질이나 지오메트리가 변경될때 발생하는 이벤트'
+        ],
+        type:'string',
+        sample: [
+            "var mesh = new Mesh();",
+            "mesh.addEventListener( Mesh.over, function(){",
+            "  console.log(this)",
+            "});"
+        ],
+        value : 'changed'
+    })
+    .event('over', {
+        description:[
+            '오버이벤트',
+            '* 모바일일 경우 터치로 이벤트가 걸림'
+        ],
+        type:'string',
+        sample: [
+            "var mesh = new Mesh();",
+            "mesh.addEventListener( Mesh.over, function(){",
+            "  console.log(this)",
+            "});"
+        ],
+        value : 'over'
+    })
+    .event('out', {
+        description:[
+            '아웃이벤트',
+            '* 모바일일 경우 터치로 이벤트가 걸림'
+        ],
+        type:'string',
+        sample: [
+            "var mesh = new Mesh();",
+            "mesh.addEventListener( Mesh.out, function(){",
+            "  console.log(this)",
+            "});"
+        ],
+        value : 'out'
+    })
+    .event('down', {
+        description:[
+            '다운이벤트',
+            '* 모바일일 경우 터치로 이벤트가 걸림'
+        ],
+        type:'string',
+        sample: [
+            "var mesh = new Mesh();",
+            "mesh.addEventListener( Mesh.down, function(){",
+            "  console.log(this)",
+            "});"
+        ],
+        value : 'down'
+    })
+    .event('up', {
+        description:[
+            '업이벤트',
+            '* 모바일일 경우 터치로 이벤트가 걸림'
+        ],
+        type:'string',
+        sample: [
+            "var mesh = new Mesh();",
+            "mesh.addEventListener( Mesh.up, function(){",
+            "  console.log(this)",
+            "});"
+        ],
+        value : 'up'
+    })
+    .event('move', {
+        description:[
+            '무브이벤트',
+            '* 모바일일 경우 터치로 이벤트가 걸림'
+        ],
+        type:'string',
+        sample: [
+            "var mesh = new Mesh();",
+            "mesh.addEventListener( Mesh.move, function(){",
+            "  console.log(this)",
+            "});"
+        ],
+        value : 'move'
+    })
     .build();
 })();
