@@ -139,11 +139,21 @@
 
             var mesh = new Mesh(geo, mat);
             mesh.rotateY = 3.14;
+            mesh.z = 7;
+            
+            mesh.addEventListener("over", function(){
+                mat.wireFrame = 1;                       
+            });
+            
+            mesh.addEventListener("out", function(){
+                mat.wireFrame = 0;                       
+            });
+
             
             scene.addChild(mesh);
 
-            camera.fov = 10;
-            console.log(camera.projectionMatrix);
+            // camera.fov = 10;
+            // console.log(camera.projectionMatrix);
 
 
             var sum = 0, count = 1;
@@ -162,8 +172,8 @@
                 requestAnimationFrame( render );
             }
 
-//            requestAnimationFrame( render );
-            world.render();
+           requestAnimationFrame( render );
+            //  world.render();
         }
     })(this);
 </script>

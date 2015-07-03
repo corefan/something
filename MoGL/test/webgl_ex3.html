@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>webgl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div style="position: absolute; left:30px; top:30px; width: 256px; height: 256px; border: 3px solid #eeeeee;">
+	<!--<canvas id="gl_canvas" width="512" height="512"></canvas>-->
+    <canvas id="gl_canvas" width="256" height="256"></canvas>
+</div>
+</body>
+<script>
+    (function(win, count){
+        var gl = gl_canvas.getContext("webgl");
+        
+        var vertexShaderStr = "" +
+                            "attribute vec3 aVertexPosition;" +
+                            "attribute vec3 aScale;" +
+                            "attribute vec3 aPosition;" +
+                            "attribute vec3 aRotation;" +
+                            "attribute vec3 aColor;" +
+                            "varying vec3 vColor;" +
+                            "" +
+                            "mat4 scaleMTX(vec3 sc){" +
+                            "   return mat4(sc[0],0,0,0, 0,sc[1],0,0, 0,0,sc[2],0, 0,0,0,1);" +
+                            "}" +
+                            "mat4 positionMTX(vec3 p){" +
+                            "   return mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, p[0],p[1],p[2],1);" +
+                            "}" +
+                            "mat4 rotationMTX(vec3 r){" +
+                            "   float s, c;" +
+                            "   s = sin(r[0]), c = cos(r[0]);" +
+                            "   mat4 mx = mat4(1,0,0,0, 0,c,-s,0,   0,-s,c,0,   0,0,0,1);" +
+                            "   s = sin(r[1]), c = cos(r[1]);" +
+                            "   mat4 my = mat4(c,0,s,0, 0,1,0,0,    -s,0,c,0,   0,0,0,1);" +
+                            "   s = sin(r[2]), c = cos(r[2]);" +
+                            "   mat4 mz = mat4(c,s,0,0, -s,c,0,0,   0,0,1,0,    0,0,0,1);" +
+                            "   return mx*my*mz;"+
+                            "}" +
+                            "void main (void){" +
+                            "   vColor = aColor;" +
+                            // "   gl_Position = vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = positionMTX(aPosition)*vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = positionMTX(aPosition)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            "" +
+                            "}" +
+                            "";
+
+        var fragmentShaderStr = "" +
+                                "precision mediump float;" +
+                                "varying vec3 vColor;" +
+                                "void main(void){" +
+                                "" +
+                                // "   gl_FragColor = vec4(0.95, 0.95, 0.95, 1.0);" +
+                                "   gl_FragColor = vec4(vColor, 1.0);" +
+                                "" +
+                                "}";
+
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, vertexShaderStr);
+        gl.compileShader(vertexShader);
+
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, fragmentShaderStr);
+        gl.compileShader(fragmentShader);
+        
+        var drawProgram = gl.createProgram();
+        gl.attachShader(drawProgram, vertexShader);
+        gl.attachShader(drawProgram, fragmentShader);
+        gl.linkProgram(drawProgram);
+        gl.useProgram(drawProgram);
+        
+        drawProgram.aVertexPosition = gl.getAttribLocation(drawProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(drawProgram.aVertexPosition);
+        drawProgram.aColor = gl.getAttribLocation(drawProgram, "aColor");
+        gl.enableVertexAttribArray(drawProgram.aColor);
+
+        drawProgram.aPosition = gl.getAttribLocation(drawProgram, "aPosition");
+        gl.enableVertexAttribArray(drawProgram.aPosition);
+
+        drawProgram.aRotation = gl.getAttribLocation(drawProgram, "aRotation");
+        gl.enableVertexAttribArray(drawProgram.aRotation);
+
+        drawProgram.aScale = gl.getAttribLocation(drawProgram, "aScale");
+        gl.enableVertexAttribArray(drawProgram.aScale);
+        
+        var colorData = [];
+        var scaleData = [];
+        var positionData = [];
+        var rotationData = [];
+        var vertexIndexData = [];
+        var vertexData = [];
+        var rotationInfo = [];
+
+        for(var i = 0; i < count; i++){           
+            var x = Math.random()*2 - 1;
+            var y = Math.random()*2 - 1;
+            var z = Math.random()*2 - 1;
+            
+            var ran0 = Math.random();
+            var ran1 = Math.random();
+            var ran2 = Math.random();
+
+        
+            for(var j = 0; j < 4; j++){
+                colorData.push(ran0, ran1, ran2);
+                // colorData.push(Math.random(), Math.random(), Math.random());
+                scaleData.push(0.05, 0.05, 0.05);
+                positionData.push(x, y, z);
+                rotationData.push(0, 0, 0);
+            }
+
+            rotationInfo.push(Math.random()*0.05);
+            vertexData.push(-1,1,0, 1,1,0, -1,-1,0, 1,-1,0);
+            vertexIndexData.push(4*i,4*i+1,4*i+2, 4*i+1,4*i+2,4*i+3);
+        }
+        
+        gl.viewport(0, 0, 256, 256);
+        gl.clearColor(0, 0, 0, 1);
+        gl.clear(gl.Color_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        
+        var vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.vertexAttribPointer(drawProgram.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+        
+        var colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.vertexAttribPointer(drawProgram.aColor, 3, gl.FLOAT, false, 0, 0);
+        
+        var scaleBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, scaleBuffer);
+        gl.vertexAttribPointer(drawProgram.aScale, 3, gl.FLOAT, false, 0, 0);
+        
+        var positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.vertexAttribPointer(drawProgram.aPosition, 3, gl.FLOAT, false, 0, 0);     
+        
+        var rotationBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, rotationBuffer);
+        gl.vertexAttribPointer(drawProgram.aRotation, 3, gl.FLOAT, false, 0, 0);         
+        
+        var vertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+        
+        
+        function start(){            
+            for(var i = 0, len = vertexData.length; i < len ; i++){
+                for(var j = 0; j < 12; j++){
+                    // rotationData[12*i + j] += rotationInfo[i];
+                    rotationData[12*i + j] += 0.1; 
+                }
+            }
+            
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData) , gl.STATIC_DRAW);
+    
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData) , gl.STATIC_DRAW);
+    
+            gl.bindBuffer(gl.ARRAY_BUFFER, scaleBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(scaleData), gl.STATIC_DRAW);
+    
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positionData), gl.STATIC_DRAW);
+            
+            gl.bindBuffer(gl.ARRAY_BUFFER, rotationBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotationData), gl.STATIC_DRAW);
+            
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndexData) , gl.STATIC_DRAW);
+            
+            gl.drawElements(gl.TRIANGLES, 6*count, gl.UNSIGNED_SHORT, 0);
+            
+            requestAnimationFrame(start);
+        }
+        requestAnimationFrame(start);
+        
+    })(this, 10000);
+</script>
+</html>

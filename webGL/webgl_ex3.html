@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>webgl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div style="position: absolute; left:30px; top:30px; width: 512px; height: 512px; border: 3px solid #eeeeee;">
+	<!--<canvas id="gl_canvas" width="512" height="512"></canvas>-->
+    <canvas id="gl_canvas" width="512" height="512"></canvas>
+</div>
+</body>
+<script>
+    (function(win){
+        var gl = gl_canvas.getContext("webgl");
+        
+        var vertexShaderStr = "" +
+                            "attribute vec3 aVertexPosition;" +
+                            "attribute vec3 aPosition;" +
+                            "attribute vec3 aRotation;" +
+                            "attribute vec3 aScale;" +
+                            "attribute vec3 aColor;" +
+                            "varying vec3 vColor;" +
+                            "" +
+                            "mat4 scaleMTX(vec3 sc){" +
+                            "   return mat4(sc[0],0,0,0, 0,sc[1],0,0, 0,0,sc[2],0, 0,0,0,1);" +
+                            "}" +
+                            "mat4 positionMTX(vec3 p){" +
+                            "   return mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, p[0],p[1],p[2],1);" +
+                            "}" +
+                            "mat4 rotationMTX(vec3 r){" +
+                            "   float s, c;" +
+                            "   s = sin(r[0]), c = cos(r[0]);" +
+                            "   mat4 mx = mat4(1,0,0,0, 0,c,-s,0,   0,-s,c,0,   0,0,0,1);" +
+                            "   s = sin(r[1]), c = cos(r[1]);" +
+                            "   mat4 my = mat4(c,0,s,0, 0,1,0,0,    -s,0,c,0,   0,0,0,1);" +
+                            "   s = sin(r[2]), c = cos(r[2]);" +
+                            "   mat4 mz = mat4(c,s,0,0, -s,c,0,0,   0,0,1,0,    0,0,0,1);" +
+                            "   return mx*my*mz;"+
+                            "}" +
+                            "void main (void){" +
+                            "   vColor = aColor;" +
+                            "   gl_PointSize = 1.0;" +
+                            // "   gl_Position = vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = positionMTX(aPosition)*vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = positionMTX(aPosition)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            // "   gl_Position = rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
+                            "" +
+                            "}" +
+                            "";
+
+        var fragmentShaderStr = "" +
+                                "precision mediump float;" +
+                                "varying vec3 vColor;" +
+                                "void main(void){" +
+                                "" +
+                                // "   gl_FragColor = vec4(0.90, 0.90, 0.90, 1.0);" +
+                                // "   gl_FragColor = vec4(0.9, 0.9, 0.7, 1.0);" +
+                                "   gl_FragColor = vec4(vColor, 1.0);" +
+                                "" +
+                                "}";
+                                
+                                
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open('GET', 'smithHead/smith_head.json', true);
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                start(JSON.parse(xmlhttp.responseText));
+            }    
+        };
+        xmlhttp.send(null);
+        
+        function start(json){
+            var vertices = json.vertices;
+            var faces = json.faces;
+            var vertexIndexData = [];
+            var vertexData = [];
+            var colorData = [];
+            var colorData2 = [];
+            var scaleData = [];
+            var positionData = [];
+            var rotationData = [];
+            // var rotationInfo = [];
+            
+            for (i = 0, len = vertices.length; i < len; i++) {
+                vertexData.push(vertices[i][0], vertices[i][1], vertices[i][2]);
+                positionData.push(0, -0.5, 0);
+                scaleData.push(3, 3, 3);
+                rotationData.push(0, 0, 0);
+                
+                colorData.push(0, 1, 0);
+                colorData2.push(0.7, 0.7, 1);
+            }
+            for (i = 0, len = faces.length; i < len; i++) {
+                vertexIndexData.push(faces[i][0], faces[i][1], faces[i][2]);
+                vertexIndexData.push(faces[i][0], faces[i][2], faces[i][3]);
+            }
+            
+            var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vertexShader, vertexShaderStr);
+            gl.compileShader(vertexShader);
+    
+            var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fragmentShader, fragmentShaderStr);
+            gl.compileShader(fragmentShader);
+            
+            var drawProgram = gl.createProgram();
+            gl.attachShader(drawProgram, vertexShader);
+            gl.attachShader(drawProgram, fragmentShader);
+            gl.linkProgram(drawProgram);
+            gl.useProgram(drawProgram);
+            
+            drawProgram.aVertexPosition = gl.getAttribLocation(drawProgram, "aVertexPosition");
+            gl.enableVertexAttribArray(drawProgram.aVertexPosition);
+            drawProgram.aColor = gl.getAttribLocation(drawProgram, "aColor");
+            gl.enableVertexAttribArray(drawProgram.aColor);    
+            drawProgram.aPosition = gl.getAttribLocation(drawProgram, "aPosition");
+            gl.enableVertexAttribArray(drawProgram.aPosition);    
+            drawProgram.aRotation = gl.getAttribLocation(drawProgram, "aRotation");
+            gl.enableVertexAttribArray(drawProgram.aRotation);
+            drawProgram.aScale = gl.getAttribLocation(drawProgram, "aScale");
+            gl.enableVertexAttribArray(drawProgram.aScale);      
+            
+                       
+            gl.viewport(0, 0, 512, 512);
+            gl.clearColor(0, 0, 0, 1);
+            gl.clear(gl.Color_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            
+            var vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.vertexAttribPointer(drawProgram.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+            
+            var colorBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+            gl.vertexAttribPointer(drawProgram.aColor, 3, gl.FLOAT, false, 0, 0);
+            // 
+            var scaleBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, scaleBuffer);
+            gl.vertexAttribPointer(drawProgram.aScale, 3, gl.FLOAT, false, 0, 0);
+            
+            var positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.vertexAttribPointer(drawProgram.aPosition, 3, gl.FLOAT, false, 0, 0);     
+            
+            var rotationBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, rotationBuffer);
+            gl.vertexAttribPointer(drawProgram.aRotation, 3, gl.FLOAT, false, 0, 0);         
+            
+            var vertexIndexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+        
+            function render(){
+                for(var i = 0, len = vertexData.length / 3; i < len ; i++){
+                    rotationData[3*i + 1] += 0.01; 
+                }
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData) , gl.STATIC_DRAW);
+        
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positionData), gl.STATIC_DRAW);
+
+                gl.bindBuffer(gl.ARRAY_BUFFER, scaleBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(scaleData), gl.STATIC_DRAW);
+        
+                gl.bindBuffer(gl.ARRAY_BUFFER, rotationBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotationData), gl.STATIC_DRAW);
+                
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndexData) , gl.STATIC_DRAW);
+                
+                // gl.drawElements(gl.TRIANGLES, 6*count, gl.UNSIGNED_SHORT, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData2) , gl.STATIC_DRAW);
+                gl.drawElements(gl.TRIANGLES, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
+                
+                gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData) , gl.STATIC_DRAW);                
+                gl.drawElements(gl.LINES, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
+                
+                // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+                // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData) , gl.STATIC_DRAW);
+                // gl.drawElements(gl.POINTS, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
+                
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        }
+    })(this);
+</script>
+</html>
