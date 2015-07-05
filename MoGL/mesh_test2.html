@@ -30,6 +30,7 @@
     <script src="./src/Geometry.js"></script>
     <script src="./src/Material.js"></script>
     <script src="./src/Mesh.js"></script>
+    <script src="./src/Point.js"></script>
     <script src="./src/Group.js"></script>
     <script src="./src/Camera.js"></script>
     <script src="./src/Scene.js"></script>
@@ -47,46 +48,16 @@
         scene.addChild(camemra);
 
         var geometry = new Geometry([-1,1,0, 1,1,0, -1,-1,0, 1,-1,0], [0,1,2,1,2,3]);
-        var geometry2 = Primitive.cube();
 
 
-        var material = new Material("#0f0");
-        var material2 = new Material("#00f");
-        var material3 = new Material("#f00");
-        var material4 = new Material("#ffffff77");
-        material4.wireFrame = 1;
+//        var material = new Material("#0ff");
+//        material.wireFrame = 1;
 
-//        scene.addGeometry(geometry);
-//        scene.addMaterial(material);
+//        var mesh = new Mesh(geometry, material);
+//        scene.addChild(mesh);
 
-        var mesh = new Mesh(geometry, material);
-//        mesh.culling = "g";
-        mesh.culling = "cullingNone";
-        scene.addChild(mesh);
-
-
-//        var mesh2 = new Mesh(geometry, material2);
-//        mesh2.x = 0.7;
-//        mesh2.y = 1;
-//        scene.addChild(mesh2);
-//
-//        var mesh3 = new Mesh(geometry, material3);
-//        mesh3.x = -0.7;
-//        mesh3.y = 1;
-//        scene.addChild(mesh3);
-
-//        var mesh4 = new Mesh(geometry2, material4);
-//        mesh4.rotateX = 1;
-//        mesh4.rotateY = 1;
-//        mesh4.rotateZ = 1;
-//        mesh4.scaleX = 3;
-//        mesh4.scaleY = 3;
-//        mesh4.scaleZ = 3;
-//        mesh4.culling = Mesh.cullingNone;
-////        mesh4.culling = Mesh.cullingFront;
-////        mesh4.culling = Mesh.cullingBack;
-//        scene.addChild(mesh4);
-
+        var point = new Point(geometry, "#f00");
+        scene.addChild(point);
 
         world.render();
     })(this);

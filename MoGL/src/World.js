@@ -443,7 +443,7 @@ var World = (function (makeUtil) {
             var priCull;
             // 재질관련 private property
             var priMatColor;
-            var priMatWireFrame, priMatWireFrameColor;
+            var priMatWireFrame, priMatWireFrameColor, priPointFrame, priPointFrameColor;
             var priMatShading, priMatLambert, priMatNormalPower, priMatSpecularValue, priMatSpecularColor;
             var priMatDiffuseMaps;
             var priMatNormalMaps;
@@ -466,6 +466,8 @@ var World = (function (makeUtil) {
             priMatColor = $getPrivate('Material', 'color'),
             priMatWireFrame = $getPrivate('Material', 'wireFrame'),
             priMatWireFrameColor = $getPrivate('Material', 'wireFrameColor'),
+            priPointFrame = $getPrivate('Point', 'pointFrame'),
+            priPointFrameColor = $getPrivate('Point', 'pointColor'),
             priMatShading = $getPrivate('Material', 'shading'),
             priMatLambert = $getPrivate('Material', 'lambert'),
             priMatNormalPower = $getPrivate('Material', 'normalPower'),
@@ -786,7 +788,7 @@ var World = (function (makeUtil) {
                                     tGL.uniform3fv(tProgram.uScale, f3),
                                     tColor = priMatWireFrameColor[tMatUUID],
                                     tGL.uniform4fv(tProgram.uColor, tColor),
-                                    tGL.drawElements(tGL.LINES, tIBO.numItem, tGL.UNSIGNED_INT, 0),
+                                    tGL.drawElements(tGL.POINTS, tIBO.numItem, tGL.UNSIGNED_INT, 0),
                                     tGL.enable(tGL.DEPTH_TEST), tGL.depthFunc(tGL.LESS);
 
                                 }
@@ -803,7 +805,6 @@ var World = (function (makeUtil) {
                                 tGL.bindFramebuffer(tGL.FRAMEBUFFER, null);
                                 pProgram = null , pVBO = null, pVNBO = null, pUVBO = null, pIBO = null;
                             }
-
                         }
                     }
                 }
