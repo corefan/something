@@ -50,7 +50,6 @@ var Texture = (function() {
                 context.drawImage(v, 0, 0, tw, th);
         }
         v.src = canvas.toDataURL();
-        //console.log('리사이저처리결과', v.src,dw,dh)
         return v;
     },
     loaded = function(e){
@@ -59,7 +58,7 @@ var Texture = (function() {
         imgs[texture] = resizer(texture.resizeType, this),
         this.removeEventListener('load', loaded);
         texture.dispatch('load');
-    };
+     };
     return MoGL.extend('Texture',{
         description: "텍스쳐 객체 클래스",
         sample: [

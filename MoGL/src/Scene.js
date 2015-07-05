@@ -41,10 +41,14 @@ var Scene = (function () {
             updateList[this] = {
                 mesh : [],
                 material : [],
-                camera : []
+                camera : [],
+                merged : [],
+                removeMerged : [],
+                update : []
             },
             baseLightRotate[this] = [0, -1, -1];
 
+            this.addVertexShader(Shader.colorMergeVShader), this.addFragmentShader(Shader.colorMergeFShader),
             this.addVertexShader(Shader.colorVertexShader), this.addFragmentShader(Shader.colorFragmentShader),
             this.addVertexShader(Shader.wireFrameVertexShader), this.addFragmentShader(Shader.wireFrameFragmentShader),
             this.addVertexShader(Shader.bitmapVertexShader), this.addFragmentShader(Shader.bitmapFragmentShader),
@@ -116,6 +120,15 @@ var Scene = (function () {
             get: $getter(children)
         }
     )
+    .field('childrenArray', {
+            description: "씬에 등록된 자식 리스트를 배열 형식으로 반환",
+            sample: [
+                "console.log(scene.childrenArray);"
+            ],
+            defaultValue: "[]",
+            get: $getter(childrenArray)
+        }
+    )
     .method('addMesh', {
             description: [
                 'Mesh객체를 추가함.'
@@ -170,11 +183,17 @@ var Scene = (function () {
                 v.addEventListener(Mesh.changed, function() {
                     p2.mesh.push(v);
                 });
-                mat.dispatch(Material.load,mat);
 
+                v.addEventListener(MoGL.updated, function () {
+                    p2.update.push(this)
+                });
+
+
+                mat.dispatch(Material.load,mat);
                 if(childrenArray[this].indexOf(v) == -1) {
                     childrenArray[this].push(v);
                 }
+                p2.merged.push(v)
                 return this;
             }
         }
@@ -520,12 +539,15 @@ var Scene = (function () {
                 "scene.removeChild('targetID');"
             ],
             value: function removeChild(id) {
-                var p, k, result;
+                var p,p2, k, result;
+                p2 = updateList[this]
                 p = children[this],
                     result = false;
                 for (k in p) {
                     if (p[k].id == id) {
                         childrenArray[this].splice(childrenArray[this].indexOf(p[k]), 1);
+                        p[k].removeEventListener(MoGL.updated)
+                        p2.removeMerged.push(p[k])
                         delete p[k],
                         result = true;
                     }

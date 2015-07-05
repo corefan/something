@@ -28,6 +28,53 @@ var Shader = (function () {
             ]
         }
     )
+
+        .constant('colorMergeVShader', {
+            description: "컬러 버텍스 쉐이더",
+            sample: [
+                "console.log(Shader.colorMergeVShader);"
+            ],
+            get: (function () {
+                var cache;
+                return function () {
+                    return cache || (cache = new Shader({
+                            id: 'colorMergeVShader',
+                            attributes: ['vec3 aVertexPosition', 'vec3 aPosition', 'vec3 aRotate', 'vec3 aScale', 'vec4 aColor'],
+                            uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix'],
+                            varyings: ['vec4 vColor'],
+                            function: [VertexShader.baseFunction],
+                            main: [
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(aPosition)*rotationMTX(aRotate)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n' +
+                                'vColor = aColor;'
+                            ]
+                        }))
+                }
+            })()
+        })
+        .constant('colorMergeFShader', {
+            description: "컬러 프레그먼트 쉐이더",
+            sample: [
+                "console.log(Shader.colorMergeFShader);"
+            ],
+            get: (function () {
+                var cache;
+                return function () {
+                    return cache || (cache = new Shader({
+                            id: 'colorMergeFShader',
+                            precision: 'mediump float',
+                            uniforms: [],
+                            varyings: ['vec4 vColor'],
+                            function: [],
+                            main: [
+                                'gl_FragColor =  vColor;'
+                            ]
+                        }))
+                }
+            })()
+        })
+
+
+
         .constant('colorVertexShader', {
             description: "컬러 버텍스 쉐이더",
             sample: [
@@ -65,7 +112,7 @@ var Shader = (function () {
                             varyings: ['vec4 vColor'],
                             function: [],
                             main: [
-                                'gl_FragColor =  vColor'
+                                'gl_FragColor =  vColor;'
                             ]
                         }))
                 }
@@ -151,7 +198,7 @@ var Shader = (function () {
                             varyings: ['vec2 vUV'],
                             function: [],
                             main: [
-                                'gl_FragColor =  texture2D(uSampler, vec2(vUV.s, vUV.t))'
+                                'gl_FragColor =  texture2D(uSampler, vec2(vUV.s, vUV.t));\n'
                             ]
                         }))
                 }
@@ -246,8 +293,9 @@ var Shader = (function () {
                             varyings: ['vec2 vUV', 'vec4 vLight'],
                             function: [],
                             main: [
-                                'gl_FragColor =  (texture2D(uSampler, vec2(vUV.s, vUV.t))*vLight);\n' +
-                                'gl_FragColor.a = 1.0;'
+                                'vec4 diffuse = texture2D(uSampler, vec2(vUV.s, vUV.t));\n'+
+                                'gl_FragColor = diffuse * vLight;\n'+
+                                'gl_FragColor.a = diffuse[3];'
                             ]
                         }))
                 }
@@ -434,6 +482,7 @@ var Shader = (function () {
                                 'vec3 reflectDir = reflect(-lightDir, normal);\n' +
                                 'float light = max( 0.05, dot(normal,lightDir) * uLambert);\n' + // 라이트강도 구하고
                                 'vec4 diffuse = texture2D( uSampler, vec2(vUV.s, vUV.t) );\n' + // 디퓨즈를 계산함
+                                'float alpha = diffuse[3];\n' + // 디퓨즈를 계산함
 
                                 'float specular\n;'+
                                 'if( useNormalMap ){\n' +
@@ -447,7 +496,7 @@ var Shader = (function () {
                                 '   specular = pow(specular,uSpecularValue)*specColor[3];\n' +
                                 '   gl_FragColor = diffuse *light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
                                 '}\n' +
-                                'gl_FragColor.a = 1.0;'
+                                'gl_FragColor.a = alpha;'
                             ]
                         }))
                 }
