@@ -155,8 +155,8 @@
             gl.bindBuffer(gl.ARRAY_BUFFER, rotationBuffer);
             gl.vertexAttribPointer(drawProgram.aRotation, 3, gl.FLOAT, false, 0, 0);         
             
-            var vertexIndexBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+            // var vertexIndexBuffer = gl.createBuffer();
+            // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
         
             function render(){
                 gl.clearColor(0, 0, 0, 1);
@@ -177,21 +177,22 @@
                 gl.bindBuffer(gl.ARRAY_BUFFER, rotationBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotationData), gl.STATIC_DRAW);
                 
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
-                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndexData) , gl.STATIC_DRAW);
+                // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
+                // gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndexData) , gl.STATIC_DRAW);
                 
-//                 gl.drawElements(gl.TRIANGLES, 6*count, gl.UNSIGNED_SHORT, 0);
+                // gl.drawElements(gl.TRIANGLES, 6*count, gl.UNSIGNED_SHORT, 0);
 //                gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 //                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData2) , gl.STATIC_DRAW);
 //                gl.drawElements(gl.TRIANGLES, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
-// 
+//
 //                gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 //                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData) , gl.STATIC_DRAW);
 //                gl.drawElements(gl.LINES, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
                 
                  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
                  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData2) , gl.STATIC_DRAW);
-                 gl.drawElements(gl.POINTS, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
+                //  gl.drawElements(gl.POINTS, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
+                 gl.drawArrays(gl.POINTS, 0, vertexData.length / 3);
                 
                 requestAnimationFrame(render);
             }
