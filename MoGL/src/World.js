@@ -443,7 +443,7 @@ var World = (function (makeUtil) {
             var priCull;
             // 재질관련 private property
             var priMatColor;
-            var priMatWireFrame, priMatWireFrameColor, priPointFrame, priPointFrameColor;
+            var priMatWireFrame, priMatWireFrameColor, priPoint, priPointColor;
             var priMatShading, priMatLambert, priMatNormalPower, priMatSpecularValue, priMatSpecularColor;
             var priMatDiffuseMaps;
             var priMatNormalMaps;
@@ -465,9 +465,9 @@ var World = (function (makeUtil) {
             priCull = $getPrivate('Mesh', 'culling'),
             priMatColor = $getPrivate('Material', 'color'),
             priMatWireFrame = $getPrivate('Material', 'wireFrame'),
-            priMatWireFrameColor = $getPrivate('Material', 'wireFrameColor'),
-            priPointFrame = $getPrivate('Point', 'pointFrame'),
-            priPointFrameColor = $getPrivate('Point', 'pointColor'),
+            priMatWireFrameColor = $getPrivate('Material', 'wireFrameColor');
+            priPoint = $getPrivate('Point', 'point'),
+            priPointColor = $getPrivate('Point', 'pointColor');
             priMatShading = $getPrivate('Material', 'shading'),
             priMatLambert = $getPrivate('Material', 'lambert'),
             priMatNormalPower = $getPrivate('Material', 'normalPower'),

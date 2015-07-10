@@ -37,8 +37,8 @@
     <script src="./src/World.js"></script>
 </head>
 <body>
-<img src="smithHead/Map-COL.jpg" id="testIMG" style="position: absolute;top:0px;;display:none" width="128" height="128">
-<img src="monkey/Suzanne.jpg" id="testIMG2" style="position: absolute;top:0px;;display:none" width="128" height="128">
+<img src="showcase/smithHead/Map-COL.jpg" id="testIMG" style="position: absolute;top:0px;;display:none" width="128" height="128">
+<img src="showcase/monkey/Suzanne.jpg" id="testIMG2" style="position: absolute;top:0px;;display:none" width="128" height="128">
 <canvas id="canvas"></canvas>
 <div class="FPS">
     Current FPS: <span id="currentFPS"></span>
@@ -81,7 +81,7 @@
     scene.addTexture(texture2);
 
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET', 'smithHead/smith_head.json', true);
+    xmlhttp.open('GET', 'showcase/smithHead/smith_head.json', true);
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             var geo = getGeometryFromJSON(JSON.parse(xmlhttp.responseText));

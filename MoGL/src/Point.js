@@ -1,13 +1,13 @@
 var Point = (function () {
     'use strict';
-    var pointFrame, pointFrameColor;
+    var point, pointColor;
 
-    pointFrame = {},
-    pointFrameColor = {};
+    point = {},
+    pointColor = {};
 
     $setPrivate('Point', {
-        pointFrameColor: pointFrameColor,
-        pointFrame: pointFrame
+        pointColor: pointColor,
+        point: point
     });
     return Matrix.extend('Point',{
         description:"점을 이루는 Mesh",
@@ -21,8 +21,8 @@ var Point = (function () {
             "var mat5 = Material(geometry, '#ff00000.8');"
         ],
         value:function Mesh(geometry, color) {
-            pointFrameColor[this] = color,
-            pointFrame[this] = geometry
+            this.geometry = geometry;
+            this.color;
         }
     })
     .field('size', {
