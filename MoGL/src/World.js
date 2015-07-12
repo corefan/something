@@ -155,39 +155,38 @@ var World = (function (makeUtil) {
             } else {
                 this.error(2);
             }
-
-            mouse[this] = {x:0,y:0}
+            mouse[this] = {x:0,y:0};
             window.addEventListener('mousemove', function(e){
-                mouse[self].x = e.x
-                mouse[self].y = cvsList[self].height-e.offsetY
-                mouse[self].move = true
-            })
+                mouse[self].x = e.x,
+                mouse[self].y = cvsList[self].height - e.offsetY,
+                mouse[self].move = true;
+            }),
             window.addEventListener('mousedown', function(e){
-                mouse[self].x = e.x
-                mouse[self].y = cvsList[self].height-e.offsetY
-                mouse[self].down = true
-            })
+                mouse[self].x = e.x,
+                mouse[self].y = cvsList[self].height - e.offsetY,
+                mouse[self].down = true;
+            }),
             window.addEventListener('mouseup', function(e){
-                mouse[self].x = e.x
-                mouse[self].y = cvsList[self].height-e.offsetY
-                mouse[self].up = true
-            })
+                mouse[self].x = e.x,
+                mouse[self].y = cvsList[self].height - e.offsetY,
+                mouse[self].up = true;
+            }),
             window.addEventListener('touchmove', function(e){
                 e.preventDefault();
-                mouse[self].x = e.touches[0].clientX*window.devicePixelRatio
-                mouse[self].y = cvsList[self].height-e.touches[0].pageY*window.devicePixelRatio
-                mouse[self].move = true
-            },false)
+                mouse[self].x = e.touches[0].clientX * window.devicePixelRatio,
+                mouse[self].y = cvsList[self].height - e.touches[0].pageY * window.devicePixelRatio,
+                mouse[self].move = true;
+            },false),
             window.addEventListener('touchstart', function(e){
-                mouse[self].x = e.touches[0].clientX*window.devicePixelRatio
-                mouse[self].y = cvsList[self].height-e.touches[0].pageY*window.devicePixelRatio
-                mouse[self].down = true
-            },false)
+                mouse[self].x = e.touches[0].clientX * window.devicePixelRatio,
+                mouse[self].y = cvsList[self].height - e.touches[0].pageY * window.devicePixelRatio,
+                mouse[self].down = true;
+            },false),
             window.addEventListener('touchend', function(e){
-                mouse[self].x = e.changedTouches[0].clientX*window.devicePixelRatio
-                mouse[self].y = cvsList[self].height-e.changedTouches[0].pageY*window.devicePixelRatio
-                mouse[self].up = true
-            },false)
+                mouse[self].x = e.changedTouches[0].clientX * window.devicePixelRatio,
+                mouse[self].y = cvsList[self].height - e.changedTouches[0].pageY * window.devicePixelRatio,
+                mouse[self].up = true;
+            },false);
         }
     })
     .method('setAutoSize', {
@@ -443,7 +442,7 @@ var World = (function (makeUtil) {
             var priCull;
             // 재질관련 private property
             var priMatColor;
-            var priMatWireFrame, priMatWireFrameColor, priPoint, priPointColor;
+            var priMatWireFrame, priMatWireFrameColor;
             var priMatShading, priMatLambert, priMatNormalPower, priMatSpecularValue, priMatSpecularColor;
             var priMatDiffuseMaps;
             var priMatNormalMaps;
@@ -465,9 +464,7 @@ var World = (function (makeUtil) {
             priCull = $getPrivate('Mesh', 'culling'),
             priMatColor = $getPrivate('Material', 'color'),
             priMatWireFrame = $getPrivate('Material', 'wireFrame'),
-            priMatWireFrameColor = $getPrivate('Material', 'wireFrameColor');
-            priPoint = $getPrivate('Point', 'point'),
-            priPointColor = $getPrivate('Point', 'pointColor');
+            priMatWireFrameColor = $getPrivate('Material', 'wireFrameColor'),
             priMatShading = $getPrivate('Material', 'shading'),
             priMatLambert = $getPrivate('Material', 'lambert'),
             priMatNormalPower = $getPrivate('Material', 'normalPower'),
@@ -788,7 +785,7 @@ var World = (function (makeUtil) {
                                     tGL.uniform3fv(tProgram.uScale, f3),
                                     tColor = priMatWireFrameColor[tMatUUID],
                                     tGL.uniform4fv(tProgram.uColor, tColor),
-                                    tGL.drawElements(tGL.POINTS, tIBO.numItem, tGL.UNSIGNED_INT, 0),
+                                    tGL.drawElements(tGL.LINES, tIBO.numItem, tGL.UNSIGNED_INT, 0),
                                     tGL.enable(tGL.DEPTH_TEST), tGL.depthFunc(tGL.LESS);
 
                                 }
@@ -805,6 +802,7 @@ var World = (function (makeUtil) {
                                 tGL.bindFramebuffer(tGL.FRAMEBUFFER, null);
                                 pProgram = null , pVBO = null, pVNBO = null, pUVBO = null, pIBO = null;
                             }
+
                         }
                     }
                 }

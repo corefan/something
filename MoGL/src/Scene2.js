@@ -43,10 +43,11 @@ var Scene = (function () {
                 material : [],
                 camera : [],
                 merged : [],
-                changePropertys : []
+                removeMerged : [],
+                update : []
             },
             baseLightRotate[this] = [0, -1, -1];
-            this.updateList = updateList[this]
+
             this.addVertexShader(Shader.colorMergeVShader), this.addFragmentShader(Shader.colorMergeFShader),
             this.addVertexShader(Shader.colorVertexShader), this.addFragmentShader(Shader.colorFragmentShader),
             this.addVertexShader(Shader.wireFrameVertexShader), this.addFragmentShader(Shader.wireFrameFragmentShader),
@@ -60,16 +61,15 @@ var Scene = (function () {
             this.addVertexShader(Shader.postBaseVertexShader), this.addFragmentShader(Shader.postBaseFragmentShader);
         }
     })
-
-    //.field('updateList', {
-    //        description: "world가 render 함수를 실행하기전 GPU업데이트가 되어야할 목록.",
-    //        sample: [
-    //            "console.log(scene.updateList);"
-    //        ],
-    //        defaultValue: '{ mesh : [], material : [], camera : [] }\n- 업데이트 완료후 각 리스트는 초기화 됨.',
-    //        get: $getter(updateList)
-    //    }
-    //)
+    .field('updateList', {
+            description: "world가 render 함수를 실행하기전 GPU업데이트가 되어야할 목록.",
+            sample: [
+                "console.log(scene.updateList);"
+            ],
+            defaultValue: '{ mesh : [], material : [], camera : [] }\n- 업데이트 완료후 각 리스트는 초기화 됨.',
+            get: $getter(updateList)
+        }
+    )
     .field('vertexShaders', {
             description: "현재 씬이 가지고있는 버텍스 쉐이더 자바스크립트 정보",
             sample: [
@@ -129,6 +129,46 @@ var Scene = (function () {
             get: $getter(childrenArray)
         }
     )
+    
+    .method('addPoint', {
+            description: [
+                'Point객체를 추가함.'
+            ],
+            param: [
+                'point:Point - 메쉬객체'
+            ],
+            ret: [
+                'this - 메서드체이닝을 위해 자신을 반환함.'
+            ],
+            sample: [
+                "var scene = new Scene();",
+                "var geo = new Geometry([],[]);",
+                "var point = new Point(geo,'#f00');",
+                "scene.addPoint(point);"
+            ],
+            exception: [
+                "'Scene.addPoint:0' - 이미 등록된 포인트 객체를 등록하려고 할 때",
+                "'Scene.addPoint:1' - 포인트객체가  아닌 객체를 등록하려고 할 때"
+            ],
+            value : function(v){
+                var p = children[this], p2 = updateList[this];
+                if (p[v]) this.error(0);
+                if (!(v instanceof Point)) this.error(1);
+                p[v] = v;
+                p2.mesh.push(v);
+                v.addEventListener(Mesh.changed, function() {
+                    p2.mesh.push(v);
+                });
+
+                v.addEventListener(MoGL.updated, function () {
+                    p2.update.push(this)
+                });
+
+                p2.merged.push(v)
+                return this;
+            }
+        }
+    )
     .method('addMesh', {
             description: [
                 'Mesh객체를 추가함.'
@@ -182,6 +222,10 @@ var Scene = (function () {
                 });
                 v.addEventListener(Mesh.changed, function() {
                     p2.mesh.push(v);
+                });
+
+                v.addEventListener(MoGL.updated, function () {
+                    p2.update.push(this)
                 });
 
 
@@ -245,6 +289,7 @@ var Scene = (function () {
             value: function addChild(v) {
                 if (v instanceof Mesh)  this.addMesh(v);
                 else if (v instanceof Camera)  this.addCamera(v);
+                else if (v instanceof Point)  this.addPoint(v);
                 else this.error(0);
                 return this;
             }

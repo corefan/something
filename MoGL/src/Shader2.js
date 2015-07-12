@@ -39,23 +39,13 @@ var Shader = (function () {
                 return function () {
                     return cache || (cache = new Shader({
                             id: 'colorMergeVShader',
-                            //attributes: ['vec3 aVertexPosition', 'vec3 aVertexNormal', 'vec3 aScale', 'vec4 aColor','vec3 aUV','float aIDX'],
-                            //uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix','vec3 uRotate[150]','vec3 uPosition[150]'],
-                            attributes: ['vec3 aVertexPosition', 'vec3 aVertexNormal', 'vec3 aScale', 'vec4 aColor','vec3 aUV','vec3 aRotate','vec3 aPosition'],
+                            attributes: ['vec3 aVertexPosition', 'vec3 aPosition', 'vec3 aRotate', 'vec3 aScale', 'vec4 aColor'],
                             uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix'],
-                            varyings: ['vec4 vColor','vec2 vUV','float vIDX','vec3 vNormal', 'vec3 vPosition'],
+                            varyings: ['vec4 vColor'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                'vIDX = aUV.x;\n' +
-                                'vUV = aUV.yz;\n'+
-                                'vColor = aColor;\n'+
-                                ' mat4 mv = uCameraMatrix*positionMTX(aPosition)*quaternionXYZ(aRotate)*scaleMTX(aScale);\n' +
-                                ' vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
-                                ' gl_Position = uPixelMatrix*position;\n' +
-                                ' vPosition = position.xyz;\n' +
-                                ' vNormal = (mv * vec4(-aVertexNormal, 0.0)).xyz;\n'
-
-
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(aPosition)*rotationMTX(aRotate)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n' +
+                                'vColor = aColor;'
                             ]
                         }))
                 }
@@ -72,68 +62,11 @@ var Shader = (function () {
                     return cache || (cache = new Shader({
                             id: 'colorMergeFShader',
                             precision: 'mediump float',
-                            uniforms: [
-                                'sampler2D uSampler0', 'sampler2D uSampler1', 'sampler2D uSampler2', 'sampler2D uSampler3', 'sampler2D uSampler4', 'sampler2D uSampler5', 'sampler2D uSampler6', 'sampler2D uSampler7', 'sampler2D uSampler8',
-                                'vec3 uDLite'],
-                            varyings: ['vec4 vColor','vec2 vUV','float vIDX','vec3 vNormal', 'vec3 vPosition'],
+                            uniforms: [],
+                            varyings: ['vec4 vColor'],
                             function: [],
                             main: [
-                                '   vec4 diffuse;\n'+
-                                ' if(vIDX <= 2.0){\n' +
-                                '   diffuse =  vColor;\n'+
-                                ' } else {\n' +
-                                '   if(vIDX <=3.0){\n' +
-                                '      diffuse = texture2D( uSampler0, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=4.0){\n' +
-                                '     diffuse = texture2D( uSampler1, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=5.0){\n' +
-                                '     diffuse = texture2D( uSampler2, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=6.0){\n' +
-                                '     diffuse = texture2D( uSampler3, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=7.0){\n' +
-                                '     diffuse = texture2D( uSampler4, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=8.0){\n' +
-                                '     diffuse = texture2D( uSampler5, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=9.0){\n' +
-                                '     diffuse = texture2D( uSampler6, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else if(vIDX <=10.0){\n' +
-                                '     diffuse = texture2D( uSampler7, vUV);\n' + // 디퓨즈를 계산함
-                                '   } else {\n' +
-                                '     diffuse = texture2D( uSampler8, vUV);\n' + // 디퓨즈를 계산함
-                                '   }\n' +
-                                '}\n' +
-                                '   vec4 uSpecularColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
-                                '   float uSpecularValue = 5.0;\n' +
-
-                                '   vec4 ambientColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
-                                '   vec4 specColor = uSpecularColor;\n' +
-
-                                '   float alpha = diffuse[3];\n' + // 디퓨즈를 계산함
-                                '   vec3 position = normalize(vPosition);\n' +
-                                '   vec3 normal = normalize(vNormal);\n' +
-                                '   vec3 lightDir = normalize(uDLite);\n' +
-                                '   vec3 reflectDir = reflect(-lightDir, normal);\n' +
-                                '   float light = max( 0.05, dot(normal,lightDir) );\n' + // 라이트강도 구하고
-
-                                '   float specular\n;'+
-                                    //'   if( useNormalMap ){\n' +
-                                    //'      vec4 bump = texture2D( uNormalSampler, vec2(vUV.s, vUV.t) );\n' +
-                                    //'      bump.rgb= bump.rgb*2.0-1.0 ;\n' + // 범프값을 -1~1로 교정
-                                    //'      float normalSpecular = max( dot(reflectDir, position-bump.g), 0.5 );\n' + // 맵에서 얻어낸 노말 스페큘라
-                                    //'      specular = pow(normalSpecular,uSpecularValue)*specColor[3];\n' + // 스페큘라
-                                    //'      gl_FragColor = ( diffuse *light * ambientColor * ambientColor[3] + specular * specColor ) + normalSpecular * bump.g * uNormalPower  ;\n' +
-                                    //'   }else{' +
-                                    //'      specular = max( dot(reflectDir, position), 0.5 );\n' +
-                                    //'      specular = pow(specular,uSpecularValue)*specColor[3];\n' +
-                                    //'      gl_FragColor = diffuse *light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
-                                    //'   }\n' +
-                                    //
-
-                                '      specular = max( dot(reflectDir, position), 0.5 );\n' +
-                                '      specular = pow(specular,uSpecularValue)*specColor[3];\n' +
-                                '      gl_FragColor = diffuse * light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
-                                '      gl_FragColor.a = alpha;\n'
-
+                                'gl_FragColor =  vColor;'
                             ]
                         }))
                 }
@@ -157,7 +90,7 @@ var Shader = (function () {
                             varyings: ['vec4 vColor'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
                                 'vColor = uColor;'
                             ]
                         }))
@@ -185,6 +118,50 @@ var Shader = (function () {
                 }
             })()
         })
+        .constant('pointVertexShader', {
+            description: "점 버텍스 쉐이더",
+            sample: [
+                "console.log(Shader.wireFrameVertexShader);"
+            ],
+            get: (function () {
+                var cache;
+                return function () {
+                    return cache || (cache = new Shader({
+                            id: 'pointVertexShader',
+                            attributes: ['vec3 aVertexPosition'],
+                            uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix', 'vec3 uRotate', 'vec3 uPosition', 'vec4 uColor'],
+                            varyings: ['vec4 vColor'],
+                            function: [VertexShader.baseFunction],
+                            main: [
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*vec4(aVertexPosition, 1.0);\n' +
+                                'gl_PointSize = 1.0 ;\n' +
+                                'vColor = uColor ;'
+                            ]
+                        }))
+                }
+            })()
+        })
+        .constant('pointFragmentShader', {
+            description: "점 프레그먼트 쉐이더",
+            sample: [
+                "console.log(Shader.wireFrameFragmentShader);"
+            ],
+            get: (function () {
+                var cache;
+                return function () {
+                    return cache || (cache = new Shader({
+                            id: 'pointFragmentShader',
+                            precision: 'mediump float',
+                            uniforms: [],
+                            varyings: ['vec4 vColor'],
+                            function: [],
+                            main: [
+                                'gl_FragColor =  vColor;'
+                            ]
+                        }))
+                }
+            })()
+        })
         .constant('wireFrameVertexShader', {
             description: "와이어프레임 버텍스 쉐이더",
             sample: [
@@ -200,7 +177,8 @@ var Shader = (function () {
                             varyings: ['vec4 vColor'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
+                                'gl_PointSize = 1.0 ;\n' +
                                 'vColor = uColor ;'
                             ]
                         }))
@@ -243,7 +221,7 @@ var Shader = (function () {
                             varyings: ['vec2 vUV'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
                                 'vUV = aUV;'
                             ]
                         }))
@@ -286,7 +264,7 @@ var Shader = (function () {
                             varyings: ['vec4 vColor'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                ' mat4 mv = uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale);\n' +
+                                ' mat4 mv = uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale);\n' +
                                 ' gl_Position = uPixelMatrix*mv*vec4(aVertexPosition, 1.0);\n' +
                                 ' vec3 normal = normalize(mv * vec4(-aVertexNormal, 0.0)).xyz;\n' +
                                 ' float light = max( 0.05, dot(normal, normalize(uDLite)) * uLambert);\n' + 
@@ -333,7 +311,7 @@ var Shader = (function () {
                             varyings: ['vec2 vUV', 'vec4 vLight'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                ' mat4 mv = uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale);\n' +
+                                ' mat4 mv = uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale);\n' +
                                 ' gl_Position = uPixelMatrix*mv*vec4(aVertexPosition, 1.0);\n' +
                                 ' vec3 normal = normalize(mv * vec4(-aVertexNormal, 0.0)).xyz;\n' +
                                 ' float light = max( 0.05, dot(normal,normalize(uDLite)) * uLambert);\n' + 
@@ -383,7 +361,7 @@ var Shader = (function () {
                             varyings: ['vec3 vNormal', 'vec3 vPosition', 'vec4 vColor'],
                             function: [VertexShader.baseFunction],
                             main: ['' +
-                            'mat4 mv = uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale);\n' +
+                            'mat4 mv = uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale);\n' +
                             'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                             'gl_Position = uPixelMatrix*position;\n' +
                             'vPosition = position.xyz;\n' +
@@ -443,7 +421,7 @@ var Shader = (function () {
                             varyings: ['vec3 vNormal', 'vec3 vPosition', 'vec4 vColor'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                'mat4 mv = uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale);\n' +
+                                'mat4 mv = uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale);\n' +
                                 'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                                 'gl_Position = uPixelMatrix*position;\n' +
                                 'vPosition = position.xyz;\n' +
@@ -509,7 +487,7 @@ var Shader = (function () {
                             varyings: ['vec2 vUV', 'vec3 vNormal', 'vec3 vPosition'],
                             function: [VertexShader.baseFunction],
                             main: [
-                                'mat4 mv = uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale);\n' +
+                                'mat4 mv = uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale);\n' +
                                 'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                                 'gl_Position = uPixelMatrix*position;\n' +
                                 'vPosition = position.xyz;\n' +
@@ -584,7 +562,7 @@ var Shader = (function () {
                             varyings: ['vec2 vUV', 'vec3 vNormal', 'vec3 vPosition'],
                             function: [VertexShader.baseFunction],
                             main: ['' +
-                            'mat4 mv = uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale);\n' +
+                            'mat4 mv = uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale);\n' +
                             'gl_Position = uPixelMatrix*mv*vec4(aVertexPosition, 1.0);\n' +
                             'vPosition = vec3(mv * vec4(aVertexPosition, 1.0));\n' +
                             'vNormal = vec3( mv * vec4(-aVertexNormal, 0.0));\n' +
@@ -648,7 +626,7 @@ var Shader = (function () {
                             varyings: ['vec2 vUV'],
                             function: [VertexShader.baseFunction],
                             main: ['' +
-                            'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*quaternionXYZ(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
+                            'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*scaleMTX(uScale)*vec4(aVertexPosition, 1.0);\n' +
                             'vUV = aUV;'
                             ]
                         }))
