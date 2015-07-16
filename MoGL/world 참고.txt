@@ -1,0 +1,63 @@
+== 월드 전역? ==
+getGL : fn - canvas를 인자로 받아서 gl context을 얻어오는 함수
+glSetting : Object - gl에서 쓰는 값을 저장?
+glContext : browser에서 지원하는 webGL 컨텍스트 key 이름 저장
+rectMatrix - Matrix() 
+
+renderList : Object - uuid 키로 
+sceneList : Array - uuid 키로 
+cvsList : Object - uuid 키로 캔버스 DOM 리스트 저장
+autoSizer : Object - uuid 키로 
+mouse : Object - uuid 키로 
+started : Object -
+gpu : Object - uuid 키로 world의 정보를 저장
+	gl : webGL 컨텍스트 객체를 저장함
+	vbo : Object -
+	vnbo : Object -
+	uvbo : Object -
+	ibo : Object -
+	programs : Object -
+	texture : Object -
+	framebuffers : Object -
+
+
+makeVBO : fn - 
+makeVNBO : fn - 
+makeIBO : fn - 
+makeUVBO : fn -
+makeProgram : fn - 
+makeTexture : fn - 
+makeFrameBuffer : fn -
+
+baseUpdate
+baseShaderUpdate
+cameraRenderAreaUpdate
+
+pRatio
+
+
+
+== 월드 지역 == 
+
+self : Object - world 자신
+m : Object - 이벤트 x, y 좌표, 이벤트동작상태 flag 저장
+c : Object - canvas DOM 객체
+
+
+== 월드 메소드 == 
+
+setAutoSize - 오토사이즈 설정하고 이벤트(resize, orientationchange) fire 함
+addScene - 
+removeScene - 
+getScene - 
+getRenderer - 
+start - 
+stop - 
+render - 
+
+== 월드 상수 == 
+
+renderBefore
+renderAfter
+
+
