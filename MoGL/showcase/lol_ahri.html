@@ -49,13 +49,14 @@
     <script src="../src/World.js"></script>
 </head>
 <body>
+    <img id="wait" style="position:absolute; width:128px; heigth:128px; display:none;" src="lol/wait.gif">
 <canvas id="canvas"></canvas>
 <div class="FPS">
     Current FPS: <span id="currentFPS"></span>
     Average FPS: <span id="averageFPS"></span>
 </div>
 <script>
-    (function (W) {
+    (function (W, aniFrame) {
         'use strict';
 
         var world = new World('canvas');
@@ -78,65 +79,81 @@
         var mat = new Material();
         var texture = new Texture();
         texture.img = imgTag;
-        
         mat.addTexture(Texture.diffuse, texture);
+        // mat.wireFrame = 1;
 
+        // var mat = new Material("#555");
+        
 
         var xmlhttp = new XMLHttpRequest();
-
         xmlhttp.open('GET', 'lol/lol_Ahri.json', true);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                start(JSON.parse(xmlhttp.responseText));
+                loading(JSON.parse(xmlhttp.responseText));
             }
         };
         xmlhttp.send(null);
+        
+        var indices, mesh;
+        var geoInfos = {};
+        geoInfos.length = 0;
+               
+        function loading(json){
+            wait.style.left = ( W.innerWidth - wait.width / 4 ) / 2 + "px";
+            wait.style.top = ( W.innerHeight - wait.height / 4 ) / 2 + "px";
+            wait.style.display = "block";
+            indices = json.indices;
 
-        function start(json) {
-            var vertices = json.vertices;
-            var indices = json.indices;
+            var geo = new Geometry(json.vertices, indices, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
 
-            var geo = new Geometry(vertices, indices, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
-
-            var mesh = new Mesh(geo, mat);
-            // mesh.rotateY = 3.14;
-            // mesh.z = 7;
-            
-            // mesh.addEventListener("over", function(){
-            //     mat.wireFrame = 1;                       
-            // });
-            // 
-            // mesh.addEventListener("out", function(){
-            //     mat.wireFrame = 0;                       
-            // });
-
-            
+            mesh = new Mesh(geo, mat);
+            mesh.y = -80;
+            mesh.z = -200;            
             scene.addChild(mesh);
+            world.render();
+            
+            for(var i = 0; i < aniFrame; i++){
+                geoInfos[i] = {};
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.open('GET', 'lol/lol_Ahri'+ i +'.json', true);
+                xmlhttp.onreadystatechange =  function(){
+                    var _ajax = arguments[0].target;
+                    if (_ajax.readyState === 4 && _ajax.status === 200) {
+                        saveGeometryInfos(JSON.parse(_ajax.responseText));
+                        if(geoInfos.length == aniFrame){
+                            wait.style.display = "none";
+                            start();
+                        }
+                    }
+                }                    
+                xmlhttp.send(null);
+            }
+        }
+        
+        function saveGeometryInfos(json){                
+            geoInfos[json.idx].geo = new Geometry(json.vertices, indices, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
+            geoInfos.length++;
+        }
 
-            // camera.fov = 10;
-            // console.log(camera.projectionMatrix);
-
-
+        function start() {
             var sum = 0, count = 1;
-
             function render( currTime ) {
                 var currentFPS = 1000 / ( currTime - prevTime );
                 prevTime = currTime;
-
                 divCurrentFPS.textContent = currentFPS.toFixed( 2 );
-                divAverageFPS.textContent = ( ( sum += currentFPS ) / count++ ).toFixed( 2 );
+                divAverageFPS.textContent = ( ( sum += currentFPS ) / count ).toFixed( 2 );
 
-//                mesh.rotateY -= 0.01;
+
+                mesh.geometry = geoInfos[count % aniFrame].geo;
+                count++;
 
                 world.render();
-
                 requestAnimationFrame( render );
             }
-
            requestAnimationFrame( render );
             //  world.render();
         }
-    })(this);
+    })(this, 1);
 </script>
 </body>
 </html>

@@ -41,8 +41,8 @@
     <script src="../src/Texture.js"></script>
     <script src="../src/Geometry.js"></script>
     <script src="../src/Material.js"></script>
-    <script src="../src/Mesh.js"></script>
     <script src="../src/Point.js"></script>
+    <script src="../src/Mesh.js"></script>
     <script src="../src/Group.js"></script>
     <script src="../src/Camera.js"></script>
     <script src="../src/Scene.js"></script>
@@ -74,17 +74,18 @@
         scene.addChild(camera);
 
         var imgTag = document.createElement('img');
-        imgTag.src = 'monkey/Suzanne.jpg';
+        imgTag.src = 'lol/ahri_base_tx_cm.png';
         var mat = new Material();
         var texture = new Texture();
         texture.img = imgTag;
-        
         mat.addTexture(Texture.diffuse, texture);
+        // mat.wireFrame = 1;
 
+        // var mat = new Material("#555");
+        
 
         var xmlhttp = new XMLHttpRequest();
-
-        xmlhttp.open('GET', 'monkey/monkey.babylon', true);
+        xmlhttp.open('GET', 'lol/lol_test.json', true);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 start(JSON.parse(xmlhttp.responseText));
@@ -93,62 +94,24 @@
         xmlhttp.send(null);
 
         function start(json) {
-            var mesh = json.meshes[0];
-            var vertices = mesh.vertices;
-            var indices = mesh.indices;
-            var uvCount = mesh.uvCount;
-            var verticesStep = 1;
+            var vertices = json.vertices;
+            var indices = json.indices;
 
-            switch (uvCount) {
-                case 0:
-                    verticesStep = 6;
-                    break;
-                case 1:
-                    verticesStep = 8;
-                    break;
-                case 2:
-                    verticesStep = 10;
-                    break;
-            }
-
-            var verticesCount = vertices.length / verticesStep;
-            var facesCount = indices.length / 3;
-            var vertex = [];
-            var index = [];
-            var i = 0;
-            var j;
-
-            for (; i < verticesCount; i++) {
-                j = i * verticesStep;
-
-                vertex.push(vertices[j], vertices[j + 1], vertices[j + 2], vertices[j + 3], vertices[j + 4], vertices[j + 5]);
-
-                if (uvCount > 0) {
-                    vertex.push(vertices[j + 6], vertices[j + 7]);
-                } else {
-                    vertex.push(0, 0);
-                }
-            }
-
-            for (i = 0; i < facesCount; i++) {
-                j = i * 3;
-
-                index.push(indices[j], indices[j + 1], indices[j + 2]);
-            }
-
-            var geo = new Geometry(vertex, index, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
+            var geo = new Geometry(vertices, indices, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
 
             var mesh = new Mesh(geo, mat);
-            mesh.rotateY = 3.14;
-            mesh.z = 7;
+            // mesh.rotateY = 3.14;
+            mesh.y = -80;
+            mesh.z = -200;
             
-            mesh.addEventListener("over", function(){
-                mat.wireFrame = 1;                       
-            });
             
-            mesh.addEventListener("out", function(){
-                mat.wireFrame = 0;                       
-            });
+            // mesh.addEventListener("over", function(){
+            //     mat.wireFrame = 1;                       
+            // });
+            // 
+            // mesh.addEventListener("out", function(){
+            //     mat.wireFrame = 0;                       
+            // });
 
             
             scene.addChild(mesh);

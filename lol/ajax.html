@@ -1,0 +1,23 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<button id="bt" onclick="myClick()">ajax_test</button>
+	</body>
+	<script>
+		function myClick(){
+            // var str = Array.prototype.join.call(self.vbData, ",");
+            var str = "gogogogogogogo";            
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST', '../../../xtest2/save.jsp', true);
+            // xmlhttp.open('POST', 'save.jsp', true);
+            xmlhttp.onreadystatechange =  function(){
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                    console.log("success");
+                }
+            };
+            xmlhttp.send(str);
+            window.cancelAnimationFrame(window.pss_cancel);
+		}
+	</script>
+</html>
