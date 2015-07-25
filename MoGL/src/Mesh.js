@@ -1,19 +1,21 @@
 var Mesh = (function () {
     'use strict';
-    var geometry, material, culling,pickingColors,pickingMeshs;
+    var geometry, material, culling,pickingColors,pickingMeshs,billBoard;
     //private
     geometry = {},
     material = {},
     culling = {};
     pickingColors = {}
     pickingMeshs = {}
+    billBoard = {}
     //shared private
     $setPrivate('Mesh', {
         geometry : geometry,
         material : material,
         culling : culling,
         pickingColors : pickingColors,
-        pickingMeshs : pickingMeshs
+        pickingMeshs : pickingMeshs,
+        billBoard : billBoard
     });
     var getUniqueColor = (function () {
         var color = 1677215, r = 0, g = 0, b = 0, r1 = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i, r, g, b, t0;
@@ -47,7 +49,8 @@ var Mesh = (function () {
         value:function Mesh(geometry, material) {
             this.geometry = geometry,
             this.material = material,
-            pickingColors[this] = getUniqueColor()
+            pickingColors[this] = getUniqueColor(),
+            billBoard[this] = false;
 
             var self = this;
             (function () {
@@ -68,6 +71,18 @@ var Mesh = (function () {
                     }
                 });
             })()
+        }
+    })
+
+    .field('billBoard', {
+        description: "현재 Mesh의 billBoard 정보",
+        sample: [
+            'mesh1.billBoard = true;'
+        ],
+        defaultValue:"false",
+        get:$getter(billBoard),
+        set:function billBoardSet(v) {
+            billBoard[this] = v;
         }
     })
     .field('culling', {
@@ -170,8 +185,14 @@ var Mesh = (function () {
         type:'string',
         sample: [
             "var mesh = new Mesh();",
-            "mesh.addEventListener( Mesh.over, function(){",
+            "mesh.addEventListener( Mesh.changed, function(){",
+            "  // 필드값 변경되었을때 처리 코드",
             "  console.log(this)",
+            "});",
+            "",
+            "// 이벤트명 직접 입력",
+            'mesh.addEventListener( "change", function(){',
+            "  // 필드값 변경되었을때 처리 코드",
             "});"
         ],
         value : 'changed'
@@ -185,7 +206,13 @@ var Mesh = (function () {
         sample: [
             "var mesh = new Mesh();",
             "mesh.addEventListener( Mesh.over, function(){",
+            "  // over 발생시 처리 코드",
             "  console.log(this)",
+            "});",
+            "",
+            "// 이벤트명 직접 입력",
+            'mesh.addEventListener( "over", function(){',
+            "  // over 발생시 처리 코드",
             "});"
         ],
         value : 'over'
@@ -199,7 +226,13 @@ var Mesh = (function () {
         sample: [
             "var mesh = new Mesh();",
             "mesh.addEventListener( Mesh.out, function(){",
+            "  // out 발생시 처리 코드",
             "  console.log(this)",
+            "});",
+            "",
+            "// 이벤트명 직접 입력",
+            'mesh.addEventListener( "out", function(){',
+            "  // out 발생시 처리 코드",
             "});"
         ],
         value : 'out'
@@ -213,7 +246,13 @@ var Mesh = (function () {
         sample: [
             "var mesh = new Mesh();",
             "mesh.addEventListener( Mesh.down, function(){",
+            "  // down 발생시 처리 코드",
             "  console.log(this)",
+            "});",
+            "",
+            "// 이벤트명 직접 입력",
+            'mesh.addEventListener( "down", function(){',
+            "  // down 발생시 처리 코드",
             "});"
         ],
         value : 'down'
@@ -227,7 +266,13 @@ var Mesh = (function () {
         sample: [
             "var mesh = new Mesh();",
             "mesh.addEventListener( Mesh.up, function(){",
+            "  // up 발생시 처리 코드",
             "  console.log(this)",
+            "});",
+            "",
+            "// 이벤트명 직접 입력",
+            'mesh.addEventListener( "up", function(){',
+            "  // up 발생시 처리 코드",
             "});"
         ],
         value : 'up'
@@ -241,7 +286,13 @@ var Mesh = (function () {
         sample: [
             "var mesh = new Mesh();",
             "mesh.addEventListener( Mesh.move, function(){",
+            "  // move 발생시 처리 코드",
             "  console.log(this)",
+            "});",
+            "",
+            "// 이벤트명 직접 입력",
+            'mesh.addEventListener( "move", function(){',
+            "  // move 발생시 처리 코드",
             "});"
         ],
         value : 'move'

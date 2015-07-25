@@ -2,15 +2,12 @@ var Material = (function () {
     'use strict';
     var textureLoaded, texType,
         diffuse, normal, specular, diffuseWrap, specularNormal,
-        shading, lambert, normalPower,specularValue, specularColor, wireFrame, wireFrameColor, count, color;
+        normalPower, specularPower, specularColor,
+        shading, lambert, wireFrame, wireFrameColor, count, color, sprite;
     
     //private
     shading = {},
-
     lambert = {},
-    normalPower = {},
-    specularValue = {},
-    specularColor = {},
     wireFrame = {},
     wireFrameColor = {},
 
@@ -22,21 +19,30 @@ var Material = (function () {
     normal = {},
     specular = {},
     specularNormal = {},
+    
+    normalPower = {},
+    specularPower = {},
+    specularColor = {},
+    
+    sprite = {},
+
     //shared private
     $setPrivate('Material', {
-        color: color,
-        wireFrame: wireFrame,
-        wireFrameColor: wireFrameColor,
-        shading: shading,
-        lambert: lambert,
-        normalPower: normalPower,
-        specularValue: specularValue,
-        specularColor: specularColor,
-        diffuse: diffuse,
-        normal: normal
+        color:color,
+        wireFrame:wireFrame,
+        wireFrameColor:wireFrameColor,
+        shading:shading,
+        lambert:lambert,
+        normalPower:normalPower,
+        specularPower:specularPower,
+        specularColor:specularColor,
+        specular:specular,
+        diffuse:diffuse,
+        normal:normal,
+        sprite:sprite
     }),
     //lib
-    textureLoaded = function(mat){
+    textureLoaded = function(mat) {
         this.removeEventListener(Texture.load, textureLoaded),
         mat.dispatch(Material.changed);
         if (mat.isLoaded) mat.dispatch(Material.load);
@@ -54,8 +60,7 @@ var Material = (function () {
             "* Material의 메서드는 대부분 메서드체이닝을 지원함."
         ],
         param:[
-            '?color:string - 재질의 기본적인 색상. 생략하면 색상 없음. 다음과 같은 형태가 올 수 있음.',
-            'r, g, b, a : 각각 0~1 사이의 소수를 받으며 각각 대응함.'
+            '?color:string - 재질의 기본적인 색상. 생략하면 FFFFFF 1.0'
         ],
         sample:[
             "var mat1 = new Material('#f00');",
@@ -67,29 +72,17 @@ var Material = (function () {
             "var mat5 = Material('#ff00000.8');"
         ],
         value:function Material() {
-            color[this] = [1,1,1,1]
-            if (arguments.length) {
-                this.color = arguments.length > 1 ? arguments : arguments[0]
-            }
-            wireFrameColor[this] = [Math.random(),Math.random(),Math.random(),1]
-            wireFrame[this] = false;
-            lambert[this] = 1.0
-            normalPower[this] = 1.0
-            specularValue[this] = 20.0
-            specularColor[this] = [1,1,1,1]
-            shading[this] = Shading.none
+            color[this] = [1,1,1,1];
+            if (arguments.length) this.color = arguments.length > 1 ? arguments : arguments[0];
+            wireFrame[this] = false,
+            wireFrameColor[this] = [Math.random(),Math.random(),Math.random(),1],
+            lambert[this] = 1.0,
+            normalPower[this] = 1.0,
+            specularPower[this] = 20.0,
+            specularColor[this] = [1,1,1,1],
+            shading[this] = Shading.none;
         }
     })
-    .field('count', {
-            description: "재질이 사용된 횟수",
-            sample: [
-                '// 미구현상태임',
-                'console.log(material.count);'
-            ],
-            defaultValue:'0',
-            get: $getter(count, false, 0)
-        }
-    )
     .field('color', {
         description: "재질 컬러색",
         sample: [
@@ -105,6 +98,88 @@ var Material = (function () {
             p[0] = v[0], p[1] = v[1], p[2] = v[2], p[3] = v[3];
        }
     })
+    .field('sprite', {
+        description:[
+            "이 재질이 스프라이트모드로 작동하게 만듬. 다음과 같은 오브젝트를 넘김",
+            "{row:00, col:00, rate:00, start:00, yoyo:boolean, loop:boolean}",
+            "* row - 이미지를 세로로 쪼갠 수",
+            "* col - 이미지를 가로로 쪼갠 수",
+            "* ?rate - 1프레임당 사용할 시간(초) 생략시 1초",
+            "* ?start - 최초 시작시 보여질 프레임번호. 생략시 0",
+            "* ?loop - 스프라이트 프레임이 몇 번 반복되는지 정함. 음수를 넣으면 무한반복. 생략시 -1",
+            "* ?yoyo - 반복시 앞에서 뒤로 뒤에서 앞으로 형태로 반복됨"
+        ],
+        sample:[
+            'var mat = new Material("#fff");',
+            'mat.sprite = {row:5, col:3};'
+        ],
+        get:function(){
+            return sprite[this].getter || null;
+        },
+        set:function(o){
+            var target, k, v;
+            if (o === null ) {
+                sprite[this] = null;
+                return;
+            }
+            if (!sprite[this]) sprite[this] = {
+                rate:1000,
+                start:0,
+                loop:-1,
+                yoyo:false,
+                curr:0,
+                total:0,
+                prev:0,
+                getter:{rate:1, start:0, loop:-1, yoyo:false}
+            };
+            target = sprite[this];
+            for (k in o) {
+                v = o[k];
+                target.getter[k] = v;
+                if (k == 'rate') v *= 1000;
+                else if(k == 'row' || k == 'col') target['_' + k] = 1 / v;
+                target[k] = v;
+            }
+            target.total = target.getter.row * target.getter.col,
+            target.curr = target.start,
+            target.prev = 0;
+        }
+    })
+    .field('spriteFrame', {
+        description:"스프라이트의 현재 프레임",
+        sample:[
+            'var mat = new Material("#fff");',
+            'mat.sprite = {row:5, col:3};',
+            'mat.spriteFrame = 3;'
+        ],
+        get:function(){
+            return sprite[this] && sprite[this].curr;
+        },
+        set:function(v){
+            var target = sprite[this];
+            if (!target || v >= target.total) return;
+            target.curr = parseInt(v);
+        }
+    })
+    .field('spriteTotalFrame', {
+        description:"스프라이트의 전체 프레임",
+        sample:[
+            'console.log(material.sheetMode);'
+        ],
+        get:function(){
+            return sprite[this] && sprite[this].total;
+        }
+    })
+    .field('count', {
+            description: "재질이 사용된 횟수",
+            sample: [
+                '// 미구현상태임',
+                'console.log(material.count);'
+            ],
+            defaultValue:'0',
+            get: $getter(count, false, 0)
+        }
+    )
     .field('wireFrame', {
         description: "와이어 프레임 표현여부",
         sample: [
@@ -150,24 +225,24 @@ var Material = (function () {
         set:$setter(lambert)
     })
     .field('normalPower', {
-        description: "재질 Normal 적용 강도 설정",
+        description: "재질 normalPower 적용 강도 설정",
         sample: [
-            'material.normalPower = 1.5;',
+            'material.normalPower = 1.0;',
             'console.log(material.normalPower);'
         ],
-        defaultValue:'1.0',
-        get:$getter(normalPower),
-        set:$setter(normalPower)
+        defaultValue:'20.0',
+        get:$getter(specularPower),
+        set:$setter(specularPower)
     })
-    .field('specularValue', {
-        description: "재질 specularValue 적용 강도 설정",
+    .field('specularPower', {
+        description: "재질 specularPower 적용 강도 설정",
         sample: [
-            'material.specularValue = 20.0;',
-            'console.log(material.specularValue);'
+            'material.specularPower = 20.0;',
+            'console.log(material.specularPower);'
         ],
         defaultValue:'20.0',
-        get:$getter(specularValue),
-        set:$setter(specularValue)
+        get:$getter(specularPower),
+        set:$setter(specularPower)
     })
     .field('specularColor', {
         description: "specular 컬러색",
@@ -177,7 +252,7 @@ var Material = (function () {
             'console.log(material.specularColor);'
         ],
         defaultValue:'[1,1,1,1]',
-        get:$getter(color),
+        get:$getter(specularColor),
         set:function specularColorrSet(v) {
             var p = specularColor[this];
             v = $color(v);
@@ -200,6 +275,15 @@ var Material = (function () {
         ],
         defaultValue:'[]',
         get:$getter(normal)
+        //set:$setter(normal)
+    })
+    .field('specular', {
+        description: "재질에 적용된 specular 리스트 반환",
+        sample: [
+            'console.log(material.specular);'
+        ],
+        defaultValue:'[]',
+        get:$getter(specular)
         //set:$setter(normal)
     })
     .field('isLoaded', {
@@ -342,7 +426,7 @@ var Material = (function () {
             "* [Texture.diffuseWrap](Texture.md#diffusewrap) or 'diffuseWrap' - 디퓨즈랩 맵으로 등록함.",
             "* [Texture.normal](Texture.md#normal) or 'normal' - 노말 맵으로 등록함.",
             "* [Texture.specularNormal](Texture.md#specularNormal) or 'diffuse' - 스페큘러노말 맵으로 등록함.",
-            '[Texture](Texture.md) - 제거 될 Texture instance.'
+            'texture:[Texture](Texture.md) - 제거 될 Texture instance.'
         ],
         ret:[
             'this - 메서드체이닝을 위해 자신을 반환함.'
