@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>Monkey</title>
+    <title>Ahri</title>
     <meta charset="utf-8"/>
     <meta property="og:image" content="http://shallaa.github.io/SoftEngine/og/1.jpg"/>
     <meta property="og:title" content="Monkey"/>
@@ -76,8 +76,7 @@
         var imgTag = document.createElement('img');
         imgTag.src = 'lol/ahri_base_tx_cm.png';
         var mat = new Material();
-        var texture = new Texture();
-        texture.img = imgTag;
+        var texture = new Texture(imgTag);
         mat.addTexture(Texture.diffuse, texture);
         // mat.wireFrame = 1;
 
