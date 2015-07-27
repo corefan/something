@@ -47,6 +47,7 @@ var World = (function (makeUtil) {
         makeProgram(gpu, 'color', vS.colorVertexShader, fS.colorFragmentShader);
         makeProgram(gpu, 'mouse', vS.mouseVertexShader, fS.colorFragmentShader);
         makeProgram(gpu, 'wireFrame', vS.wireFrameVertexShader, fS.wireFrameFragmentShader);
+        makeProgram(gpu, 'pointFrame', vS.pointVertexShader, fS.pointFragmentShader);
         makeProgram(gpu, 'bitmap', vS.bitmapVertexShader, fS.bitmapFragmentShader);
         makeProgram(gpu, 'bitmapGouraud', vS.bitmapVertexShaderGouraud, fS.bitmapFragmentShaderGouraud);
         makeProgram(gpu, 'colorGouraud', vS.colorVertexShaderGouraud, fS.colorFragmentShaderGouraud);
@@ -139,6 +140,9 @@ var World = (function (makeUtil) {
             var gMatShading, gMatLambert, gMatNormalPower, gMatSpecularPower, gMatSpecularColor;
             var gMatDiffuseMaps, gMatNormalMaps, gMatSpecularMaps;
             var gMatSprite;
+            
+            // pss
+            var gPointGeo, gPointMat, gPointSize;
 
             var gGeoVertexCount;
 
@@ -167,10 +171,10 @@ var World = (function (makeUtil) {
 
             gChild = $getPrivate('Scene', 'children'),
             gChildArray = $getPrivate('Scene', 'childrenArray'),
-            gCameraLen = $getPrivate('Scene', 'cameraLength'),
+            gCameraLen = $getPrivate('Scene', 'cameraLength');
 
-            gGeo = $getPrivate('Mesh', 'geometry'),
-            gMat = $getPrivate('Mesh', 'material'),
+            gGeo = $getPrivate('Mesh', 'geometry');
+            gMat = $getPrivate('Mesh', 'material');
             gPickColors = $getPrivate('Mesh', 'pickingColors'),
             gPickMeshs = $getPrivate('Mesh', 'pickingMeshs'),
             gCull = $getPrivate('Mesh', 'culling'),
@@ -186,7 +190,11 @@ var World = (function (makeUtil) {
             gMatDiffuseMaps = $getPrivate('Material', 'diffuse'),
             gMatNormalMaps = $getPrivate('Material', 'normal'),
             gMatSpecularMaps = $getPrivate('Material', 'specular'),
-            gMatSprite = $getPrivate('Material', 'sprite'),
+            gMatSprite = $getPrivate('Material', 'sprite');
+
+            gPointGeo = $getPrivate('Point', 'geometry'); // pss
+            gPointMat = $getPrivate('Point', 'material'); // pss
+            gPointSize = $getPrivate('Point', 'pointSize'); // pss
 
             gGeoVertexCount = $getPrivate('Geometry', 'vertexCount'),
 
@@ -331,8 +339,29 @@ var World = (function (makeUtil) {
                         i2 = tChildrenArray.length;
                         var i3 = 0
                         while(i2--){
-                            tItem = tChildrenArray[i3++],
-                            tUUID_Item = tItem.uuid,
+                            tItem = tChildrenArray[i3++];
+                            tUUID_Item = tItem.uuid;
+                            if(tItem.pointSize != null){ // pss
+                                tGL.uniform3fv(tProgram.uAffine,
+                                    (
+                                        f9[0] = tItem.x, f9[1] = tItem.y, f9[2] = tItem.z,
+                                        f9[3] = tItem.rotateX, f9[4] = tItem.rotateY, f9[5] = tItem.rotateZ,
+                                        f9[6] = tItem.scaleX, f9[7] = tItem.scaleY, f9[8] = tItem.scaleZ, f9
+                                    )
+                                );
+                                tVBO = tGPU.vbo[gPointGeo[tUUID_Item]];
+                                tProgram = tGPU.programs['pointFrame'];
+                                tGL.useProgram(tProgram);
+                                tGL.bindBuffer(tGL.ARRAY_BUFFER, tVBO);
+                                tGL.vertexAttribPointer(tProgram.aVertexPosition, tVBO.stride, tGL.FLOAT, false, 0, 0);
+                                tColor = gPointMat[tUUID_Item].color;
+                                tGL.uniform4fv(tProgram.uColor, tColor);
+                                tGL.uniform4fv(tProgram.uSize, tColor);
+                                // tGL.uniform4fv(tProgram.uColor, [0.7, 0.7, 0.7, 1]);
+                                // tGL.drawElements(tGL.POINTS, tIBO.numItem, tGL.UNSIGNED_INT, 0);
+                                tGL.drawArrays(tGL.POINTS, 0, tVBO.data.length / tVBO.stride);
+                            }else{
+                                
                             tCull = gCull[tUUID_Item];
                             if (tCull != pCull) {
                                 if (tCull == Mesh.cullingNone) tGL.disable(tGL.CULL_FACE);
@@ -461,8 +490,10 @@ var World = (function (makeUtil) {
                             pDiffuse = tDiffuse,
                             pNormal = tNormal,
                             pSpecular = tSpecular
-
                         }
+
+                        }                     
+                        
                         if (cameraLength > 1) {
                             tGL.bindFramebuffer(tGL.FRAMEBUFFER, pVBO = pVNBO = pUVBO = pIBO = pDiffuse = pNormal = pSpecular = pShading = null);
                         }

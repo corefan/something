@@ -47,9 +47,9 @@ var Mesh = (function () {
             "* 'Mesh.materialSet:0' - 두번째 인자가 material 객체가 아닌 경우"
         ],
         value:function Mesh(geometry, material) {
-            this.geometry = geometry,
-            this.material = material,
-            pickingColors[this] = getUniqueColor(),
+            this.geometry = geometry;
+            this.material = material;
+            pickingColors[this] = getUniqueColor();
             billBoard[this] = false;
 
             var self = this;

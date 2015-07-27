@@ -93,9 +93,9 @@ var makeUtil = (function(){
             }
             var gl, vShader, fShader, program, i, len, tList;
             gl = gpu.gl,
-            vShader = gl.createShader(gl.VERTEX_SHADER),
-            fShader = gl.createShader(gl.FRAGMENT_SHADER),
-            gl.shaderSource(vShader, vSource.shaderStr),
+            vShader = gl.createShader(gl.VERTEX_SHADER);
+            fShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(vShader, vSource.shaderStr);
             gl.compileShader(vShader),
             gl.shaderSource(fShader, fSource.shaderStr),
             gl.compileShader(fShader);

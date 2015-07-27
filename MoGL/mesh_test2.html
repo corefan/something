@@ -14,6 +14,12 @@
             margin: 0;
             padding: 0;
         }
+        .FPS {
+            color: #FFF;
+            left: 0px;
+            top: 0px;
+            position: absolute
+        }
     </style>
     <script src="./src/$.js"></script>
     <script src="./src/make.js"></script>
@@ -50,13 +56,13 @@
         var geometry = new Geometry([-1,1,0, 1,1,0, -1,-1,0, 1,-1,0], [0,1,2,1,2,3]);
 
 
-//        var material = new Material("#0ff");
+       var material = new Material("#f00");
 //        material.wireFrame = 1;
 
 //        var mesh = new Mesh(geometry, material);
 //        scene.addChild(mesh);
 
-        var point = new Point(geometry, "#f00");
+        var point = new Point(geometry, material);
         scene.addChild(point);
 
         world.render();

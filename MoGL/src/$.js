@@ -35,7 +35,7 @@ var $setPrivate, $getPrivate, $writable, $readonly, $getter, $setter, $color, $m
 (function() {
     var VAR = {}, value = {};
     $setPrivate = function $setPrivate(cls, v) { //공용private설정
-        $readonly.value = v,
+        $readonly.value = v;
         Object.defineProperty(VAR, cls, $readonly);
     },
     $getPrivate = function $getPrivate(cls) { //공용private읽기

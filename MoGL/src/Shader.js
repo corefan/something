@@ -227,6 +227,52 @@ var Shader = (function () {
                 }
             })()
         })
+        .constant('pointVertexShader', {
+            description: "점 버텍스 쉐이더",
+            sample: [
+                "console.log(Shader.wireFrameVertexShader);"
+            ],
+            get: (function () {
+                var cache;
+                return function () {
+                    return cache || (cache = new Shader({
+                            id: 'pointVertexShader',
+                            attributes: ['vec3 aVertexPosition'],
+                            uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix', 'vec3 uRotate', 'vec3 uPosition', 'vec4 uColor'],
+                            // uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix', 'vec3 uAffine[3]', 'vec4 uColor'],
+                            varyings: ['vec4 vColor'],
+                            function: [VertexShader.baseFunction],
+                            main: [
+                                'gl_Position = uPixelMatrix*uCameraMatrix*positionMTX(uPosition)*rotationMTX(uRotate)*vec4(aVertexPosition, 1.0);\n' +
+                                // 'gl_Position = uPixelMatrix * uCameraMatrix * positionMTX(uAffine[0])*quaternionXYZ(uAffine[1])*scaleMTX(uAffine[2]) * vec4(aVertexPosition, 1.0);\n' +                                
+                                'gl_PointSize = 2.0;\n' +
+                                'vColor = uColor ;'
+                            ]
+                        }))
+                }
+            })()
+        })
+        .constant('pointFragmentShader', {
+            description: "점 프레그먼트 쉐이더",
+            sample: [
+                "console.log(Shader.wireFrameFragmentShader);"
+            ],
+            get: (function () {
+                var cache;
+                return function () {
+                    return cache || (cache = new Shader({
+                            id: 'pointFragmentShader',
+                            precision: 'mediump float',
+                            uniforms: [],
+                            varyings: ['vec4 vColor'],
+                            function: [],
+                            main: [
+                                'gl_FragColor =  vColor;'
+                            ]
+                        }))
+                }
+            })()
+        })
         .constant('wireFrameVertexShader', {
             description: "와이어프레임 버텍스 쉐이더",
             sample: [

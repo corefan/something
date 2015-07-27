@@ -121,6 +121,7 @@ var Scene = (function () {
             this.addVertexShader(Shader.mouseVertexShader), this.addFragmentShader(Shader.mouseFragmentShader),
             this.addVertexShader(Shader.colorVertexShader), this.addFragmentShader(Shader.colorFragmentShader),
             this.addVertexShader(Shader.wireFrameVertexShader), this.addFragmentShader(Shader.wireFrameFragmentShader),
+            this.addVertexShader(Shader.pointVertexShader), this.addFragmentShader(Shader.pointFragmentShader), // pss
             this.addVertexShader(Shader.bitmapVertexShader), this.addFragmentShader(Shader.bitmapFragmentShader),
             this.addVertexShader(Shader.bitmapVertexShaderGouraud), this.addFragmentShader(Shader.bitmapFragmentShaderGouraud),
             this.addVertexShader(Shader.colorVertexShaderGouraud), this.addFragmentShader(Shader.colorFragmentShaderGouraud),
@@ -185,7 +186,50 @@ var Scene = (function () {
                 this.addMesh(v);
             } else if (v instanceof Camera) {
                 this.addCamera(v);
+            } else if (v instanceof Point) {
+                this.addPoint(v);
             } else this.error(0);
+            return this;
+        }
+    })
+    .method('addPoint', { // pss
+        description: [
+            'Point객체를 추가함.'
+        ],
+        param: [
+            'point:Point - 메쉬객체'
+        ],
+        ret: [
+            'this - 메서드체이닝을 위해 자신을 반환함.'
+        ],
+        sample: [
+            "var scene = new Scene();",
+            "var geo = new Geometry([],[]);",
+            "var point = new Point(geo,'#f00');",
+            "scene.addPoint(point);"
+        ],
+        exception: [
+            "'Scene.addPoint:0' - 이미 등록된 포인트 객체를 등록하려고 할 때",
+            "'Scene.addPoint:1' - 포인트객체가  아닌 객체를 등록하려고 할 때"
+        ],
+        value : function(v) {           
+            var target, update;
+            
+            if (!(v instanceof Point)) this.error(1);
+            
+            target = children[this];
+            if (target[v]) {
+                this.error(0);
+            } else {
+                target[v] = v;
+            }
+            
+            target = childrenArray[this];
+            if (target.indexOf(v) == -1) target[target.length] = v;
+            
+            update = updateList[this],
+            update.geometry.push(v.geometry),
+            update.merged.push(v);
             return this;
         }
     })

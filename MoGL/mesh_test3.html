@@ -14,6 +14,12 @@
             margin: 0;
             padding: 0;
         }
+        .FPS {
+            color: #FFF;
+            left: 0px;
+            top: 0px;
+            position: absolute
+        }
     </style>
     <script src="./src/$.js"></script>
     <script src="./src/make.js"></script>
@@ -39,11 +45,12 @@
 <body>
 <img src="showcase/smithHead/Map-COL.jpg" id="testIMG" style="position: absolute;top:0px;;display:none" width="128" height="128">
 <img src="showcase/monkey/Suzanne.jpg" id="testIMG2" style="position: absolute;top:0px;;display:none" width="128" height="128">
-<canvas id="canvas"></canvas>
 <div class="FPS">
     Current FPS: <span id="currentFPS"></span>
     Average FPS: <span id="averageFPS"></span>
 </div>
+<canvas id="canvas"></canvas>
+
 
 <script>
     'use strict';
@@ -62,23 +69,12 @@
     world.addScene(scene)
     scene.addChild(camera)
 
-    world.setAutoSize(1)
+    world.setAutoSize(1);
     ////////////////////////////////////////////////////////////////////////////
-    var mat1, mat2, mat3;
-    var texture1, texture2, texture3;
+    var mat1, texture1;
     // 재질생성
-    mat1 = new Material('#fff')
-    mat2 = new Material('#22f232')
-    mat3 = new Material('#fef232')
+    mat1 = new Material('#222');
     // 텍스쳐생성
-    texture1 = new Texture().setId('texture1')
-    texture2 = new Texture().setId('texture2')
-    texture1.img = document.getElementById('testIMG')
-    // 재질에 텍스쳐 주입
-    mat1.addTexture(Texture.diffuse, texture1)
-    // 씬에 텍스쳐 등록
-    scene.addTexture(texture1);
-    scene.addTexture(texture2);
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open('GET', 'showcase/smithHead/smith_head.json', true);
@@ -92,53 +88,16 @@
     xmlhttp.send(null);
     function makeItems(geo) {
         var mesh = new Mesh(geo, mat1);
-        mesh.scale = [10, 10, 10]
+        mesh.y = -2;
+        mesh.scale = [15, 15, 15]
         scene.addChild(mesh);
+        mat1.wireFrame = 1;
+        
+        // var point = new Point(geo, mat1);
+        // point.scale = [15, 15, 15];
+        // scene.addChild(point);
+       
 
-        mat1.wireFrame = 1
-        mat2.wireFrame = 1
-        mat3.wireFrame = 1
-
-        /*
-        var mesh2 = new Mesh(geo, mat2);
-        mesh2.scale = [10, 10, 10]
-        scene.addChild(mesh2);
-
-        var mesh3 = new Mesh(geo, mat3);
-        mesh3.scale = [10, 10, 10]
-        scene.addChild(mesh3);
-
-        mat1.shading = Shading.phong
-        mat2.shading = Shading.phong
-        mat3.shading = Shading.phong
-        mat3.lambert = 1.5
-
-        mesh.x = -3
-        mesh2.x = 3
-        mesh3.y = -1
-        */
-
-        setTimeout(function () {
-            texture2 = new Texture()
-            texture2.img = document.getElementById('testIMG2')
-            texture3 = new Texture()
-            texture3.img = document.getElementById('testIMG')
-
-            mat1.addTexture(Texture.diffuse, texture2)
-            mat2.addTexture(Texture.diffuse, texture3)
-            check1()
-
-        }, 1000)
-        var check1 = function(){
-            mesh.material = mat1
-            mesh2.material = mat2
-            setTimeout(check2, 1000)
-        }
-        var check2 = function(){
-            mesh.material = mat2
-            mesh2.material = mat1
-            setTimeout(check1, 1000)
-        }
         var currentFPS, prevTime = 0, count = 0, sum = 0
         world.addEventListener(World.renderBefore, function (currTime) {
                     currentFPS = 1000 / ( currTime - prevTime );
@@ -146,9 +105,7 @@
                     count++
                     divCurrentFPS.textContent = currentFPS.toFixed(2);
                     divAverageFPS.textContent = ( ( sum += currentFPS ) / count ).toFixed(2);
-                    mesh.rotateY -= 0.01;
-                    mesh2.rotateY -= 0.01;
-                    mesh3.rotateY -= 0.01;
+                    // mesh.rotateY -= 0.01;
                 }
         )
     }
