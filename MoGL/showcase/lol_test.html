@@ -105,13 +105,13 @@
             mesh.z = -200;
             
             
-            // mesh.addEventListener("over", function(){
-            //     mat.wireFrame = 1;                       
-            // });
-            // 
-            // mesh.addEventListener("out", function(){
-            //     mat.wireFrame = 0;                       
-            // });
+            mesh.addEventListener("over", function(){
+                mat.wireFrame = 1;                       
+            });
+            
+            mesh.addEventListener("out", function(){
+                mat.wireFrame = 0;                       
+            });
 
             
             scene.addChild(mesh);
@@ -129,7 +129,7 @@
                 divCurrentFPS.textContent = currentFPS.toFixed( 2 );
                 divAverageFPS.textContent = ( ( sum += currentFPS ) / count++ ).toFixed( 2 );
 
-//                mesh.rotateY -= 0.01;
+                mesh.rotateY -= 0.01;
 
                 world.render();
 

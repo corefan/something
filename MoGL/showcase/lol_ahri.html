@@ -80,9 +80,9 @@
         var texture = new Texture();
         texture.img = imgTag;
         mat.addTexture(Texture.diffuse, texture);
-        // mat.wireFrame = 1;
-
-        // var mat = new Material("#555");
+        // mat.shading = Shading.gouraud;
+        // mat.shading = Shading.phong;
+        // mat.shading = Shading.toon;
         
 
         var xmlhttp = new XMLHttpRequest();
@@ -108,8 +108,16 @@
 
             mesh = new Mesh(geo, mat);
             mesh.y = -80;
-            mesh.z = -200;            
-            scene.addChild(mesh);
+            mesh.z = -200;       
+            
+            // mesh.addEventListener("over", function(){
+            //     mat.wireFrame = 1;                       
+            // });
+            // mesh.addEventListener("out", function(){
+            //     mat.wireFrame = 0;                       
+            // });
+     
+            scene.addChild(mesh);            
             world.render();
             
             for(var i = 0; i < aniFrame; i++){
@@ -146,6 +154,8 @@
 
                 mesh.geometry = geoInfos[count % aniFrame].geo;
                 count++;
+                
+                // mesh.rotateY -= 0.02;
 
                 world.render();
                 requestAnimationFrame( render );
@@ -153,7 +163,7 @@
            requestAnimationFrame( render );
             //  world.render();
         }
-    })(this, 1);
+    })(this, 102);
 </script>
 </body>
 </html>
