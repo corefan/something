@@ -67,15 +67,7 @@
         var camera = new Camera();        
         scene.addChild(camera);
 
-        // var imgTag = document.createElement('img');
-        // imgTag.src = 'showcase/monkey/Suzanne.jpg';
-        // var mat = new Material();
-        // var texture = new Texture(imgTag);
-        // mat.addTexture(Texture.diffuse, texture);
-        var mat = new Material("#fff");
-
         var xmlhttp = new XMLHttpRequest();
-
         xmlhttp.open('GET', 'showcase/monkey/monkey.babylon', true);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
@@ -129,28 +121,21 @@
             }
 
             var geo = new Geometry(vertex, index, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
-
+            var mat = new Material("#575");
             var mesh = new Mesh(geo, mat);
             mesh.rotateY = 2.8;
             mesh.z = 3;
-            mesh.x = 3;
-
-            // mesh.addEventListener("over", function(){
-            //     mat.wireFrame = 1;                       
-            // });
-            // 
-            // mesh.addEventListener("out", function(){
-            //     mat.wireFrame = 0;                       
-            // });
+            mesh.x = 2;
             scene.addChild(mesh);
 
             
-            // var mat2 = new Material("#50f");
-            // var point = new Point(geo, mat2);
-            // point.rotateY = 2.8;
-            // point.z = 5;
-            // point.x = -3;
-            // scene.addChild(point);
+            var mat2 = new Material("#80f");
+            mat2.shading = Shading.phong;
+            var mesh2 = new Mesh(geo, mat2);
+            mesh2.rotateY = 2.8;
+            mesh2.z = 5;
+            mesh2.x = -2;
+            scene.addChild(mesh2);
             
 
             var sum = 0, count = 1;
@@ -162,7 +147,8 @@
                 divCurrentFPS.textContent = currentFPS.toFixed( 2 );
                 divAverageFPS.textContent = ( ( sum += currentFPS ) / count++ ).toFixed( 2 );
 
-//                mesh.rotateY -= 0.01;
+                mesh.rotateY -= 0.01;
+                mesh2.rotateY -= 0.01;
 
                 world.render();
 
