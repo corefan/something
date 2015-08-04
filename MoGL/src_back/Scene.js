@@ -1,6 +1,6 @@
 var Scene = (function () {
     'use strict';
-    var vertexShaderParser, fragmentShaderParser, mkGet, mkAdd, mkAddShader, mkRemove,addRenderList,removeRenderItem,renderList,
+    var vertexShaderParser, fragmentShaderParser, mkGet, mkAdd, mkAddShader, mkRemove,addRenderList,renderList,
         children,childrenArray, cameras, textures, materials, geometrys, vertexShaders, fragmentShaders, updateList,baseLightRotate,cameraLength;
     //private
     children = {},
@@ -68,55 +68,28 @@ var Scene = (function () {
             return false;
         }
     },
-    (function(){
-        var sort = [['culling',0],['geometry',0],['diffuse',0],['shading',0]], data = {};
-        var target, ref, i, j
-        var curr, sep, key, diffuse;
+    addRenderList = function(v,list){
+        var geo, shading;
+        geo = v.geometry,
+        shading = v.material.shading
 
-        data = {
-            culling:$getPrivate('Mesh', 'culling'),
-            geometry:$getPrivate('Mesh', 'geometry'),
-            material:$getPrivate('Mesh', 'material'),
-            diffuse:$getPrivate('Material', 'diffuse'),
-            shading:$getPrivate('Material', 'shading')
-        },
-        addRenderList = function (v, list) {
-            target = list;
-            for (i = 0, j = sort.length; i < j; i++) {
-                curr = sort[i],
-                ref = v,
-                key = ''
-                if (i > 1) {
-                    ref = data.material[ref.uuid]
-                }
-                if (i == 2) {
-                    diffuse = data.diffuse[ref.uuid]
-                    if (diffuse) key = 'useTexture_' + diffuse[0].tex.uuid
-                    else key = 'noTexture'
-                    sep = key
-                    if (ref.sprite) sep = 'sprite_' + sep
-                } else {
-                    sep = ref[curr[0]]
-                }
-                if (!target[sep]) target[sep] = i == j - 1 ? [] : {};
-                target = target[sep];
-            }
-            if(target.indexOf(v)==-1) target[target.length] = v;
-        },
-        removeRenderItem = function(v,list) {
-            var checkList, k, tList;
-            var tGeo, tMat,tShading;
-            tGeo = data.geometry[v.uuid],
-            tMat = data.material[v.uuid],
-            tShading = data.shading[tMat]
-            checkList = list[v.culling][tGeo]
-            for (k in checkList) {
-                tList = checkList[k][tShading],
-                tList.splice(tList.indexOf(v),1)
-            }
+        var useTexture = v.material.diffuse ? 1 : 0;
+
+        shading=
+        shading == Shading.phong ? useTexture ? 'bitmapPhong' : 'colorPhong' :
+        shading == Shading.gouraud ? useTexture ? 'bitmapGouraud' : 'colorGouraud' :
+        shading == Shading.toon ? 'toonPhong' :
+        shading == Shading.blinn ? 'bitmapBlinn' :
+        useTexture ? 'bitmap' : 'color';
+
+        if(!list[geo]){
+            list[geo] = {}
         }
-    })()
-
+        if(!list[geo][shading]){
+            list[geo][shading] = []
+        }
+        list[geo][shading].push(v)
+    };
     return MoGL.extend('Scene', {
         description:[
             '실제 렌더링될 구조체는 Scene별로 집결됨.',
@@ -144,15 +117,18 @@ var Scene = (function () {
             },
             baseLightRotate[this] = [0, -1, -1],
             this.updateList = updateList[this],
+            this.addVertexShader(Shader.colorMergeVShader), this.addFragmentShader(Shader.colorMergeFShader),
             this.addVertexShader(Shader.mouseVertexShader), this.addFragmentShader(Shader.mouseFragmentShader),
             this.addVertexShader(Shader.colorVertexShader), this.addFragmentShader(Shader.colorFragmentShader),
             this.addVertexShader(Shader.wireFrameVertexShader), this.addFragmentShader(Shader.wireFrameFragmentShader),
+            this.addVertexShader(Shader.pointVertexShader), this.addFragmentShader(Shader.pointFragmentShader), // pss
             this.addVertexShader(Shader.bitmapVertexShader), this.addFragmentShader(Shader.bitmapFragmentShader),
             this.addVertexShader(Shader.bitmapVertexShaderGouraud), this.addFragmentShader(Shader.bitmapFragmentShaderGouraud),
             this.addVertexShader(Shader.colorVertexShaderGouraud), this.addFragmentShader(Shader.colorFragmentShaderGouraud),
             this.addVertexShader(Shader.colorVertexShaderPhong), this.addFragmentShader(Shader.colorFragmentShaderPhong),
             this.addVertexShader(Shader.toonVertexShaderPhong), this.addFragmentShader(Shader.toonFragmentShaderPhong),
             this.addVertexShader(Shader.bitmapVertexShaderPhong), this.addFragmentShader(Shader.bitmapFragmentShaderPhong),
+            this.addVertexShader(Shader.bitmapVertexShaderBlinn), this.addFragmentShader(Shader.bitmapFragmentShaderBlinn),
             this.addVertexShader(Shader.postBaseVertexShader), this.addFragmentShader(Shader.postBaseFragmentShader);
         }
     })
@@ -210,7 +186,50 @@ var Scene = (function () {
                 this.addMesh(v);
             } else if (v instanceof Camera) {
                 this.addCamera(v);
+            } else if (v instanceof Point) {
+                this.addPoint(v);
             } else this.error(0);
+            return this;
+        }
+    })
+    .method('addPoint', { // pss
+        description: [
+            'Point객체를 추가함.'
+        ],
+        param: [
+            'point:Point - 메쉬객체'
+        ],
+        ret: [
+            'this - 메서드체이닝을 위해 자신을 반환함.'
+        ],
+        sample: [
+            "var scene = new Scene();",
+            "var geo = new Geometry([],[]);",
+            "var point = new Point(geo,'#f00');",
+            "scene.addPoint(point);"
+        ],
+        exception: [
+            "'Scene.addPoint:0' - 이미 등록된 포인트 객체를 등록하려고 할 때",
+            "'Scene.addPoint:1' - 포인트객체가  아닌 객체를 등록하려고 할 때"
+        ],
+        value : function(v) {           
+            var target, update;
+            
+            if (!(v instanceof Point)) this.error(1);
+            
+            target = children[this];
+            if (target[v]) {
+                this.error(0);
+            } else {
+                target[v] = v;
+            }
+            
+            target = childrenArray[this];
+            if (target.indexOf(v) == -1) target[target.length] = v;
+            
+            update = updateList[this],
+            update.geometry.push(v.geometry),
+            update.merged.push(v);
             return this;
         }
     })
@@ -269,7 +288,7 @@ var Scene = (function () {
                 }
             };
             return function addMesh(v){
-                var target, update,render;
+                var target, update;
                 
                 if (!(v instanceof Mesh)) this.error(1);
                 
@@ -287,15 +306,12 @@ var Scene = (function () {
                 update.geometry.push(v.geometry),
                 update.merged.push(v),
 
-                render = renderList[this]
                 v.addEventListener(Mesh.changed, function() {
                 if (update.geometry.indexOf(v.geometry)==-1) update.geometry.push(v.geometry);
                     target = v.material;
                     if (target.isLoaded) {
                         loaded.call(target, update.texture);
                     }
-                    removeRenderItem(v,render)
-                    addRenderList(v,render)
                 });
 
                 target = v.material;
@@ -424,7 +440,7 @@ var Scene = (function () {
                 if (k == v || p[k].id == v) {
                     childrenArray[this].splice(childrenArray[this].indexOf(p[k]), 1),
                     p[k].removeEventListener(MoGL.changed),
-                    removeRenderItem(v, renderList[this]);
+                    //updateList[this].removeMerged.push(p[k]),
                     delete p[k];
                     return true;
                 }

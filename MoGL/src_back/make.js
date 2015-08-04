@@ -93,11 +93,11 @@ var makeUtil = (function(){
             }
             var gl, vShader, fShader, program, i, len, tList;
             gl = gpu.gl,
-            vShader = gl.createShader(gl.VERTEX_SHADER),
+            vShader = gl.createShader(gl.VERTEX_SHADER);
             fShader = gl.createShader(gl.FRAGMENT_SHADER);
             gl.shaderSource(vShader, vSource.shaderStr);
-            gl.compileShader(vShader);
-            gl.shaderSource(fShader, fSource.shaderStr);
+            gl.compileShader(vShader),
+            gl.shaderSource(fShader, fSource.shaderStr),
             gl.compileShader(fShader);
 
             program = gl.createProgram(),
@@ -123,6 +123,7 @@ var makeUtil = (function(){
             while (i--) {
                 if(tList[i].indexOf('[')>-1) {
                     var t = tList[i].split('[')
+
                     program[t[0]] = gl.getUniformLocation(program, t[0]);
                 }else{
                     program[tList[i]] = gl.getUniformLocation(program, tList[i]);
@@ -131,12 +132,7 @@ var makeUtil = (function(){
             tList = fSource.uniforms,
             i = tList.length;
             while (i--) {
-                if(tList[i].indexOf('[')>-1) {
-                    var t = tList[i].split('[')
-                    program[t[0]] = gl.getUniformLocation(program, t[0]);
-                }else{
-                    program[tList[i]] = gl.getUniformLocation(program, tList[i]);
-                }
+                program[tList[i]] = gl.getUniformLocation(program, tList[i]);
             }
 
             if(!gl.getProgramParameter(program, gl.LINK_STATUS)) {

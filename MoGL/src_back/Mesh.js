@@ -1,25 +1,21 @@
 var Mesh = (function () {
     'use strict';
-    var geometry, material, culling,pickingColors,pickingMeshs,billboard,alpha,visible;
+    var geometry, material, culling,pickingColors,pickingMeshs,billBoard;
     //private
     geometry = {},
     material = {},
-    culling = {},
-    pickingColors = {},
-    pickingMeshs = {},
-    billboard = {},
-    alpha = {},
-    visible = {},
+    culling = {};
+    pickingColors = {}
+    pickingMeshs = {}
+    billBoard = {}
     //shared private
     $setPrivate('Mesh', {
-        alpha : alpha,
         geometry : geometry,
         material : material,
         culling : culling,
         pickingColors : pickingColors,
         pickingMeshs : pickingMeshs,
-        billboard : billboard,
-        visible : visible
+        billBoard : billBoard
     });
     var getUniqueColor = (function () {
         var color = 1677215, r = 0, g = 0, b = 0, r1 = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i, r, g, b, t0;
@@ -51,12 +47,10 @@ var Mesh = (function () {
             "* 'Mesh.materialSet:0' - 두번째 인자가 material 객체가 아닌 경우"
         ],
         value:function Mesh(geometry, material) {
-            this.geometry = geometry,
-            this.material = material,
-            pickingColors[this] = getUniqueColor(),
-            billboard[this] = false;
-            alpha[this] = 1.0
-            visible[this] = 1
+            this.geometry = geometry;
+            this.material = material;
+            pickingColors[this] = getUniqueColor();
+            billBoard[this] = false;
 
             var self = this;
             (function () {
@@ -79,37 +73,16 @@ var Mesh = (function () {
             })()
         }
     })
-    .field('billboard', {
-        description: "현재 Mesh의 billboard 정보",
+
+    .field('billBoard', {
+        description: "현재 Mesh의 billBoard 정보",
         sample: [
             'mesh1.billBoard = true;'
         ],
         defaultValue:"false",
-        get:$getter(billboard),
-        set:function billboardSet(v) {
-            billboard[this] = v;
-        }
-    })
-    .field('alpha', {
-        description: "현재 Mesh의 alpha 정보",
-        sample: [
-            'mesh1.alpha = 0.5;'
-        ],
-        defaultValue:"1.0",
-        get:$getter(alpha),
-        set:function alphaSet(v) {
-            alpha[this] = v;
-        }
-    })
-    .field('visible', {
-        description: "현재 Mesh의 visible 정보",
-        sample: [
-            'mesh1.visible = 1;'
-        ],
-        defaultValue:"1",
-        get:$getter(visible),
-        set:function visibleSet(v) {
-            visible[this] = v;
+        get:$getter(billBoard),
+        set:function billBoardSet(v) {
+            billBoard[this] = v;
         }
     })
     .field('culling', {
@@ -169,18 +142,11 @@ var Mesh = (function () {
         exception:"* 'Mesh.materialSet:0' - material객체가 아닌 값를 필드에 입력하려는 경우",
         get:$getter(material),
         set:function materialSet(v) {
-            var self = this
             if (v instanceof Material) {
-                if(material[self]) {
-                    material[self].removeEventListener(Material.changed)
-                }
-                material[self] = v;
-                self.dispatch('changed')
-                v.addEventListener(Material.changed,function(){
-                    self.dispatch('changed')
-                })
+                material[this] = v;
+                this.dispatch('changed')
             } else {
-                self.error(0);
+                this.error(0);
             }
         }
     })

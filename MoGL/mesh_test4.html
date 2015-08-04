@@ -67,12 +67,12 @@
         var camera = new Camera();        
         scene.addChild(camera);
 
-        var imgTag = document.createElement('img');
-        imgTag.src = 'showcase/monkey/Suzanne.jpg';
-        var mat = new Material();
-        var texture = new Texture(imgTag);
-        mat.addTexture(Texture.diffuse, texture);
-        // var mat = new Material("#fff");
+        // var imgTag = document.createElement('img');
+        // imgTag.src = 'showcase/monkey/Suzanne.jpg';
+        // var mat = new Material();
+        // var texture = new Texture(imgTag);
+        // mat.addTexture(Texture.diffuse, texture);
+        var mat = new Material("#fff");
 
         var xmlhttp = new XMLHttpRequest();
 
@@ -145,12 +145,12 @@
             scene.addChild(mesh);
 
             
-            var mat2 = new Material("#50f");
-            var point = new Point(geo, mat2);
-            point.rotateY = 2.8;
-            point.z = 5;
-            point.x = -3;
-            scene.addChild(point);
+            // var mat2 = new Material("#50f");
+            // var point = new Point(geo, mat2);
+            // point.rotateY = 2.8;
+            // point.z = 5;
+            // point.x = -3;
+            // scene.addChild(point);
             
 
             var sum = 0, count = 1;
