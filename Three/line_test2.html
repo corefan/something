@@ -77,9 +77,10 @@
 
 				}
 				
-				var xx = [-4,-4,-3,-3,-2,-2,-1,-1,0,0,1,1,2,2,3,3,4,4,5,5];
+				var xx = [-7,-6,-5.5,-5,-4,-3.5,-3,-2,-1,0,1,1.5,2,3,3.5,4,4.5,6,7,7.5];
+				var yy = [-7,6,-5.5,-5,4,-3.5,3,-2,-1,0,-1,1.5,-2,3,-3.5,-4,4.5,-6,7,7.5];
 
-				for ( var i = 0, j = 5; i < j; i ++ ) {
+				for ( var i = 0, j = 20; i < j; i ++ ) {
 										
 					nurbsControlPoints.push(
 						new THREE.Vector4(
@@ -88,7 +89,8 @@
 							// Math.random() * 400 - 200,
 							// 1
 							xx[i]*100,
-							Math.random() * 400,
+							yy[i]*100+200,
+							// Math.random() * 400,
 							0,
 							1 // weight of control point: higher means stronger attraction
 						)
@@ -103,7 +105,7 @@
 
 				var nurbsGeometry = new THREE.Geometry();
 				// nurbsGeometry.vertices = nurbsCurve.getPoints(200);
-				nurbsGeometry.vertices = nurbsCurve.getPoints(300);
+				nurbsGeometry.vertices = nurbsCurve.getPoints(100);
 				var nurbsMaterial = new THREE.LineBasicMaterial( { linewidth: 10, color: 0x333333, transparent: true } );
 
 				var nurbsLine = new THREE.Line( nurbsGeometry, nurbsMaterial );
