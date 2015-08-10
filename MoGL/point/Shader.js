@@ -88,9 +88,9 @@ var Shader = (function () {
                             main: [
                                 'mat4 mv;\n' +
                                 'if( uVS[16] == 1.0 ){\n'+
-                                    'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
+                                'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
                                 '} else {\n' +
-                                    'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
+                                'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
                                 '}\n'+
                                 'gl_Position = uPixelMatrix * mv * vec4(aVertexPosition, 1.0);\n' +
                                 'vColor = uColor;'
@@ -137,9 +137,9 @@ var Shader = (function () {
                             main: [
                                 'mat4 mv;\n' +
                                 'if( uVS[16] == 1.0 ){\n'+
-                                    'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
+                                'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
                                 '} else {\n' +
-                                    'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
+                                'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
                                 '}\n'+
                                 'gl_Position = uPixelMatrix * mv * vec4(aVertexPosition, 1.0);\n' +
                                 'vColor = uColor ;'
@@ -189,9 +189,9 @@ var Shader = (function () {
                             main: [
                                 'mat4 mv;\n' +
                                 'if( uVS[16] == 1.0 ){\n'+
-                                    'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
+                                'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
                                 '} else {\n' +
-                                    'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
+                                'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
                                 '}\n'+
                                 'gl_Position = uPixelMatrix * mv * vec4(aVertexPosition, 1.0);\n' +
                                 'vUV = aUV;'
@@ -238,9 +238,9 @@ var Shader = (function () {
                             main: [
                                 'mat4 mv;\n' +
                                 'if( uVS[16] == 1.0 ){\n'+
-                                     'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
+                                'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
                                 '} else {\n' +
-                                     'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
+                                'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
                                 '}\n'+
                                 ' gl_Position = uPixelMatrix*mv*vec4(aVertexPosition, 1.0);\n' +
                                 ' vec3 normal = normalize(mv * vec4(-aVertexNormal, 0.0)).xyz;\n' +
@@ -346,6 +346,7 @@ var Shader = (function () {
                             'mat4 mv = uCameraMatrix* positionMTX( vec3(uVS[0], uVS[1], uVS[2]) ) * quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) ) * scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) ) ;\n' +
                             'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                             'gl_Position = uPixelMatrix*position;\n' +
+                            'gl_PointSize = uVS[25];\n' +
                             'vPosition = position.xyz;\n' +
                             'vNormal =  (mv * vec4(-aVertexNormal, 0.0)).xyz;\n'
                             ]
@@ -372,22 +373,22 @@ var Shader = (function () {
                             function: [],
                             main: [
                                 'if( uFS[4] == 1.0 ){\n' +
-                                    'gl_FragColor = vec4(uFS[5],uFS[6],uFS[7],uFS[8])*uFS[9];\n' +
+                                'gl_FragColor = vec4(uFS[5],uFS[6],uFS[7],uFS[8])*uFS[9];\n' +
                                 '}else{\n' +
-                                    'vec4 ambientColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
-                                    'vec4 specColor = vec4(uFS[12],uFS[13],uFS[14],uFS[15]);\n' +
-                                    'vec4 diffuseColor = vec4(uFS[0],uFS[1],uFS[2],uFS[3]);\n' +
+                                'vec4 ambientColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
+                                'vec4 specColor = vec4(uFS[12],uFS[13],uFS[14],uFS[15]);\n' +
+                                'vec4 diffuseColor = vec4(uFS[0],uFS[1],uFS[2],uFS[3]);\n' +
 
-                                    'vec3 position = normalize(vPosition);\n' +
-                                    'vec3 normal = normalize(vNormal);\n' +
-                                    'vec3 lightDir = normalize(uDLite);\n' +
-                                    'vec3 reflectDir = reflect(-lightDir, normal);\n' +
-                                    'float specular = max( dot(reflectDir, position), 0.0 );\n' +
+                                'vec3 position = normalize(vPosition);\n' +
+                                'vec3 normal = normalize(vNormal);\n' +
+                                'vec3 lightDir = normalize(uDLite);\n' +
+                                'vec3 reflectDir = reflect(-lightDir, normal);\n' +
+                                'float specular = max( dot(reflectDir, position), 0.0 );\n' +
 
-                                    'specular = pow(specular,uFS[11])*specColor[3];\n' +
-                                    'float light = max( 0.05, dot(normal,lightDir) * uFS[10]);\n' +
-                                    'gl_FragColor = diffuseColor *light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
-                                    'gl_FragColor.a = uFS[9];\n'+
+                                'specular = pow(specular,uFS[11])*specColor[3];\n' +
+                                'float light = max( 0.05, dot(normal,lightDir) * uFS[10]);\n' +
+                                'gl_FragColor = diffuseColor *light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
+                                'gl_FragColor.a = uFS[9];\n'+
                                 '}\n'
                             ]
                         }))
@@ -488,19 +489,20 @@ var Shader = (function () {
                             main: [
                                 'mat4 mv;\n' +
                                 'if( uVS[16] == 1.0 ){\n'+
-                                    'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
+                                'mv = uCameraMatrix * mat4(uVS[0],uVS[1],uVS[2],uVS[3],uVS[4],uVS[5],uVS[6],uVS[7],uVS[8],uVS[9],uVS[10],uVS[11],uVS[12],uVS[13],uVS[14],uVS[15]);\n'+
                                 '} else {\n' +
-                                    'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
+                                'mv = uCameraMatrix * positionMTX( vec3(uVS[0], uVS[1], uVS[2]) )*quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) )*scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) );\n'+
                                 '}\n'+
                                 'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                                 'gl_Position = uPixelMatrix*position;\n' +
+                                'gl_PointSize = uVS[25];\n' +
                                 'vPosition = position.xyz;\n' +
                                 'isDiscard = 0.0;\n' +
                                 'if( gl_Position.x < -uVS[22] * 1.0 || gl_Position.x > uVS[22] * 1.0) {\n' +
-                                        'isDiscard = 1.0;\n' +
+                                'isDiscard = 1.0;\n' +
                                 '}\n' +
                                 'else if( vPosition.y < -uVS[23] * 1.0  || vPosition.y > uVS[23] * 1.0) {\n' +
-                                     'isDiscard = 1.0;\n' +
+                                'isDiscard = 1.0;\n' +
                                 '};\n' +
 
                                 'vNormal = (mv * vec4(-aVertexNormal, 0.0)).xyz;\n' +
@@ -542,7 +544,7 @@ var Shader = (function () {
         //fs[19] = gMatSpecularMapPower[tUID_mat] // 스페큘러맵 강도
 
         ////////////////
-            .constant('bitmapFragmentShaderPhong', {
+        .constant('bitmapFragmentShaderPhong', {
             description: "비트맵 퐁 프레그먼트 쉐이더",
             sample: [
                 "console.log(Shader.bitmapFragmentShaderPhong);"
@@ -565,49 +567,49 @@ var Shader = (function () {
                             main: [
 
                                 'if( uFS[9] == 0.0 || isDiscard >0.0  ) discard;\n' +
-                                //'if( uFS[9] == 0.0 || isDiscard >0.0  ) gl_FragColor = vec4(0.1,0.5,0.2,1.0);\n' +
-                                //'else if( gl_Position.x < -uFS[20]*0.65 || vPosition.x > uFS[20]*0.65) {\n' +
-                                //    'if( vPosition.y < -uFS[21]*0.65 || vPosition.y > uFS[21]*0.65) {\n' +
-                                //        'discard;\n' +
-                                //    '};\n' +
-                                //'}\n' +
+                                    //'if( uFS[9] == 0.0 || isDiscard >0.0  ) gl_FragColor = vec4(0.1,0.5,0.2,1.0);\n' +
+                                    //'else if( gl_Position.x < -uFS[20]*0.65 || vPosition.x > uFS[20]*0.65) {\n' +
+                                    //    'if( vPosition.y < -uFS[21]*0.65 || vPosition.y > uFS[21]*0.65) {\n' +
+                                    //        'discard;\n' +
+                                    //    '};\n' +
+                                    //'}\n' +
                                 'else {\n'+
-                                    'if( uFS[4] == 1.0 ){\n' +
-                                        'gl_FragColor = vec4(uFS[5],uFS[6],uFS[7],uFS[8])*uFS[9];\n' +
-                                    '}else{\n' +
-                                        'vec4 diffuse = texture2D( uSampler, vUV );\n' + // 디퓨즈를 계산함
-                                        'float alpha = diffuse[3];\n' + // 디퓨즈를 계산함
-                                        'if(alpha==0.0) discard;\n'+
-                                        'else {\n'+
-                                            'vec4 ambientColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
-                                            'vec4 specColor = vec4(uFS[12],uFS[13],uFS[14],uFS[15]);\n' +
+                                'if( uFS[4] == 1.0 ){\n' +
+                                'gl_FragColor = vec4(uFS[5],uFS[6],uFS[7],uFS[8])*uFS[9];\n' +
+                                '}else{\n' +
+                                'vec4 diffuse = texture2D( uSampler, vUV );\n' + // 디퓨즈를 계산함
+                                'float alpha = diffuse[3];\n' + // 디퓨즈를 계산함
+                                'if(alpha==0.0) discard;\n'+
+                                'else {\n'+
+                                'vec4 ambientColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
+                                'vec4 specColor = vec4(uFS[12],uFS[13],uFS[14],uFS[15]);\n' +
 
-                                            'vec3 position = normalize(vPosition);\n' +
-                                            'vec3 normal = normalize(vNormal);\n' +
-                                            'vec3 lightDir = normalize(uDLite);\n' +
-                                            'vec3 reflectDir = reflect(-lightDir, normal);\n' +
-                                            'float light = max( 0.05, dot(normal,lightDir) * uFS[10]);\n' + // 라이트강도 구하고
+                                'vec3 position = normalize(vPosition);\n' +
+                                'vec3 normal = normalize(vNormal);\n' +
+                                'vec3 lightDir = normalize(uDLite);\n' +
+                                'vec3 reflectDir = reflect(-lightDir, normal);\n' +
+                                'float light = max( 0.05, dot(normal,lightDir) * uFS[10]);\n' + // 라이트강도 구하고
 
-                                            'float specular\n;' +
-                                            'if( uFS[16] == 1.0 ){\n' +
-                                            '   vec4 bump = texture2D( uNormalSampler, vUV );\n' +
-                                            '   bump.rgb= bump.rgb*2.0-1.0 ;\n' + // 범프값을 -1~1로 교정
-                                            '   float normalSpecular = max( dot(reflectDir, normalize(position-bump.rgb)), 0.3 );\n' + // 맵에서 얻어낸 노말 스페큘라
-                                            '   specular = pow(normalSpecular,uFS[11])*specColor[3];\n' + // 스페큘라
-                                            '   gl_FragColor = ( diffuse *light * ambientColor * ambientColor[3] + specular * specColor ) + normalSpecular * bump.g * uFS[17]  ;\n' +
-                                            '}else{' +
-                                            '   specular = max( dot(reflectDir, position), 0.5 );\n' +
-                                            '   specular = pow(specular,uFS[11])*specColor[3];\n' +
-                                            '   gl_FragColor = diffuse *light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
-                                            '}\n' +
-                                            'if( uFS[18] == 1.0 ){\n' +
-                                            '   specular = max( dot(reflectDir, position), 0.5 );\n' +
-                                            '   specular = pow(specular,texture2D( uSpecularSampler, vUV ).a);\n' +
-                                            '   gl_FragColor = gl_FragColor + gl_FragColor * specColor * specular * texture2D( uSpecularSampler, vUV ) * uFS[19];\n' +
-                                            '}\n' +
-                                            'gl_FragColor.a = alpha*uFS[9];\n'+
-                                        '}\n'+
-                                    '};\n'+
+                                'float specular\n;' +
+                                'if( uFS[16] == 1.0 ){\n' +
+                                '   vec4 bump = texture2D( uNormalSampler, vUV );\n' +
+                                '   bump.rgb= bump.rgb*2.0-1.0 ;\n' + // 범프값을 -1~1로 교정
+                                '   float normalSpecular = max( dot(reflectDir, normalize(position-bump.rgb)), 0.3 );\n' + // 맵에서 얻어낸 노말 스페큘라
+                                '   specular = pow(normalSpecular,uFS[11])*specColor[3];\n' + // 스페큘라
+                                '   gl_FragColor = ( diffuse *light * ambientColor * ambientColor[3] + specular * specColor ) + normalSpecular * bump.g * uFS[17]  ;\n' +
+                                '}else{' +
+                                '   specular = max( dot(reflectDir, position), 0.5 );\n' +
+                                '   specular = pow(specular,uFS[11])*specColor[3];\n' +
+                                '   gl_FragColor = diffuse *light * ambientColor * ambientColor[3] + specular * specColor ;\n' +
+                                '}\n' +
+                                'if( uFS[18] == 1.0 ){\n' +
+                                '   specular = max( dot(reflectDir, position), 0.5 );\n' +
+                                '   specular = pow(specular,texture2D( uSpecularSampler, vUV ).a);\n' +
+                                '   gl_FragColor = gl_FragColor + gl_FragColor * specColor * specular * texture2D( uSpecularSampler, vUV ) * uFS[19];\n' +
+                                '}\n' +
+                                'gl_FragColor.a = alpha*uFS[9];\n'+
+                                '}\n'+
+                                '};\n'+
                                 '};\n'
 
                             ]
