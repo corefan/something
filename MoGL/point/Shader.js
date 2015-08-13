@@ -338,7 +338,7 @@ var Shader = (function () {
                 return function () {
                     return cache || (cache = new Shader({
                             id: 'colorVertexShaderPhong',
-                            attributes: ['vec3 aVertexPosition', 'vec3 aVertexNormal'],
+                            attributes: ['vec3 aVertexPosition', 'vec3 aVertexNormal', 'vec2 aPointSize'],
                             uniforms: ['mat4 uPixelMatrix', 'mat4 uCameraMatrix', 'float uVS[30]'],
                             varyings: ['vec3 vNormal', 'vec3 vPosition'],
                             function: [VertexShader.baseFunction],
@@ -346,7 +346,8 @@ var Shader = (function () {
                             'mat4 mv = uCameraMatrix* positionMTX( vec3(uVS[0], uVS[1], uVS[2]) ) * quaternionXYZ( vec3(uVS[3], uVS[4], uVS[5]) ) * scaleMTX( vec3(uVS[6], uVS[7], uVS[8]) ) ;\n' +
                             'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                             'gl_Position = uPixelMatrix*position;\n' +
-                            'gl_PointSize = uVS[25];\n' +
+                            //'gl_PointSize = uVS[25];\n' +
+                            'gl_PointSize = uVS[25] > 0.0 ? uVS[25] : aPointSize.x;\n' +
                             'vPosition = position.xyz;\n' +
                             'vNormal =  (mv * vec4(-aVertexNormal, 0.0)).xyz;\n'
                             ]
@@ -476,7 +477,7 @@ var Shader = (function () {
                 return function () {
                     return cache || (cache = new Shader({
                             id: 'bitmapVertexShaderPhong',
-                            attributes: ['vec3 aVertexPosition', 'vec2 aUV', 'vec3 aVertexNormal'],
+                            attributes: ['vec3 aVertexPosition', 'vec2 aUV', 'vec3 aVertexNormal', 'vec2 aPointSize'],
                             uniforms: [
                                 'mat4 uPixelMatrix', 'mat4 uCameraMatrix',
                                 'float uVS[30]'
@@ -495,7 +496,8 @@ var Shader = (function () {
                                 '}\n'+
                                 'vec4 position = mv * vec4(aVertexPosition, 1.0);\n' +
                                 'gl_Position = uPixelMatrix*position;\n' +
-                                'gl_PointSize = uVS[25];\n' +
+                                //'gl_PointSize = uVS[25];\n' +
+                                'gl_PointSize = uVS[25] > 0.0 ? uVS[25] : aPointSize.x;\n' +
                                 'vPosition = position.xyz;\n' +
                                 'isDiscard = 0.0;\n' +
                                 'if( gl_Position.x < -uVS[22] * 1.0 || gl_Position.x > uVS[22] * 1.0) {\n' +

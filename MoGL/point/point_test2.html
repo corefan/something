@@ -78,29 +78,7 @@
          var mat = new Material();
          var texture = new Texture(imgTag);
          mat.addTexture(Texture.diffuse, texture);
-        mat.wireFrame = 1;
         mat.shading = Shading.phong;
-
-
-       var mat2 = new Material("#fff");
-       mat2.addTexture(Texture.diffuse, texture);
-       mat2.shading = Shading.phong;
-
-       var mat3 = new Material("#999");
-       mat3.shading = Shading.phong;
-
-       var mat4 = new Material("#00f");
-       mat4.shading = Shading.phong;
-
-       var mat5 = new Material("#f00");
-       mat5.shading = Shading.phong;
-
-       var mat6 = new Material("#f0f");
-       mat6.shading = Shading.phong;
-
-       var mat7 = new Material("#ff0");
-       mat7.shading = Shading.phong;
-
 
        var xmlhttp = new XMLHttpRequest();
 
@@ -157,52 +135,11 @@
             }
 
             var geo = new Geometry(vertex, index, [Vertex.x, Vertex.y, Vertex.z, Vertex.normalX, Vertex.normalY, Vertex.normalZ, Vertex.u, Vertex.v]);
-            var geo2 = new Geometry([-1,1,0, 1,1,0, -1,-1,0, 1,-1,0], [0,1,2,1,2,3]);
 
-
-            var point = new Point(geo, mat3);
-            point.x = -3;
-            point.z = 3;
-            point.y = 1.5;
+            var point = new Point(geo, mat);
+            point.z = 7;
             point.pointsize = 3.0;
             scene.addChild(point);
-
-            var point2 = new Point(geo, mat2);
-            point2.rotateY = 2;
-            point2.z = 3;
-            point2.y = 1.5;
-            point2.pointsize = 9.0;
-            scene.addChild(point2);
-
-            var point3 = new Point(geo, mat2);
-            point3.rotateY = 2.9;
-            point3.z = 3;
-            point3.x = 3;
-            point3.y = 1.5;
-            point3.pointsize = -1.0;
-            scene.addChild(point3);
-
-            var path = new Path(geo, mat3);
-            path.x = -3;
-            path.z = 3;
-            path.y = -1;
-            path.pathtype = 3;
-            scene.addChild(path);
-
-            var path2 = new Path(geo, mat2);
-            path2.rotateY = 2;
-            path2.z = 3;
-            path2.y = -1;
-            path2.pathtype = 3;
-            scene.addChild(path2);
-
-            var path3 = new Path(geo, mat2);
-            path3.rotateY = 2.9;
-            path3.z = 3;
-            path3.x = 3;
-            path3.y = -1;
-            path3.pathtype = 1;
-            scene.addChild(path3);
 
 
             var sum = 0, count = 1;
@@ -215,11 +152,6 @@
                 divAverageFPS.textContent = ( ( sum += currentFPS ) / count++ ).toFixed( 2 );
 
                 point.rotateY -= 0.05;
-                point2.rotateY -= 0.05;
-                point3.rotateY -= 0.05;
-                path.rotateY -= 0.05;
-                path2.rotateY -= 0.05;
-                path3.rotateY -= 0.05;
 
                 world.render();
                 requestAnimationFrame( render );

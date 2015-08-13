@@ -128,6 +128,7 @@ var World = (function (makeUtil) {
             var tUID, tUID_camera, tUID_Mesh, tUID_mat, pUUID_mat, tUID_Scene;
             var tGeo, tBgColor, tColor2, tDiffuseMaps, tNormalMaps, tSpecularMaps;
             var tCull, tVBO, tVNBO, tUVBO, tIBO, tDiffuse, tNormal, tSpecular, tShading, tFrameBuffer, tProgram;
+            var tPSBO; // pss
             var pCull, pNormal, pSpecular, pShading;
             var tListener;
             var tTextures;
@@ -203,8 +204,8 @@ var World = (function (makeUtil) {
                 var sheetInfo, i, i2, j, k, k2, sortGeo, sortCull, sortCullList, sortGeoList, sortDiffuse, sortDiffuseList, sortShading, sortList, list, curr;
                 tUID = this.uuid,
                     pCull = null,
-                    tCvs = cvsList[tUID], tSceneList = sceneList[tUID],
-                    tGPU = gpu[tUID], tGL = tGPU.gl,
+                    tCvs = cvsList[tUID], tSceneList = sceneList[tUID];
+                    tGPU = gpu[tUID], tGL = tGPU.gl;
                     tTextures = tGPU.textures,
                     tCvsW = tCvs.width, tCvsH = tCvs.height,
                     tDiffuseMaps = tNormalMaps = pShading = null,
@@ -413,6 +414,12 @@ var World = (function (makeUtil) {
                                             tGL.bindBuffer(tGL.ARRAY_BUFFER, tUVBO),
                                                 tGL.vertexAttribPointer(tProgram.aUV, tUVBO.stride, tGL.FLOAT, false, 0, 0);
                                         }
+
+                                        // pss pointsize
+                                        tPSBO = tGPU.psbo[tGeo];
+                                        tGL.bindBuffer(tGL.ARRAY_BUFFER, tPSBO);
+                                        tGL.vertexAttribPointer(tProgram.aPS, tPSBO.stride, tGL.FLOAT, false, 0, 0);
+
                                         tIBO = tGPU.ibo[tGeo],
                                             tGL.bindBuffer(tGL.ELEMENT_ARRAY_BUFFER, tIBO);
                                         ///////////////////////////////////////////////////////////////
@@ -598,7 +605,7 @@ var World = (function (makeUtil) {
                 if (!id) this.error(0);
                 if (!(cvsList[this] = c = document.getElementById(id))) this.error(1);
                 gpu[this] = {
-                    gl:null, vbo:{}, vnbo:{}, uvbo:{}, ibo:{},
+                    gl:null, vbo:{}, vnbo:{}, uvbo:{}, ibo:{}, psbo:{}, // pss
                     programs:{}, textures:{}, framebuffers:{}
                 };
                 if (gpu[this].gl = getGL(cvsList[this])) {
