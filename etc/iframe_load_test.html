@@ -1,0 +1,71 @@
+<html lang="ko">
+<head>
+	<script>
+	count = 0;
+	function blank_click(){
+		var doc = i1.contentWindow.document;
+		doc.open("text/html", "replace");
+		doc.write("text 입력 : " + count++);
+		doc.close();
+	}
+	function same_click(){
+		var doc = i2.contentWindow.document;
+		doc.open("text/html", "replace");
+		doc.write("text 입력 : " + count++);
+		doc.close();
+	}
+	
+	function ifrm1_blank(){
+		i1.src = "about:blank";
+	}
+	
+	function ifrm2_blank(){
+		i2.src = "about:blank";
+	}
+	
+	
+	
+	function iframe1_loaded(evt){
+		console.log("load_iframe1");
+		if(count < 10){
+			var doc = i1.contentWindow.document;
+			doc.open("text/html", "replace");
+			doc.write("text 입력 : " + count++);
+			doc.close();
+		}
+	}
+	
+	function iframe2_loaded(evt){
+		console.log("load_iframe2");
+		if(count < 10){
+			var doc = i2.contentWindow.document;
+			doc.open("text/html", "replace");
+			doc.write("text 입력 : " + count++);
+			doc.close();
+		}
+	}
+
+</script>
+</head>
+<body>
+	<button onclick="blank_click()">doc write</button>
+	<button onclick="ifrm1_blank()">about:blank</button><br><br>
+	<iframe id="ifrm1" src="about:blank">
+	</iframe><br><br>
+	<button onclick="same_click()">doc write</button>
+	<button onclick="ifrm2_blank()">about:blank</button><br><br>
+	<iframe id="ifrm2" src="http://172.10.12.61:9090/git/something/etc/ifrm_sample.html">													
+	</iframe>
+</body>
+<script>
+	var i1 = document.getElementById("ifrm1");
+	var i2 = document.getElementById("ifrm2");
+	if(window.addEventListener){
+		i1.addEventListener("load", iframe1_loaded, false);
+		i2.addEventListener("load", iframe2_loaded, false);		
+	}else{
+		i1.attachEvent("onload", iframe1_loaded, false);
+		i2.attachEvent("onload", iframe2_loaded, false);
+	}
+</script>
+</html>

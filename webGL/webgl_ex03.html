@@ -105,8 +105,26 @@
         var rotation_info = [];
         
         for(var j = 0; j < totalCount; j++){
-            vertex_data.push(-1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, -1.0, 0.0);
-            index_data.push(4*j+0, 4*j+1, 4*j+2, 4*j+1, 4*j+2, 4*j+3);
+                        vertex_data.push(
+                -1.0, -1.0, 1.0, //0
+                1.0, -1.0,  1.0,  // 1
+                1.0,  1.0,  1.0,  // 2
+                -1.0,  1.0,  1.0, // 3        
+                -1.0, -1.0, -1.0, // 4
+                -1.0,  1.0, -1.0, // 5
+                1.0,  1.0, -1.0, // 6
+                1.0, -1.0, -1.0 // 7
+            );                     
+            index_data.push(
+                0,  1,  2,      0,  2,  3,    // front
+                4, 0, 3,     0, 3, 5,    // left
+                4, 7, 1,     4, 1, 0,   // bottom
+                4,  5,  6,      4,  6,  7,    // back
+                7, 6, 2,     7, 2, 1,   // right
+                5,  3,  2,     5,  2, 6   // top
+            );
+            // vertex_data.push(-1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, -1.0, 0.0);
+            // index_data.push(4*j+0, 4*j+1, 4*j+2, 4*j+1, 4*j+2, 4*j+3);
             var r0 = Math.random();
             var r1 = Math.random();
             var r2 = Math.random();
@@ -121,9 +139,10 @@
             for(var i = 0, len2 = vertex_data.length/3; i < len2; i++){
                 rotation_data.push(0, 0, 0);
                 rotation_info.push(r3/5 - 0.1, r4/5 - 0.1, r5/5 - 0.1);
-                position_data.push(px, py, pz);
-                // scale_data.push(0.3, 0.3, 0.3);
-                scale_data.push(0.03, 0.03, 0.03);
+                // position_data.push(px, py, pz);
+                position_data.push(0, 0, 0);
+                scale_data.push(0.3, 0.3, 0.3);
+                // scale_data.push(0.03, 0.03, 0.03);
             }
         }
 
@@ -171,8 +190,7 @@
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
         
-        gl.enable(gl.DEPTH_TEST); 
-        gl.depthFunc(gl.LESS);    
+        
         // gl.drawArrays(gl.POINTS, 0, 4);
         // gl.drawArrays(gl.POINTS, 0, 4);
         // gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
@@ -181,7 +199,7 @@
             gl.clearColor(1, 1, 1, 1);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             
-            for(var j = 0, len = totalCount*12; j < len; j++){
+            for(var j = 0, len = totalCount*24; j < len; j++){
                 // rotation_data[j] += 0.01;
                 rotation_data[j] += rotation_info[j];
             }
@@ -189,7 +207,8 @@
             // gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);        
                                         
-            gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, (len2*2-2)*totalCount, gl.UNSIGNED_SHORT, 0);
+            // gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
             //gl.drawArrays(gl.POINTS, 0, totalCount);
             // gl.drawArrays(gl.LINES, 0, totalCount*4);
             // gl.drawArrays(gl.LINE_LOOP, 0, totalCount*4);
@@ -200,6 +219,6 @@
             
         }, 64);
         
-    })(this, 1000, 256, 256);
+    })(this, 1, 256, 256);
 </script>
 </html>

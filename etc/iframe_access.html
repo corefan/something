@@ -1,0 +1,62 @@
+<html lang="ko">
+<head>
+	<script>
+	function blank_click(use_doc){
+		try{			
+			var i1 = document.getElementById("ifrm1");
+			if(use_doc){
+				console.log(i1.contentDocument);				
+			}else{
+				console.log(i1.contentWindow.document);
+			}
+		}catch(e){
+			console.log(e.message);
+		}
+	}
+		
+	function cross_click(use_doc){
+		try{			
+			var i2 = document.getElementById("ifrm2");
+			if(use_doc){
+				console.log(i2.contentDocument);				
+			}else{
+				console.log(i2.contentWindow.document);
+			}
+		}catch(e){
+			console.log(e.message);
+		}
+	}
+			
+	function same_click(use_doc){
+		try{			
+			var i3 = document.getElementById("ifrm3");
+			if(use_doc){
+				console.log(i3.contentDocument);				
+			}else{
+				console.log(i3.contentWindow.document);
+			}
+		}catch(e){
+			console.log(e.message);
+		}
+	}
+	function iframe_loaded(){
+		console.log("load");
+	}
+</script>
+</head>
+<body>
+	<button onclick="blank_click()">blank_window.doc</button>
+	<button onclick="blank_click(true)">blank_document</button><br><br>
+	<iframe id="ifrm1" onload="iframe_loaded()">
+	</iframe><br><br>
+	<button onclick="cross_click()">cross_window.doc</button>
+	<button onclick="cross_click(true)">cross_document</button><br><br>
+	<iframe id="ifrm2" src="http://m.naver.com">
+	</iframe><br><br>
+	<button onclick="same_click()">same_window.doc</button>
+	<button onclick="same_click(true)">same_document</button><br><br>
+	<iframe id="ifrm3" src="http://172.10.12.61:9090/git/something/etc/ifrm_sample.html">
+	</iframe>
+</body>
+
+</html>

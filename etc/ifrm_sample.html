@@ -1,0 +1,32 @@
+<html lang="ko">
+<head>
+	<script>
+	function bt_click(){
+		try{			
+			var i1 = document.getElementById("ifrm1");
+			console.log(i1.contentWindow.document);
+		}catch(e){
+			console.log(e.message);
+		}
+
+	}
+	
+	function bt_click2(){
+		try{			
+			var i2 = document.getElementById("ifrm2");
+			console.log(i2.contentWindow.document);
+		}catch(e){
+			console.log(e.message);
+		}
+
+	}
+	function iframe_loaded(){
+		console.log("load");
+	}
+</script>
+</head>
+<body>
+	<div style="position:absolute; left:10px; top:10px; width:100px; height:100px; background:red;">
+</body>
+
+</html>

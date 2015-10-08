@@ -171,8 +171,7 @@
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
         
-        gl.enable(gl.DEPTH_TEST); 
-        gl.depthFunc(gl.LESS);    
+        
         // gl.drawArrays(gl.POINTS, 0, 4);
         // gl.drawArrays(gl.POINTS, 0, 4);
         // gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
@@ -200,6 +199,6 @@
             
         }, 64);
         
-    })(this, 1000, 256, 256);
+    })(this, 1, 256, 256);
 </script>
 </html>
