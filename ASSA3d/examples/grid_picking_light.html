@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Assa3d</title>
+		
+		<!-- 스크립트 파일 추가하는 부분 -->
+		<script src="ASSA3d_v1.0_min.js" type="text/javascript" charset="utf-8"></script>
+		
+		
+		<!-- -->
+		
+		<style>
+			body{
+				background-color: black;
+				color: #CCCCCC;
+			}
+			h1{
+				text-align:center;
+			}
+			div{
+				width: 800px;
+				margin: 0 auto;
+			}
+			canvas{
+				/*border: solid 1px #CCCCCC;*/
+			}
+			footer{
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>ASSA3d grid + picking + light</h1>
+		<div>
+			<canvas id="test" width="800" height="600" style="background-color: black;"></canvas>
+		.</div>
+		
+		<!-- 사용자 스크립트 -->
+		<script>
+		
+		
+			// 장면과 카메라 생성 
+			var scene = new ASSA3d.Scene();
+			var camera = new ASSA3d.Camera(45.0,4/3,1, 2000);
+			camera.position.set(0,0,200);
+			
+			
+			// 그리드 생성
+			var grid = new ASSA3d.Grid(17,11);
+			grid.mulScalar(10);
+			scene.add(grid);
+			
+			
+			// 조명을 만든다.
+			var light = new ASSA3d.Light(255,0,0);
+			light.position.set(1,1,1);
+			scene.add(light);
+			
+			// 캔바스 엘리먼트와 렌더러 생성					
+			var canvas 		= document.getElementById('test');
+			var renderer 	= new ASSA3d.Renderer(canvas);
+			
+			
+			var mouseX=0;
+			var mouseY=0;
+			var halfX = canvas.width/2;
+			var halfY = canvas.height/2;
+			
+			canvas.onmousemove = function(e){
+				mouseX = e.offsetX - halfX;
+				mouseY = e.offsetY - halfY;
+			};
+			
+			// 피킹 구현 , Face 를 검은색으로 칠한다.
+			canvas.onclick = function(e){
+				
+				var atom = renderer.picking(e.offsetX, e.offsetY);
+				
+				if(atom){
+					if(atom instanceof ASSA3d.Face4){
+						
+						atom.faceColor[0] = 0;
+						atom.faceColor[1] = 0;
+						atom.faceColor[2] = 0;
+						
+					}
+				}
+				
+			};
+			
+			//ASSA3d.face4DrawNormal = true;
+				
+			var time=0;
+			setInterval(function(){
+				
+				var i=0;
+				
+				// 조명색을 변화시킨다.
+				light.r = (Math.cos(time) * 64) + 64;
+				light.g = (Math.sin(time) * 64) + 64;
+												
+				camera.position.x += (mouseX - camera.position.x) * .03;
+				camera.position.y += (-mouseY - camera.position.y) * .05;
+				
+				camera.up.set(0,1,0);
+				camera.lookAt(0,0,0);
+				
+				// 렌더링
+				renderer.render(scene, camera);	
+				
+				time += 0.1;
+				
+			},1000/60);
+			
+		</script>
+		<!---->
+		
+		<footer>
+			made by SKKUASSA
+		</footer>
+	</body>
+</html>

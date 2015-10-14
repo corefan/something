@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Assa3d</title>
+		
+		<!-- 스크립트 파일 추가하는 부분 -->
+		<script src="ASSA3d_v1.0_min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- -->
+		
+		<style>
+			body{
+				background-color: black;
+				color: #CCCCCC;
+			}
+			h1,p{
+				text-align:center;
+			}
+			div{
+				width: 800px;
+				margin: 0 auto;
+			}
+			canvas{
+				/*border: solid 1px #CCCCCC;*/
+			}
+			footer{
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>ASSA3d particle cube</h1>
+		<p>(click particle)</p>
+		<div>
+			<canvas id="test" width="800" height="600" style="background-color: black;"></canvas>
+		.</div>
+		
+		<!-- 사용자 스크립트 -->
+		<script>
+			// 장면을 만든다.
+			var scene = new ASSA3d.Scene();
+			
+			// 카메라를 생성한다.
+			var camera = new ASSA3d.Camera(45.0,4/3,0.1, 1000);
+			
+			// 카메라 위치 조정
+			camera.position.set(
+				0,200,150
+			);
+			
+			var step = 20; // 간격
+			var num = 6; // 개수
+			
+			var light = new ASSA3d.Light();
+			light.position.set(4,5,-3);
+			scene.add(light);
+						
+			
+			var colors = [
+				[255, 0, 0, 1.5],[255, 127, 0, 1.5],[255,255,0, 1.5],
+				[0, 255, 0, 1.5],[0, 0, 255,   1.5],[0,0,127,   1.5],
+				[255,0,255, 1.5]
+			];
+			
+			
+			for(var i=0; i < num; i++){
+				for(var j=0; j < num; j++){
+					for(var k=0; k < num; k++){
+						
+						// 파티클 생성
+						var p = new ASSA3d.Particle(2,colors[parseInt(Math.random()*6)]);
+						// 파티클 위치 지정
+						p.position.set(step*i - step*num/2, step*k - step*num/2, step*j - step*num/2);
+						
+						// 장면에 파티클 추가
+						scene.add(p);
+					}
+				}
+			}
+						
+			var canvas = document.getElementById('test');
+			// 렌더러를 생성
+			var renderer = new ASSA3d.Renderer(canvas);
+			
+			
+			var mouseX=0;
+			var mouseY=0;
+			var halfX = canvas.width/2;
+			var halfY = canvas.height/2;
+			
+			canvas.onmousemove = function(e){
+				mouseX = e.offsetX - halfX;
+				mouseY = e.offsetY - halfY;
+			}
+			canvas.onclick = function(e){
+				// 피킹 테스트 
+				var obj = renderer.picking(e.offsetX, e.offsetY);
+								
+				if(obj || obj instanceof ASSA3d.Particle){
+					
+					if(obj.color[3] >= 1){
+						obj.color[3] = 0.5;
+					}else{
+						obj.color[3] = 1.2;
+					}
+				}
+			};
+			
+			//ASSA3d.face4DrawNormal = true;
+				
+			var time=0;
+			setInterval(function(){
+				time++;
+				
+												
+				camera.position.x += (mouseX - camera.position.x) * .03;
+				camera.position.y += (-mouseY - camera.position.y) * .05;
+				
+				camera.up.set(0,1,0);
+				camera.lookAt(0,0,0);
+				
+				renderer.render(scene, camera);	
+			},1000/60);
+			
+			
+			
+		</script>
+		<!---->
+		
+		<footer>
+			made by SKKUASSA
+		</footer>
+	</body>
+</html>
