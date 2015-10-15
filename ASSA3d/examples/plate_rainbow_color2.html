@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Assa3d</title>
+		
+		<!-- 스크립트 파일 추가하는 부분 -->
+		<!--<script src="../build/ASSA3d_v1.0_total.js" type="text/javascript" charset="utf-8"></script>-->
+		
+		<!-- -->
+		
+		<style>
+			body{
+				background-color: black;
+				color: #CCCCCC;
+			}
+			h1,p{
+				text-align:center;
+			}
+			div{
+				width: 800px;
+				margin: 0 auto;
+			}
+			canvas{
+				/*border: solid 1px #CCCCCC;*/
+			}
+			footer{
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<canvas id="test" width="800" height="600" style="background-color: black;"></canvas>
+		</div>
+<script>
+
+//------------------------ packed
+
+eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('7 6=6||{};6.1t=q(){5.R=[]};6.1t.L={V:6.1t,1S:q(a){5.R.2F(a)},10:q(){C 5.R.10},1y:q(){5.R.1y(q(a,b){C a.Q.z-b.Q.z})}};6.N=q(x,y,z){5.x=x||0;5.y=y||0;5.z=z||0};6.N.L={V:6.N,P:q(x,y,z){5.x=x;5.y=y;5.z=z;C 5},1S:q(a,b){5.x=a.x+b.x;5.y=a.y+b.y;5.z=a.z+b.z;C 5},2E:q(v){5.x+=v.x;5.y+=v.y;5.z+=v.z;C 5},2D:q(a,b){5.x=a.x-b.x;5.y=a.y-b.y;5.z=a.z-b.z;C 5},1O:q(){7 x=5.x,y=5.y,z=5.z;C x*x+y*y+z*z},10:q(){C 12.2C(5.1O())},15:q(s){A(s){5.x/=s;5.y/=s;5.z/=s}B{5.x=0;5.y=0;5.z=0}C 5},2B:q(s){5.x*=s;5.y*=s;5.z*=s;C 5},1w:q(){C 5.15(5.10())},1v:q(a,b){5.x=a.y*b.z-a.z*b.y;5.y=a.z*b.x-a.x*b.z;5.z=a.x*b.y-a.y*b.x;C 5},F:q(v){5.x=v.x;5.y=v.y;5.z=v.z;C 5},2A:q(v){C 5.x*v.x+5.y*v.y+5.z*v.z},2z:q(){5.x*=-1;5.y*=-1;5.z*=-1;C 5}};6.Y=q(x,y,z,w){5.x=x||0;5.y=y||0;5.z=z||0;5.w=w||1};6.Y.L={V:6.Y,P:q(x,y,z,w){5.x=x;5.y=y;5.z=z;5.w=w;C 5},15:q(s){A(s){5.x/=s;5.y/=s;5.z/=s;5.w/=s}B{5.x=0;5.y=0;5.z=0;5.w=0}C 5},2y:q(s){5.x*=s;5.y*=s;5.z*=s;5.w*=s;C 5},F:q(v){5.x=v.x;5.y=v.y;5.z=v.z;5.w=(v.w!==2x)?v.w:1;C 5}};6.X=q(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p){5.P(a||1,b||0,c||0,d||0,e||0,f||1,g||0,h||0,i||0,j||0,k||1,l||0,m||0,n||0,o||0,p||1)};6.X.L={V:6.X,P:q(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p){5.1Y=a;5.1Z=b;5.20=c;5.25=d;5.2b=e;5.2e=f;5.1B=g;5.1C=h;5.1D=i;5.1E=j;5.1F=k;5.1G=l;5.1H=m;5.1I=n;5.1J=o;5.1K=p;C 5},2m:q(){C 5.P(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)},1k:q(x,y,z){C 5.P(1,0,0,x,0,1,0,y,0,0,1,z,0,0,0,1)},1r:q(u,v,n){C 5.P(u.x,v.x,n.x,0,u.y,v.y,n.y,0,u.z,v.z,n.z,0,0,0,0,1)},2l:q(u,v,n){C 5.P(u.x,u.y,u.z,0,v.x,v.y,v.z,0,n.x,n.y,n.z,0,0,0,0,1)},1Q:q(a){7 u=a.Z,v=a.14,n=a.O;7 b=a.1a;C 5.P(-u.x,-u.y,-u.z,+u.x*b.x+u.y*b.y+u.z*b.z,v.x,v.y,v.z,-v.x*b.x-v.y*b.y-v.z*b.z,-n.x,-n.y,-n.z,+n.x*b.x+n.y*b.y+n.z*b.z,0,0,0,1)},2f:q(l,r,b,t,n,f){C 5.P(2*n/(r-l),0,(r+l)/(r-l),0,0,2*n/(t-b),(t+b)/(t-b),0,0,0,(n+f)/(n-f),2*n*f/(n-f),0,0,-1,0)},21:q(a){7 n=a.1o;7 f=a.27;7 t=n*12.2k(a.29*12.2a/2j.0);7 b=-t;7 l=b*a.1s;7 r=t*a.1s;C 5.2f(l,r,b,t,n,f)},1A:q(a,b){C 5.P(a/2,0,0,a/2,0,-b/2,0,b/2,0,0,1,0,0,0,0,1)},U:q(v){7 a=v.x,19=v.y,1d=v.z,1c=v.w;v.x=5.1Y*a+5.1Z*19+5.20*1d+5.25*1c;v.y=5.2b*a+5.2e*19+5.1B*1d+5.1C*1c;v.z=5.1D*a+5.1E*19+5.1F*1d+5.1G*1c;v.w=5.1H*a+5.1I*19+5.1J*1d+5.1K*1c;C v}};6.T=q(){5.1a=E 6.N(0,0,0);5.14=E 6.N(0,1,0);5.O=E 6.N(0,0,1);5.Z=E 6.N(1,0,0);5.Q=E 6.Y();5.J=I};6.T.L={V:6.T,2i:q(x,y,z){7 a=5.1a;7 b=5.O;5.O.x=x-a.x;5.O.y=y-a.y;5.O.z=z-a.z;5.O.1w();5.Z.1v(5.14,5.O);5.Z.1w();5.14.1v(5.O,5.Z)}};6.1e=q(){1l=E 6.X();1b=E 6.X();1g=E 6.X();1h=E 6.X();2h=E 6.Y();9=E 1R(8);M(7 i=0;i<8;i++){9[i]=E 6.Y()}};6.1e.L={V:6.1e,1U:q(k,l){1l.1Q(l);1b.21(l);7 m=l.1o;M(7 i=0;i<k.R.10;i++){7 o=k.R[i];7 p=o.1a;o.Q.F(p);1g.1r(o.Z,o.14,o.O);1h.1k(p.x,p.y,p.z);1m(o.Q)}k.1y();M(7 i=0;i<k.R.10;i++){7 o=k.R[i];7 p=o.1a;1g.1r(o.Z,o.14,o.O);1h.1k(p.x,p.y,p.z);A(o 1i 6.13){A(o.Q.z<=-m){7 n=o.Q;1b.U(n);n.15(n.w);A(12.1p(n.x)>1||12.1p(n.y)>1||12.1p(n.z)>1){o.J=I}B{o.J=18}}B{o.J=I}}B A(o 1i 6.16){o.H[0].F(o.22);o.H[1].F(o.23);o.H[2].F(o.24);o.H[3].F(o.26);o.G=4;M(7 j=0;j<4;j++){1m(o.H[j])}W(o,2,-m,18);A(o.G==0){o.J=I;11}7 n=o.Q;1b.U(n);n.15(n.w);M(7 j=0;j<o.G;j++){1b.U(o.H[j]);o.H[j].15(o.H[j].w)}W(o,0,-1,I);A(o.G==0){o.J=I;11}W(o,0,1,18);A(o.G==0){o.J=I;11}W(o,1,-1,I);A(o.G==0){o.J=I;11}W(o,1,1,18);A(o.G==0){o.J=I;11}W(o,2,-1,I);A(o.G==0){o.J=I;11}W(o,2,1,18);A(o.G==0){o.J=I;11}o.J=18}}q 1m(v){1h.U(v);1g.U(v);1l.U(v)};q W(c,d,e,f){q K(a,b){C(a==b)?0:-a/(b-a)}q D(a,b,t){C a+(b-a)*t}7 g=0;M(7 i=0;i<c.G;i++){7 a=c.H[i%c.G];7 b=c.H[(i+1)%c.G];7 h=0,2g=0;A(d==0){A(f){A(a.x>e&&b.x<=e){7 t=K(a.x-e,b.x-e);9[g].y=D(a.y,b.y,t);9[g].z=D(a.z,b.z,t);9[g].x=e;g++}B A(a.x<=e&&b.x<=e){9[g].F(a);g++}B A(a.x<=e&&b.x>e){9[g].F(a);g++;7 t=K(a.x-e,b.x-e);9[g].y=D(a.y,b.y,t);9[g].z=D(a.z,b.z,t);9[g].x=e;g++}B A(a.x>e&&b.x>e){}B{}}B{A(a.x<e&&b.x>=e){7 t=K(a.x-e,b.x-e);9[g].y=D(a.y,b.y,t);9[g].z=D(a.z,b.z,t);9[g].x=e;g++}B A(a.x>=e&&b.x>=e){9[g].F(a);g++}B A(a.x>=e&&b.x<e){9[g].F(a);g++;7 t=K(a.x-e,b.x-e);9[g].y=D(a.y,b.y,t);9[g].z=D(a.z,b.z,t);9[g].x=e;g++}B A(a.x<e&&b.x<e){}B{}}}B A(d==1){A(f){A(a.y>e&&b.y<=e){7 t=K(a.y-e,b.y-e);9[g].x=D(a.x,b.x,t);9[g].z=D(a.z,b.z,t);9[g].y=e;g++}B A(a.y<=e&&b.y<=e){9[g].F(a);g++}B A(a.y<=e&&b.y>e){9[g].F(a);g++;7 t=K(a.y-e,b.y-e);9[g].x=D(a.x,b.x,t);9[g].z=D(a.z,b.z,t);9[g].y=e;g++}B A(a.y>e&&b.y>e){}B{}}B{A(a.y<e&&b.y>=e){7 t=K(a.y-e,b.y-e);9[g].x=D(a.x,b.x,t);9[g].z=D(a.z,b.z,t);9[g].y=e;g++}B A(a.y>=e&&b.y>=e){9[g].F(a);g++}B A(a.y>=e&&b.y<e){9[g].F(a);g++;7 t=K(a.y-e,b.y-e);9[g].x=D(a.x,b.x,t);9[g].z=D(a.z,b.z,t);9[g].y=e;g++}B A(a.y<e&&b.y<e){}B{}}}B A(d==2){A(f){A(a.z>e&&b.z<=e){7 t=K(a.z-e,b.z-e);9[g].y=D(a.y,b.y,t);9[g].x=D(a.x,b.x,t);9[g].z=e;g++}B A(a.z<=e&&b.z<=e){9[g].F(a);g++}B A(a.z<=e&&b.z>e){9[g].F(a);g++;7 t=K(a.z-e,b.z-e);9[g].y=D(a.y,b.y,t);9[g].x=D(a.x,b.x,t);9[g].z=e;g++}B A(a.z>e&&b.z>e){}B{}}B{A(a.z<e&&b.z>=e){7 t=K(a.z-e,b.z-e);9[g].y=D(a.y,b.y,t);9[g].x=D(a.x,b.x,t);9[g].z=e;g++}B A(a.z>=e&&b.z>=e){9[g].F(a);g++}B A(a.z>=e&&b.z<e){9[g].F(a);g++;7 t=K(a.z-e,b.z-e);9[g].y=D(a.y,b.y,t);9[g].x=D(a.x,b.x,t);9[g].z=e;g++}B A(a.z<e&&b.z<e){}B{}}}B{}}M(7 i=0;i<g;i++){c.H[i].F(9[i])}c.G=g}},};6.13=q(r,a,b){6.T.1z(5);5.r=r||1;5.2c=a||\'1j(S,S,S,1.0)\';5.17=b||1n};6.13.L=E 6.T();6.13.L.V=6.13;6.16=q(a,b,c){6.T.1z(5);5.22=E 6.N(-1,-1,0);5.23=E 6.N(1,-1,0);5.24=E 6.N(1,1);5.26=E 6.N(-1,1);5.H=E 1R(8);M(7 i=0;i<8;i++){5.H[i]=E 6.Y()}5.G=0;5.28=a||\'1j(S,S,S,1.0)\';5.1q=b||1n;5.17=c||1n};6.16.L=E 6.T();6.16.L.V=6.16;6.1f=q(a,b,c,d){6.T.1z(5);5.29=a||2n.0;5.1s=b||1.0;5.1o=c||0.1;5.27=d||2o};6.1f.L=E 6.T();6.1f.L.V=6.1f;6.2p=q(f){7 f=f||2q.2r(\'2s\');7 g=f.2t;7 h=f.2u;7 k=E 6.X().1A(g,h);7 l=f.2I(\'2d\');7 m=E 6.1e();5.2v=q(c,d){l.2w(0,0,g,h);m.1U(c,d);M(7 i=0;i<c.R.10;i++){7 o=c.R[i];A(o.J){A(o 1i 6.13){k.U(o.Q);7 e=o.Q;A(o.17){o.17(o,l)}B{1P(e.x,e.y,o.r,o.2c)}}B A(o 1i 6.16){M(7 j=0;j<o.G;j++){k.U(o.H[j])}A(o.G>2){A(o.17){o.17(o,l)}B{l.1u();7 a=o.H[0];7 b=o.H[1];l.1X(a.x,a.y);M(j=1;j<o.G;j++){a=o.H[j%o.G];b=o.H[(j+1)%o.G];l.1W(a.x,a.y)}l.1x();l.1T=o.28;l.1N();A(o.1q){l.1L=o.1q;l.1M()}}}}}}};q 1P(x,y,r,a){l.1u();l.2G(x,y,r,0,12.2a*2,I);l.1T=a||\'1j(S,S,S,1.0)\';l.1N();l.1x()};q 2H(a,b,c,d,e){l.1u();l.1X(a,b);l.1W(c,d);l.1x();l.1L=e||\'1j(1V,1V,0,1.0)\';l.1M()}};',62,169,'|||||this|ASSA3d|var||_face4vertics|||||||||||||||||function||||||||||if|else|return|paraEqu|new|copy|cnt|vertics|false|visible|getT|prototype|for|Vec3|at|set|screenPos|objs|128|LC|mulVec4|constructor|clipFacePlane|Mat4|Vec4|hv|length|continue|Math|Particle|up|divScalar|Face4|prog|true|vy|position|_perspectiveMat|vw|vz|Projector|Camera|_rMat|_tMat|instanceof|rgba|setTranslation|_modelviewMat|updateBeforePerspective|null|near|abs|edgeColor|setOrthogonalT|aspect|Scene|beginPath|cross|normalize|closePath|sort|call|setViewport|n23|n24|n31|n32|n33|n34|n41|n42|n43|n44|strokeStyle|stroke|fill|lengthSq|fillCircle|setModelview|Array|add|fillStyle|projectScene|255|lineTo|moveTo|n11|n12|n13|setPerspective|p1|p2|p3|n14|p4|far|faceColor|fov|PI|n21|color||n22|setFrustum|bd|_particleV|lookAt|360|tan|setOrthogonal|setIdentity|45|1000|Renderer|document|createElement|canvas|width|height|render|clearRect|undefined|mulSelf|negSelf|dot|mulScalar|sqrt|sub|addSelf|push|arc|drawLine|getContext'.split('|'),0,{}))
+
+//----------------------------------
+			// 장면을 만든다.
+			var scene = new ASSA3d.Scene();
+			
+			// 카메라를 생성한다.
+			var camera = new ASSA3d.Camera(45.0,4/3,0.1, 1000);
+			
+			// 카메라 위치 조정
+			camera.position.set(
+				0,0,200
+			);
+			
+			var step = 20; // 간격
+			var num = 6; // 개수
+			
+
+			var rainbow_color = [
+				'rgba(255,0,0, .5)','rgba(255,127,0, .5)','rgba(255,255,0, .5)',
+				'rgba(0,255,0, .5)','rgba(0,0,255, .5)','rgba(0,0,128, .5)',
+				'rgba(255,0,255, .5)'
+			];
+			
+			for(var i=0; i < 7; i++){
+				var face = new ASSA3d.Face4(rainbow_color[i],'rgb(255,255,255)');
+				
+				face.position.set(0,0, -3*step*i );
+				
+				face.p1.mulScalar(3*step);
+				face.p2.mulScalar(3*step);
+				face.p3.mulScalar(3*step);
+				face.p4.mulScalar(3*step);
+				
+				scene.add(face);
+			
+			}
+			
+			var canvas = document.getElementById('test');
+			
+			// 렌더러를 생성
+			var renderer = new ASSA3d.Renderer(canvas);
+			
+			//renderer.DEBUG_FUNC();
+			
+			var mouseX=0;
+			var mouseY=0;
+			var halfX = canvas.width/2;
+			var halfY = canvas.height/2;
+			
+			canvas.onmousemove = function(e){
+e.offsetX = e.offsetX || e.pageX - this.offsetLeft;
+		e.offsetY = e.offsetY || e.pageY - this.offsetTop;
+				mouseX = e.offsetX - halfX;
+				mouseY = e.offsetY - halfY;
+			}
+			
+			var time=0;
+			setInterval(function(){
+				time++;
+														
+				camera.position.x += (mouseX - camera.position.x) * .05;
+				camera.position.y += (-mouseY - camera.position.y) * .05;
+				
+				camera.up.set(0,1,0);
+				camera.lookAt(0,0,0);
+				
+				
+				renderer.render(scene, camera);	
+			},1000/33);
+</script>			
+			
+		
+	</body>
+</html>
