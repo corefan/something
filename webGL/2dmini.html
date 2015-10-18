@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>webgl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+    <script src="./2dmini/stats.js"></script>
+    <script src="./2dmini/2dmini.js"></script>
+</head>
+<body>
+<div style="position: absolute; left:30px; top:50px; width: 512px; height: 512px; border: 3px solid #eeeeee;">
+	<canvas id="gl_canvas" width="512" height="512">
+	</canvas>
+</div>
+</body>
+<script>
+//    var World, Geometry, Material, Mesh;
+    (function(totalCount, w, h){
+        var stats = new Stats();
+        stats.setMode(0);
+
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+
+        document.body.appendChild(stats.domElement);
+
+
+        var world = new World(document.getElementById('gl_canvas'));
+        //world.camera(x,y,z,rx,ry,rz);
+        world.viewport(w,h);
+//        world.frustum(near,far,width,height);
+
+        var geo1 = new Geometry(
+                [-1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, -1.0, 0.0],
+                [0, 1, 2, 1, 2, 3]
+        );
+//        var mat1 = new Material('#ff0000');
+
+        var meshes = [];
+
+        for(var i = 0; i < totalCount; i++) {
+            var r0 = Math.random();
+            var r1 = Math.random();
+            var r2 = Math.random();
+            var r3 = Math.random() / 20;
+            var mat1 = new Material([r0, r1, r2]);
+            meshes.push(new Mesh(geo1, mat1));
+            meshes[i].rotation = r3;
+            meshes[i].translate(r0 * 2 - 1, r1 * 2 - 1, r2 * 2 - 1);
+            meshes[i].scale(0.03, 0.03, 0.03);
+            world.add(meshes[i]);
+        }
+//        world.render();
+
+        requestAnimationFrame(function ani(){
+            for(var i = 0; i < totalCount; i++) {
+                meshes[i].rotate(meshes[i].rx + meshes[i].rotation, meshes[i].ry + meshes[i].rotation, meshes[i].rz + meshes[i].rotation);
+            }
+
+            stats.update();
+            world.render();
+            requestAnimationFrame(ani);
+        });
+
+    }(10000, 512, 512));
+</script>
+</html>

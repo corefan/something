@@ -11,15 +11,26 @@
             height: 100%;
         }
     </style>
+    <script src="./2dmini/stats.js"></script>
 </head>
 <body>
-<div style="position: absolute; left:30px; top:30px; width: 512px; height: 512px; border: 3px solid #eeeeee;">
+<div style="position: absolute; left:30px; top:50px; width: 512px; height: 512px; border: 3px solid #eeeeee;">
 	<canvas id="gl_canvas" width="512" height="512">
 	</canvas>
 </div>
 </body>
 <script>
     (function(win, totalCount, width, height){
+
+        var stats = new Stats();
+        stats.setMode(0);
+
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+
+        document.body.appendChild(stats.domElement);
+
         
         var cv = document.getElementById("gl_canvas");
         cv.width = width;
@@ -69,7 +80,7 @@
                                     "" +
                                     "   gl_FragColor = vec4(vColor, 1);\n" +
                                     // "   gl_FragColor = vec4(1, 0, 0, 1);\n" +
-                                    "   gl_FragColor.a = 0.5;\n" +
+//                                    "   gl_FragColor.a = 0.5;\n" +
                                     "" +
                                     "}\n";
 
@@ -144,8 +155,8 @@
             var r1 = Math.random();
             var r2 = Math.random();
             var r3 = Math.random();
-            var r4 = Math.random();
-            var r5 = Math.random();
+//            var r4 = Math.random();
+//            var r5 = Math.random();
 
             var px = r0*2-1;
             var py = r1*2-1;
@@ -153,12 +164,14 @@
             // for(var i = 0; i < 4; i++){
             for(var j = 0; j < vertex_size; j++){
                 rotation_data.push(0, 0, 0);
-                rotation_info.push(r3/5 - 0.1, r4/5 - 0.1, r5/5 - 0.1);
+//                rotation_info.push(r3/5 - 0.1, r4/5 - 0.1, r5/5 - 0.1);
+                rotation_info.push(r3/20, r3/20, r3/20);
                 position_data.push(px, py, pz);
                 // position_data.push(0, 0, 0);
-                scale_data.push(0.3, 0.3, 0.3);
-                // scale_data.push(0.03, 0.03, 0.03);
-                color_data.push(r3, r4, r5); 
+//                scale_data.push(0.3, 0.3, 0.3);
+                 scale_data.push(0.03, 0.03, 0.03);
+//                color_data.push(r3, r4, r5);
+                color_data.push(r0, r1, r2);
             }
         }
                 
@@ -199,19 +212,21 @@
             gl.clearColor(1, 1, 1, 1);
             // gl.colorMask(false, false, false, true);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-            gl.enable(gl.BLEND);
-            gl.disable(gl.DEPTH_TEST);
+            gl.enable(gl.DEPTH_TEST);
+            gl.depthFunc(gl.LESS);
+//            gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+//            gl.enable(gl.BLEND);
+//            gl.disable(gl.DEPTH_TEST);
             
-            // for(var j = 0, len = totalCount*24; j < len; j++){
-            //     // rotation_data[j] += 0.01;
-            //     rotation_data[j] += rotation_info[j];
-            // }
+             for(var j = 0, len = totalCount*24; j < len; j++){
+                 // rotation_data[j] += 0.01;
+                 rotation_data[j] += rotation_info[j];
+             }
 
 
-            for(var j = 0, len = totalCount*8; j < len; j++){
-                rotation_data[j*3+1] += 0.03;
-            }
+//            for(var j = 0, len = totalCount*8; j < len; j++){
+//                rotation_data[j*3+1] += 0.03;
+//            }
             
             // gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);        
@@ -225,9 +240,10 @@
             //gl.drawArrays(gl.TRIANGLES, 0, totalCount*4);
 
             //gl.drawElements(gl.POINTS, 6*totalCount, gl.UNSIGNED_SHORT, 0);
-            
+
+            stats.update();
         }, 64);
         
-    })(this, 10, 256, 256);
+    })(this, 10000, 512, 512);
 </script>
 </html>

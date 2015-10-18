@@ -191,7 +191,7 @@
                 
                  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
                  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData2) , gl.STATIC_DRAW);
-                //  gl.drawElements(gl.POINTS, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
+                 //gl.drawElements(gl.POINTS, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
                  gl.drawArrays(gl.POINTS, 0, vertexData.length / 3);
                 
                 requestAnimationFrame(render);
