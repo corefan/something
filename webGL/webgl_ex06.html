@@ -38,102 +38,14 @@
         cv.parentNode.style.width = width + "px";
         cv.parentNode.style.height = height + "px";
         var gl = cv.getContext("webgl");
-        
-        var red_texture = gl.createTexture();
-        var red_image = new Image();
-        red_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, red_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, red_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        red_image.src = "./img/red.jpg";
-        
-        var orange_texture = gl.createTexture();
-        var orange_image = new Image();
-        orange_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, orange_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, orange_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        orange_image.src = "./img/orange.jpg";
-        
-        var yellow_texture = gl.createTexture();
-        var yellow_image = new Image();
-        yellow_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, yellow_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, yellow_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        yellow_image.src = "./img/yellow.jpg";
-        
-        var green_texture = gl.createTexture();
-        var green_image = new Image();
-        green_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, green_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, green_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        green_image.src = "./img/green.jpg";
-
-
-        var blue_texture = gl.createTexture();
-        var blue_image = new Image();
-        blue_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, blue_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, blue_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        blue_image.src = "./img/blue.jpg";
-
-        var darkblue_texture = gl.createTexture();
-        var darkblue_image = new Image();
-        darkblue_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, darkblue_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, darkblue_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        darkblue_image.src = "./img/darkblue.jpg";
-        
-        var purple_texture = gl.createTexture();
-        var purple_image = new Image();
-        purple_image.onload = function() { 
-            gl.bindTexture(gl.TEXTURE_2D, purple_texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, purple_image);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-            gl.generateMipmap(gl.TEXTURE_2D);
-            // gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        purple_image.src = "./img/purple.jpg";
-
-        
+                
         var vertexShaderSource =    "" +
                                     "attribute vec3 aVertexPosition;\n" +
                                     "attribute vec3 aPosition;\n" +
                                     "attribute vec3 aScale;\n" +
                                     "attribute vec3 aRotation;\n" +
                                     "attribute vec3 aColor;\n" +
-                                    "attribute vec2 aUV;\n" +
                                     "varying vec3 vColor;\n" +
-                                    "varying vec2 vUV;\n" +
                                     "" +
                                     "mat4 positionMTX(vec3 p){\n" +
                                     "   return mat4(1,0,0,0,  0,1,0,0,  0,0,1,0,  p[0],p[1],p[2],1);\n" +
@@ -154,7 +66,6 @@
                                     "" +
                                     "void main(void){\n" +
                                     "   vColor = aColor;\n" +
-                                    "   vUV = aUV;\n" +
                                     // "   gl_Position = vec4(aVertexPosition, 1.0);\n" +
                                     // "   gl_Position = positionMTX(aPosition)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
                                     "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
@@ -165,14 +76,12 @@
         var fragmentShaderSource =  "" +
                                     "precision lowp float;\n" +
                                     "varying vec3 vColor;\n" +
-                                    "varying vec2 vUV;\n" +
-                                    "uniform sampler2D uSampler;\n" +
                                     "void main(void){\n" +
                                     "" +
-                                    // "   gl_FragColor = vec4(vColor, 1);\n" +
-                                    "   gl_FragColor =  texture2D(uSampler, vec2(vUV.s, vUV.t));\n" +
+                                    "   gl_FragColor = vec4(vColor, 0.5);\n" +
+                                    // "   gl_FragColor =  texture2D(uSampler, vec2(vUV.s, vUV.t));\n" +
                                     // "   gl_FragColor = vec4(1, 0, 0, 1);\n" +
-                                   "   gl_FragColor.a = 0.1;\n" +
+                                   // "   gl_FragColor.a = 0.5;\n" +
                                     "" +
                                     "}\n";
 
@@ -201,11 +110,6 @@
         gl.enableVertexAttribArray(program.aRotation);          
         program.aColor = gl.getAttribLocation(program, "aColor");
         gl.enableVertexAttribArray(program.aColor);
-        program.aUV = gl.getAttribLocation(program, "aUV");
-        gl.enableVertexAttribArray(program.aUV);   
-        
-        program.uSampler = gl.getUniformLocation(program, "uSampler");
-        gl.enableVertexAttribArray(program.uSampler);   
                 
                                       
         gl.viewport(0,0, width, height);
@@ -262,18 +166,28 @@
             var px = r0*2-1;
             var py = r1*2-1;
             var pz = r2*2-1;
+            // pz = 0;
             // for(var i = 0; i < 4; i++){
             for(var j = 0; j < vertex_size; j++){
                 rotation_data.push(0, 0, 0);
                rotation_info.push(r3/5 - 0.1, r4/5 - 0.1, r5/5 - 0.1);
                 // rotation_info.push(r3/20, r3/20, r3/20);
                 position_data.push(px, py, pz);
-                // position_data.push(0, 0, 0);
+                // position_data.push(0, 0, pz);
                 // scale_data.push(1, 1, 1);
                  scale_data.push(0.3, 0.3, 0.3);
 //                color_data.push(r3, r4, r5);
-                color_data.push(r0, r1, r2);
+                // color_data.push(r0, r1, r2);
             }
+            color_data.push(1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+                1, 0.5, 0, 1, 0.5, 0, 1, 0.5, 0, 1, 0.5, 0,
+                1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+                0, 1, 0.5, 0, 1, 0.5, 0, 1, 0.5, 0, 1, 0.5,
+                0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1,
+                0, 0, 1,  0, 0, 1,   0, 0, 1,   0, 0, 1,
+                0.5, 0, 0.5, 0.5, 0, 0.5, 0.5, 0, 0.5, 0.5, 0, 0.5
+                );
+            // pz -= 0.5;
         }
                 
         var vertexBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
@@ -295,13 +209,7 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(color_data), gl.STATIC_DRAW);
         gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 0, 0);   
-        
-    
-        var uvBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
-        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv_data), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(program.aUV, 2, gl.FLOAT, false, 0, 0);   
-        
+                
         var roatationBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);
@@ -311,37 +219,40 @@
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
         
-        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);        
-        // gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
-                       
-        setInterval(function(){
+       
             gl.clearColor(1, 1, 1, 1);
-            // gl.colorMask(false, false, false, true);
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.disable(gl.DEPTH_TEST);
+            
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            // gl.enable(gl.DEPTH_TEST);
+            gl.depthFunc(gl.LESS);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);        
+        gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
+                       
+                       /*
+        setInterval(function(){
+            // gl.clearColor(1, 1, 1, 1);
+            gl.clearColor(0, 0, 0, 1);
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             gl.enable(gl.DEPTH_TEST);
             gl.depthFunc(gl.LESS);
             
-            gl.activeTexture(gl.TEXTURE0);
-            // gl.activeTexture(gl.TEXTURE2);
-            gl.bindTexture(gl.TEXTURE_2D, red_texture);
-            // gl.activeTexture(gl.TEXTURE2);
-            gl.uniform1i(program.uSampler, 0);
-
-//            gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-//            gl.enable(gl.BLEND);
-//            gl.disable(gl.DEPTH_TEST);
             
-             for(var j = 0, len = totalCount*24; j < len; j++){
-                 // rotation_data[j] += 0.01;
-                 rotation_data[j] += rotation_info[j];
-             }
+            //  for(var j = 0, len = totalCount*24; j < len; j++){
+            //      // rotation_data[j] += 0.01;
+            //      rotation_data[j] += rotation_info[j];
+            //  }
 
 
 //            for(var j = 0, len = totalCount*8; j < len; j++){
 //                rotation_data[j*3+1] += 0.03;
 //            }
             
-            // gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
+
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);        
                                         
             gl.drawElements(gl.TRIANGLES, 6*totalCount, gl.UNSIGNED_SHORT, 0);
@@ -356,6 +267,7 @@
 
             stats.update();
         }, 64);
+        */
         
     })(this, 10, 512, 512);
 </script>

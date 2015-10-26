@@ -42,35 +42,34 @@
                 [-1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, -1.0, 0.0],
                 [0, 1, 2, 1, 2, 3]
         );
-       // var mat1 = new Material('#ff0000');
-       var mat1 = new Material('#000000', "./img/glass.gif");
+//        var mat1 = new Material('#ff0000');
 
         var meshes = [];
 
         for(var i = 0; i < totalCount; i++) {
-            // var r0 = Math.random();
-            // var r1 = Math.random();
-            // var r2 = Math.random();
-            // var r3 = Math.random() / 20;
-            // var mat1 = new Material([r0, r1, r2]);
-            meshes.push(new Mesh(geo1, mat1, [0,0, 0,1, 1,0, 1,1]));
-            // meshes[i].rotation = r3;
-            // meshes[i].translate(r0 * 2 - 1, r1 * 2 - 1, r2 * 2 - 1);
-            meshes[i].scale(0.3, 0.3, 0.3);
+            var r0 = Math.random();
+            var r1 = Math.random();
+            var r2 = Math.random();
+            var r3 = Math.random() / 20;
+            var mat1 = new Material([r0, r1, r2]);
+            meshes.push(new Mesh(geo1, mat1));
+            meshes[i].rotation = r3;
+            meshes[i].translate(r0 * 2 - 1, r1 * 2 - 1, r2 * 2 - 1);
+            meshes[i].scale(0.03, 0.03, 0.03);
             world.add(meshes[i]);
         }
-       world.render();
+//        world.render();
 
-        // requestAnimationFrame(function ani(){
-        //     for(var i = 0; i < totalCount; i++) {
-        //         meshes[i].rotate(meshes[i].rx + meshes[i].rotation, meshes[i].ry + meshes[i].rotation, meshes[i].rz + meshes[i].rotation);
-        //     }
+        requestAnimationFrame(function ani(){
+            for(var i = 0; i < totalCount; i++) {
+                meshes[i].rotate(meshes[i].rx + meshes[i].rotation, meshes[i].ry + meshes[i].rotation, meshes[i].rz + meshes[i].rotation);
+            }
 
-        //     stats.update();
-        //     world.render();
-        //     requestAnimationFrame(ani);
-        // });
+            stats.update();
+            world.render();
+            requestAnimationFrame(ani);
+        });
 
-    }(1, 512, 512));
+    }(10000, 512, 512));
 </script>
 </html>

@@ -1,0 +1,23 @@
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<script>
+
+	</script>
+</head>
+<body>
+	<button onclick="alert(111)">alert</button><br><br>
+	<button onclick="alert(111)">555</button><br><br>
+</body>
+<script>
+	document.addEventListener("blur", function(evt){
+		console.log("blur");
+	}, false);
+
+	document.addEventListener("focus", function(evt){
+		console.log("focus");
+	}, false);
+
+
+</script>
+</html>
