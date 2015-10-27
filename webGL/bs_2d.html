@@ -50,8 +50,12 @@
         varying vec3 vColor;
         varying vec3 vUV;
         void main(void){
-            gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));
-            gl_FragColor.a = 0.5;
+            if(vColor[0] + vColor[1] + vColor[2] == 3.0){
+                gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));
+            }else{
+                gl_FragColor = vec4(vColor, 1.0);
+            }
+            gl_FragColor.a = 0.75;
         }
 	</script>
 
@@ -83,8 +87,9 @@ var World = (function(){
 		}
         result["uSampler"] = gl.getUniformLocation(program, "uSampler");
         // gl.uniform1i(result["uSampler"], 0);
-		
-        gl.disable(gl.DEPTH_TEST);
+
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 		// gl.enable(gl.DEPTH_TEST);
         // gl.depthFunc(gl.LESS);
 	
@@ -207,6 +212,7 @@ var World = (function(){
 	   	    	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this[key[i]+"_data"]), gl.STATIC_DRAW);
     		    gl.vertexAttribPointer(this.context[key2[i]], 3, gl.FLOAT, false, 0, 0);
     		}
+            gl.uniform1i(this.context.uSampler, 0);
     	} else {
             key = "position,scale,rotation,color".split(",");
             key2 = "px,py,pz|sx,sy,sz|rx,ry,rz|r,g,b".split("|");
@@ -222,9 +228,9 @@ var World = (function(){
                     var mesh = this.changed[key[i]][j];
                     var offset = mesh.offset;
                     for(k = 0, len2 = mesh.geometry.vertices.length/3; k < len2; k++){
-                        target[offset+k] = mesh[key2[i][0]];
-                        target[offset+k+1] = mesh[key2[i][1]];
-                        target[offset+k+2] = mesh[key2[i][2]];
+                        target[3*(offset+k)] = mesh[key2[i][0]];
+                        target[3*(offset+k)+1] = mesh[key2[i][1]];
+                        target[3*(offset+k)+2] = mesh[key2[i][2]];
                     }
                 }    
                 gl.bindBuffer(gl.ARRAY_BUFFER, this[key[i]+"Buffer"]);
@@ -234,7 +240,6 @@ var World = (function(){
 	    }
 
 	    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.uniform1i(this.context.uSampler, 0);
     	gl.drawElements(gl.TRIANGLES, this.index_data.length, gl.UNSIGNED_SHORT, 0);
 	};
     
@@ -330,22 +335,28 @@ Mesh.prototype.scale = function(sx, sy, sz){
             world.viewport(w,h);
     //        world.frustum(near,far,width,height);
     
+    //        var mat1 = new Material('#ff0000');
+
             var geo1 = new Geometry(
                     [-1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, -1.0, 0.0],
-                    [0, 1, 2, 1, 2, 3], [0,0,0, 0,1,0, 1,0,0, 1,1,0]
+                    [0, 1, 2, 1, 2, 3], [0,0,0,  0,1,0,  1,0,0,  1,1,0]
             );
-    //        var mat1 = new Material('#ff0000');
-    
-            var meshes = [];  
+            var meshes = [], mat1;
     
             for(var i = 0; i < totalCount; i++) {
                 var r0 = Math.random();
                 var r1 = Math.random();
                 var r2 = Math.random();
-                var r3 = Math.random() / 20;
-                var mat1 = new Material([r0, r1, r2], img);
+                var flag = Math.random() < 0.75 ? 0 : 1;
+                if(flag){
+                    mat1 = new Material([1, 1, 1], img);
+                }else{
+                    mat1 = new Material([r0, r1, r2]);
+                }
+
+//                var mat1 = new Material([r0, r1, r2]);
+//                var mat1 = new Material([r0, r1, r2], img);
                 meshes.push(new Mesh(geo1, mat1));
-                meshes[i].rotation = r3;
                 meshes[i].translate(r0 * 2 - 1, r1 * 2 - 1, r2 * 2 - 1);
                 meshes[i].scale(0.3, 0.3, 0.3);
                 world.add(meshes[i]);
@@ -354,19 +365,18 @@ Mesh.prototype.scale = function(sx, sy, sz){
     
             requestAnimationFrame(function ani(){
                 for(var i = 0; i < totalCount; i++) {
-                    meshes[i].rotate(meshes[i].rx + meshes[i].rotation, meshes[i].ry + meshes[i].rotation, meshes[i].rz + meshes[i].rotation);
+                    meshes[i].rotate(meshes[i].rx, meshes[i].ry, meshes[i].rz + 0.01);
                 }
-    
+
                 stats.update();
                 world.render();
                 requestAnimationFrame(ani);
             });
-    
         }
         img.src = "./img/glass.gif";
 
 
-    }(5, 512, 512));
+    }(20, 512, 512));
 
 </script>
 </body>
