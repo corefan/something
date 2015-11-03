@@ -358,7 +358,7 @@ Mesh.prototype.scale = function(sx, sy, sz){
 //                var mat1 = new Material([r0, r1, r2], img);
                 meshes.push(new Mesh(geo1, mat1));
                 meshes[i].translate(r0 * 2 - 1, r1 * 2 - 1, r2 * 2 - 1);
-                meshes[i].scale(0.3, 0.3, 0.3);
+                meshes[i].scale(0.1, 0.1, 0.1);
                 world.add(meshes[i]);
             }
             // world.render();
@@ -376,7 +376,7 @@ Mesh.prototype.scale = function(sx, sy, sz){
         img.src = "./img/glass.gif";
 
 
-    }(20, 512, 512));
+    }(5000, 512, 512));
 
 </script>
 </body>

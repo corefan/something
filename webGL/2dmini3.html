@@ -55,7 +55,8 @@
             meshes.push(new Mesh(geo1, mat1));
             meshes[i].rotation = r3;
             meshes[i].translate(r0 * 2 - 1, r1 * 2 - 1, r2 * 2 - 1);
-            meshes[i].scale(0.03, 0.03, 0.03);
+            // meshes[i].scale(0.03, 0.03, 0.03);
+            meshes[i].scale(0.3, 0.3, 0.3);
             world.add(meshes[i]);
         }
 //        world.render();
@@ -70,6 +71,6 @@
             requestAnimationFrame(ani);
         });
 
-    }(10000, 512, 512));
+    }(5000, 512, 512));
 </script>
 </html>
