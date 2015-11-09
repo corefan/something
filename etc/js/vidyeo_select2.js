@@ -56,6 +56,9 @@ var pssVD;
 	}	
 	document.body.appendChild(select);
 	document.body.insertBefore(pssVD, document.body.firstChild);
+	document.addEventListener('scroll', function (evt){
+		console.log(evt.target);
+	}, false);
 })();
 window.addEventListener('keydown', function (evt){
 	if(evt.altKey){

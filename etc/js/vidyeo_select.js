@@ -57,6 +57,7 @@ window.onload = function(){
 	document.body.appendChild(select);
 	document.body.insertBefore(pssVD, document.body.firstChild);
 };
+
 window.addEventListener('keydown', function (evt){
 	if(evt.altKey){
 		var opc = +pssVD.style.opacity;

@@ -1,0 +1,38 @@
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+</head>
+<script>
+	function win_open(){
+		var aa = window.open("http://naver.com");
+		console.log(aa);
+	}	
+	
+	
+	function timercallback_open(){
+		setTimeout(function(){
+			var aa = window.open("http://naver.com");
+			console.log(aa);
+		}, 0);
+	}	
+	
+	
+	function loadcallback_open(){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open('GET', './test.json', true);
+		xmlhttp.onreadystatechange = function(){
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+				window.open("http://naver.com");
+			}
+		};
+		xmlhttp.send(null);
+	}
+		
+</script>
+<body>
+	<button onclick=win_open()>그냥 open</button><br><br>
+	<button onclick=timercallback_open()>timer callback open</button><br><br>
+	<button onclick=loadcallback_open()>load callback open</button>
+</body>
+</html>	
+		

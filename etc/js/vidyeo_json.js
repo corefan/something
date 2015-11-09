@@ -1,16 +1,17 @@
 var pssVD;
 
-(function(){
+window.onload = function(){
 	pssVD = document.createElement('video');	
 	pssVD.style.position = 'absolute';
 	pssVD.style.right = 0;
 	pssVD.style.bottom = 0;
 	pssVD.style.width = '100%';
 	pssVD.style.height = '100%';
-	pssVD.style.opacity = '0.1';
+	pssVD.style.opacity = '1';
 	pssVD.style.backgroundColor = '#fff';
 	pssVD.style.zIndex = 0;
 	pssVD.autoplay = true;
+	pssVD.controls = true;
 	pssVD.rootURL = 'http://172.10.12.61:9090/media/';
 	pssVD.skip = function(prev){
 		if(prev === 1){
@@ -59,7 +60,7 @@ var pssVD;
 			allDOM[i].style.backgroundColor = "transparent";
 		}
 	}	
-})();
+};
 
 window.addEventListener('keydown', function (evt){
 	if(evt.altKey){
