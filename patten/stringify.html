@@ -5,42 +5,97 @@
     <title>stringify</title>
 <script>
     var test_obj = {
-        'name' : 'father', 
-        'age': 40,
-        'height': 175,
-        'sub_obj' : {'name' : 'sun', 'age': 10, 'height': 100,},
-        'arr' : [3, [1,2,3,6], 9],                
+        'name' : 'grandfather',
+        'age': 58,
+        'birthday': new Date(1958, 5, 5),
+        'sub_obj' : {
+            'name' : 'father',
+            'age': 33,
+            'birthday': new Date(1983, 7, 15),
+            'arr' : [3, [1,2,3,6], 9],
+            'arr2' : [3, {"val" : 6}, 9],
+            'subsub_obj' : {
+                'name' : 'son',
+                'age': 1,
+                'birthday': new Date(2015, 1, 20),
+                'arr' : [1, [1,2], 9],
+                'arr' : [1, {"val" : 2}, 3]
+            }
+        },
+        'arr' : [-1, [-1, 0, 1], 1],
+        'arr2' : [-1, {"val" : 0}, 1]
     };
 </script>        
 </head>
 <body>
     <script>
         var stringify = (function(JSON){
-             return function(obj){
-                var str = '{';
-                for(var k in obj){
-                    if(str != '{'){
-                        str += ", ";
+            var stack = [], t_obj, target, str = '';
+            return function(obj) {
+                stack.push({"key" : null, "obj" : obj, "keyIndex" : 0});
+                while (target = stack.pop()) {
+                    if(target.keyIndex > 0) {
+                        str += ",";
                     }
-                    str += '"' + k + '":';
-                    if(typeof obj[k] == "number"){
-                        str += obj[k];                        
-                    }else{
-                        str += '"' + obj[k] + '"';
+                    str += target.key ? '"' + target.key + '":' : '';
+
+                    t_obj = target.obj;
+                    switch (typeof t_obj) {
+                        case 'object':
+                            if (t_obj instanceof Date) {
+                                str += '"' + t_obj.toJSON() + '"';
+                            } else if(t_obj instanceof Array) {
+                                str += '[';
+                                stack.push({"key" : null, "obj" : ']', "keyIndex" : 0, "exc" : true});
+                                for (var i = t_obj.length - 1; i > -1; i--) {
+                                    stack.push({
+                                        "key": null,
+                                        "obj": t_obj[i],
+                                        "keyIndex" : i,
+                                        "exc" : true
+                                    });
+                                }
+                            }else{
+                                str += '{';
+                                stack.push({"key" : null, "obj" : '}', "keyIndex" : 0, "exc" : true});
+                                for (var keys = Object.keys(t_obj), i = keys.length - 1; i > -1; i--) {
+                                    stack.push({
+                                        "key": keys[i],
+                                        "obj": t_obj[keys[i]],
+                                        "keyIndex" : i,
+                                        "exc" : target.exc ? true : false
+                                    });
+                                }
+                            }
+                            continue;
+                        case 'string':
+                            if(target.exc){
+                                str += t_obj;
+                            }else{
+                                str += '"' + t_obj + '"';
+                            }
+                            continue;
+                        default:
+                            str += t_obj;
+                            continue;
                     }
                 }
-                str += '}';
                 return str;
-            };
+            }
         })(null);
             
         var parse = function(v){
             return (new Function('', 'return ' + v.trim()))();
         };
             
-        var aa = stringify(test_obj);
-        console.log(aa);
-        console.log(parse(aa));            
+        var my = stringify(test_obj);
+        var origin = JSON.stringify(test_obj);
+        console.log('========== my stringify ============');
+        console.log(my);
+        console.log('========== origin stringify ============');
+        console.log(origin);
+        console.log('========== (my == origin) ============');
+        console.log(my == origin);
     </script>
 </body>
 </html>
