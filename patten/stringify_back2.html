@@ -30,33 +30,23 @@
 <body>
     <script>
         var stringify = (function(JSON){
-            var charCode = {
-                "delimiter" : ',',
-                "colon" : ':',
-                "stringStart" : '"',
-                "stringEnd" : '"',
-                "arrayStart" : '[',
-                "arrayEnd" : ']',
-                "objectStart" : '{',
-                "objectEnd" : '}'
-            };
             return function(obj) {
                 var stack = [], t_obj, target, str = '';
                 stack.push({"key" : null, "obj" : obj, "keyIndex" : 0});
                 while (target = stack.pop()) {
                     if(target.keyIndex > 0) {
-                        str += charCode["delimiter"];
+                        str += ",";
                     }
-                    str += target.key ? charCode["stringStart"] + target.key + charCode["stringStart"] + charCode["colon"] : '';
+                    str += target.key ? '"' + target.key + '":' : '';
 
                     t_obj = target.obj;
                     switch (typeof t_obj) {
                         case 'object':
                             if (t_obj instanceof Date) {
-                                str += charCode["stringStart"] + t_obj.toJSON() + charCode["stringEnd"];
+                                str += '"' + t_obj.toJSON() + '"';
                             } else if(t_obj instanceof Array) {
-                                str += charCode["arrayStart"];
-                                stack.push({"key" : null, "obj" : charCode["arrayEnd"], "keyIndex" : 0, "exc" : true});
+                                str += '[';
+                                stack.push({"key" : null, "obj" : ']', "keyIndex" : 0, "exc" : true});
                                 for (var i = t_obj.length - 1; i > -1; i--) {
                                     stack.push({
                                         "key": null,
@@ -66,8 +56,8 @@
                                     });
                                 }
                             }else{
-                                str += charCode["objectStart"];
-                                stack.push({"key" : null, "obj" : charCode["objectEnd"], "keyIndex" : 0, "exc" : true});
+                                str += '{';
+                                stack.push({"key" : null, "obj" : '}', "keyIndex" : 0, "exc" : true});
                                 for (var keys = Object.keys(t_obj), i = keys.length - 1; i > -1; i--) {
                                     stack.push({
                                         "key": keys[i],
@@ -82,7 +72,7 @@
                             if(target.exc){
                                 str += t_obj;
                             }else{
-                                str += charCode["stringStart"] + t_obj + charCode["stringEnd"];
+                                str += '"' + t_obj + '"';
                             }
                             continue;
                         default:
