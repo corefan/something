@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		function loaded(){
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "http://pparkssi.github.io/something/etc/json/test.json", false);
+			xmlhttp.onreadystatechange = function (){
+				if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+					var str = "";
+					var obj = JSON.parse(xmlhttp.responseText);
+					for(var k in obj){
+						str += '"' + k + '" : ' ;
+						str += obj[k] + "\n";
+					}
+					document.getElementById("view").innerText = str;
+				}	
+			};
+			xmlhttp.send();
+		}
+	</script>
+</head>
+<body onload="loaded()">
+	<div id="view">
+	</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html lang="ko">
+<head>
+<script>
+	window.onerror = function(evt){
+		console.log(evt);
+	};
+	function _click(){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("head", "http://172.10.12.61:9090/xtest2/zzz2.zip", true);
+		xmlhttp.onreadystatechange = function(){
+			if(xmlhttp.readyState == 4){
+				if(xmlhttp.status < 400){
+					console.log("success");
+					console.log(xmlhttp.responseText);
+				}else if(xmlhttp.status < 500){
+					console.log("404");
+					console.log(xmlhttp.responseText);
+				}else{
+					console.log("500");
+					console.log(xmlhttp.responseText);
+				}
+			}
+		}
+		xmlhttp.send();
+	}	
+	function _error (){
+		console.log("error");		
+	}
+	
+	function _loaded (){
+		console.log("_loaded");
+	}
+</script>
+</head>
+<body>
+	<button onclick="_click()">check url</button><br><br>
+	<iframe id="ifrm" onerror="_error()" onload="_loaded()"></iframe>
+</body>
+</html>

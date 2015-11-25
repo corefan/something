@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script>
+		(function(){
+			
+			var Parent = function(name, parent){
+				this.name = name;
+				this.parent = parent;
+			};
+			Parent.prototype._type_name = "parent";
+			Parent.prototype._arr = [3,6,9];
+			Parent.prototype._obj = {"age" : 40};
+			Parent.prototype._fn = function(a , b){
+				return a + b;
+			}
+
+			var Child = function(name, parent){
+				this.name = name;
+				this.parent = parent;
+			};
+			Child.prototype = new Parent("proto");
+			Child.prototype._type_name = "child";
+			Child.prototype._a = [1, 2, 3];
+			Child.prototype._o = {"age" : 10}; 
+			Child.prototype._fn = function(a , b){
+				return a * b;
+			}
+		
+			
+			var p1 = new Parent("p1");
+			var p2 = new Parent("p2");
+			
+			var c1 = new Child("c1", p1);
+			var c2 = new Child("c2", p2);
+			
+			console.log(p1, p2, c1, c2);
+			// console.log(c1._a);
+			// console.log(c1._arr);
+			// c1._arr = [7, 9, 0];
+			// console.log(c1._arr);
+			// console.log(p1._arr);			
+			console.log(p1._fn(3,3));
+			console.log(c1._fn(3,3));
+																											
+		})();
+	</script>	
+</body>
+</html>

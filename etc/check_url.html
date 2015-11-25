@@ -1,0 +1,25 @@
+<html lang="ko">
+<head>
+<script>
+	window.onerror = function(evt){
+		console.log(evt);
+	};
+	function _click(url){
+		var xmlhttp = new XMLHttpRequest();
+		// xmlhttp.open("head", "", true);
+		xmlhttp.open("head", url, true);
+		xmlhttp.onreadystatechange = function(){
+			if(xmlhttp.readyState == 4){
+				console.log(xmlhttp.status);
+			}
+		}
+		xmlhttp.send();
+	}	
+</script>
+</head>
+<body>
+	<button onclick="_click(this.textContent)">http://172.10.12.61:9090/xtest2/zzz.zip</button><br><br>
+	<button onclick="_click(this.textContent)">http://172.10.12.61:9090/xtest2/empty.zip</button><br><br>
+	<button onclick="_click(this.textContent)">http://172.10.12.61:9090/xtest2/fileUpload_ssv_error.jsp</button><br><br>
+</body>
+</html>
