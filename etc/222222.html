@@ -1,0 +1,38 @@
+n += '';
+var result = 0;
+var temp = {};
+
+for(var i = 0, len = n.length; i < len; i++ ){
+if(temp[n[i]] == null){
+temp[n[i]] = true;
+result++;
+}
+}
+console.log(result);
+
+
+11
+123456789
+114108089
+110110015
+121
+33
+44
+55
+66
+77
+88
+106108048
+
+
+3
+3
+6
+2
+2
+2
+2
+2
+2
+2
+5

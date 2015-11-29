@@ -1,0 +1,54 @@
+<html lang="ko">
+<head>
+	<script>
+		var n = null,first_str_obj, result = "N0", result_arr = [];
+		function processData(input){
+			//Enter your code here
+			if(n == null){
+				n = +input;
+				return;
+			}
+			if(first_str_obj == null){
+				first_str_obj = {};
+				for(var i = 0, len = input.length; i < len; i++){
+					if(first_str_obj[input[i]] == null){
+						first_str_obj[input[i]] = input[i];
+					}else{
+						continue;
+					}
+				}
+			}else{
+				result = "NO";
+				for(var i = 0, len = input.length; i < len; i++){
+					if(first_str_obj[input[i]] != null){
+						result = "YES";
+						break;
+					}
+				}
+				result_arr.push(result);
+				first_str_obj = null;
+				n--
+			}
+
+			if(n < 1){
+				var target;
+				while(target = result_arr.shift()){
+					console.log(target);
+				}
+			}
+		}
+
+		function act(){
+			processData(2);
+			processData("hello");
+			processData("world");
+			processData("hi");
+			processData("world");
+		}
+	</script>
+</head>
+<body>
+	<button onclick="act()">act</button>
+</body>
+
+</html>
