@@ -1,0 +1,20 @@
+<html lang="ko">
+<head>
+<script>
+	function _click(){
+		var ifm = document.getElementById("ifrm");
+		var doc = ifm.contentWindow.document || ifrm.contentDocument;
+		if(doc){
+			console.log(doc.contentsType);
+			console.log(doc.xmlVersion);			
+		}else{
+			console.log(doc);
+		}
+	}
+</script>
+</head>
+<body>
+	<button onclick="_click()">get xml</button><br><br>
+	<iframe id="ifrm" width="500px" height="500px" src="http://172.10.12.61:9090/xtest2/web.xml"></iframe>
+</body>
+</html>

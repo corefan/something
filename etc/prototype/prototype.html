@@ -8,28 +8,39 @@
 	<script>
 		(function(){
 			
-			var Parent = function(name, parent){
+			var Parent = function(name){
 				this.name = name;
-				this.parent = parent;
+				this.parent = null;
 			};
-			Parent.prototype._type_name = "parent";
-			Parent.prototype._arr = [3,6,9];
-			Parent.prototype._obj = {"age" : 40};
-			Parent.prototype._fn = function(a , b){
-				return a + b;
-			}
+			// Parent.prototype._type_name = "parent";
+			// Parent.prototype._arr = [3,6,9];
+			// Parent.prototype._obj = {"age" : 40};
+			// Parent.prototype._fn = function(a , b){
+			// 	return a + b;
+			// }
 
 			var Child = function(name, parent){
 				this.name = name;
 				this.parent = parent;
 			};
+			var ppp = new Parent("p1");
+			var ccc = new Child("c1", ppp);
+			console.log(ccc.constructor);
+			console.log(ccc.constructor.prototype);
+			console.log(ccc.constructor.prototype.constructor);
+			console.log(ccc.constructor.prototype.constructor.prototype);			
 			Child.prototype = new Parent("proto");
-			Child.prototype._type_name = "child";
-			Child.prototype._a = [1, 2, 3];
-			Child.prototype._o = {"age" : 10}; 
-			Child.prototype._fn = function(a , b){
-				return a * b;
-			}
+			ccc = new Child("c1", ppp);
+			console.log(ccc.constructor);
+			console.log(ccc.constructor.prototype);			
+			console.log(ccc.constructor.prototype.constructor);
+			console.log(ccc.constructor.prototype.constructor.prototype);			
+			// Child.prototype._type_name = "child";
+			// Child.prototype._a = [1, 2, 3];
+			// Child.prototype._o = {"age" : 10}; 
+			// Child.prototype._fn = function(a , b){
+			// 	return a * b;
+			// }
 		
 			
 			var p1 = new Parent("p1");

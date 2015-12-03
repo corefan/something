@@ -107,9 +107,11 @@
         program.aScale = gl.getAttribLocation(program, "aScale");
         gl.enableVertexAttribArray(program.aScale);
         program.aRotation = gl.getAttribLocation(program, "aRotation");
-        gl.enableVertexAttribArray(program.aRotation);          
+        gl.enableVertexAttribArray(program.aRotation);
         program.aColor = gl.getAttribLocation(program, "aColor");
         gl.enableVertexAttribArray(program.aColor);
+
+        
                 
                                       
         gl.viewport(0,0, width, height);
@@ -209,12 +211,12 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(color_data), gl.STATIC_DRAW);
         gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 0, 0);   
-                
+                               
         var roatationBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, );
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);
         gl.vertexAttribPointer(program.aRotation, 3, gl.FLOAT, false, 0, 0);
-        
+               
         var indexBuffer = gl.createBuffer(gl.ELEMENT_ARRAY_BUFFER);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        

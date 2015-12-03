@@ -1,0 +1,68 @@
+<html lang="ko">
+<head>
+	  <style type="text/css">
+    div {
+      -moz-user-select:-moz-none;
+      -webkit-user-select:none;
+      -webkit-touch-callout:none;
+      -webkit-appearance:none;
+      -webkit-tap-highlight-color:rgba(0,0,0,0);
+      outline:none;
+    }
+    
+    v\:shape    {behavior:url(#default#VML);display:inline-block; }
+    v\:fill     {behavior:url(#default#VML);display:inline-block; }
+    v\:path     {behavior:url(#default#VML);display:inline-block; }
+    v\:line     {behavior:url(#default#VML);display:inline-block; }
+    v\:textpath {behavior:url(#default#VML);display:inline-block; }
+    o\:opacity2 {behavior:url(#default#VML);}
+    
+    input::-ms-clear { display: none; }
+    input::-ms-reveal{ display: none; }
+  </style>
+  <script>
+	  function _click(){
+		  if(dd.style.visibility == "hidden"){
+			  dd.style.visibility = "";
+			  dd.style.width = "427px";
+			  dd.style.height = "296px";			  
+		  }else{
+			  dd.style.visibility = "hidden";
+			  dd.style.width = 0;
+			  dd.style.height = 0;
+		  }
+	  }
+  </script>
+</head>
+<body>
+	<div style="POSITION: absolute; WIDTH: 100%; HEIGHT: 100%; OVERFLOW: hidden; TOP: 0px; LEFT: 0px; background:yellowgreen;">
+		<button onclick="_click()">aaaa</button>
+	</div>	
+	<DIV id="dd" style="POSITION: absolute; WIDTH: 427px; HEIGHT: 296px; OVERFLOW: hidden; TOP: 50px; CURSOR: default; LEFT: 50px;" _element_type="1" unselectable="on">
+		<!--<IFRAME style="FILTER: Alpha(Opacity=0); WIDTH: 100%; HEIGHT: 100%;" scrolling="no" frameborder="0" left="84" top="8"></IFRAME>-->
+		<IFRAME id="ifrm" style="WIDTH: 100%; HEIGHT: 100%;" scrolling="no" frameborder="0" left="84" top="8"></IFRAME>
+		<DIV id="dd2" style="POSITION: absolute; left:0px; top:0px; WIDTH: 100%; HEIGHT: 100%; OVERFLOW: hidden" unselectable="on">
+		<?xml:namespace prefix = v ns = "urn:schemas-microsoft-com:vml" />
+			<v:shape style="POSITION: absolute; WIDTH: 1px; HEIGHT: 1px" coordsize = "10,10" coordorigin = "5,5" fillcolor = "blue" stroked = "f" path = " m0,200 qy200,0 l3040,0 qx3240,200 l3240,2760 qy3040,2960 l200,2960 qx0,2760 x m30,200 qy200,30 l3040,30 qx3210,200 l3210,2760 qy3040,2930 l200,2930 qx30,2760 x e"></v:shape>
+			<v:shape style="POSITION: absolute; WIDTH: 1px; HEIGHT: 1px" coordsize = "10,10" coordorigin = "5,5" stroked = "f" path = " m30,200 qy200,30 l3040,30 qx3210,200 l3210,2760 qy3040,2930 l200,2930 qx30,2760 x e">
+				<v:fill type = "gradient" opacity = "1" color2 = "#87ceeb" o:opacity2 = "1" colors = "0 #87ceeb"></v:fill>
+			</v:shape>
+		</DIV>
+		<!--
+		<DIV style="POSITION: absolute; OVERFLOW-X: hidden; OVERFLOW-Y: hidden; BACKGROUND-COLOR: transparent; WIDTH: 318px; HEIGHT: 290px; OVERFLOW: hidden; TOP: 3px; LEFT: 3px" _element_type="3" unselectable="on">
+		<DIV style="POSITION: absolute; WIDTH: 75px; DIRECTION: inherit; HEIGHT: 68px; OVERFLOW: hidden; TOP: -3px; CURSOR: default; LEFT: 243px" tabIndex=-1 unselectable="on">
+		<DIV style="POSITION: absolute; WIDTH: 100%; HEIGHT: 100%; OVERFLOW: hidden" id=mainframe_childframe_form_PopupDiv00_Button00VMLContainerElement unselectable="on">
+			<v:shape style="POSITION: absolute; WIDTH: 1px; HEIGHT: 1px" coordsize = "10,10" coordorigin = "5,5" fillcolor = "#999" stroked = "f" path = " m0,100 qy100,0 l650,0 qx750,100 l750,580 qy650,680 l100,680 qx0,580 x m10,100 qy100,10 l650,10 qx740,100 l740,580 qy650,670 l100,670 qx10,580 x e"></v:shape>
+			<v:shape style="POSITION: absolute; WIDTH: 1px; HEIGHT: 1px" coordsize = "10,10" coordorigin = "5,5" stroked = "f" path = " m10,100 qy100,10 l650,10 qx740,100 l740,580 qy650,670 l100,670 qx10,580 x e">
+				<v:fill type = "gradient" opacity = "1" color2 = "green" o:opacity2 = "1" colors = "0 green"></v:fill>
+			</v:shape>
+		</DIV>
+		<DIV style="POSITION: absolute; FILTER: alpha(Opacity=0); BACKGROUND-COLOR: #ffffff; WIDTH: 73px; HEIGHT: 66px; OVERFLOW: hidden; TOP: 1px; LEFT: 1px" _element_type="2" unselectable="on">
+		<DIV style="POSITION: absolute; WIDTH: 73px; HEIGHT: 66px; OVERFLOW: hidden; TOP: 0px; LEFT: 0px" _element_type="4" unselectable="on">
+			<DIV style="TEXT-ALIGN: center; PADDING-BOTTOM: 0px; FONT-STYLE: normal; PADDING-LEFT: 0px; WIDTH: 73px; TEXT-OVERFLOW: ellipsis; PADDING-RIGHT: 0px; DISPLAY: table-cell; FONT-FAMILY: Dotum; WHITE-SPACE: pre; HEIGHT: 40px; COLOR: #444444; FONT-SIZE: 9pt; VERTICAL-ALIGN: top; FONT-WEIGHT: normal; PADDING-TOP: 26px">Button00</DIV>
+		</DIV>
+		-->
+	</DIV>
+</body>
+
+</html>
