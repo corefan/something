@@ -13,7 +13,7 @@
     </style>
     <script>
         function _click(){
-            _vd.src = "http://172.10.12.61:9090/media/151020 트와이스(TWICE) 쇼케이스  OOHAHH하게 쯔위 직캠.mp4";
+            _vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
         }        
     </script>
 </head>
@@ -81,10 +81,10 @@
                                     "void main(void){\n" +
                                     "   vColor = aPosition;\n" +
                                     "   vUV = aUV;\n" +
-                                    // "   gl_Position = vec4(aVertexPosition, 1.0);\n" +
+                                    "   gl_Position = vec4(aVertexPosition, 1.0);\n" +
                                     // "   gl_Position = positionMTX(aPosition)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
-                                    "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
-                                    // "   gl_PointSize = 2.0;\n" +
+                                    // "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
+                                    "   gl_PointSize = 2.0;\n" +
                                     "" +
                                     "}";
 
@@ -138,12 +138,10 @@
         var rotation_data = [];
         var uv_data = [];
         
-        // vertex_data.push(-1.0, 1.0, 0.0,  -1.0,-1.0,0.0,  1.0,1.0,0.0,  1.0,-1.0,0.0);
-        vertex_data.push(-1.0, 1.0, 0.0,  -1.0,-1.0,0.0,  1.0,1.0,0.0,  1.0,-1.0,0.0);
-        index_data.push(0, 1, 2, 1, 2, 3);
+        vertex_data.push(0.0016666667070239782,0.5024999976158142,0.3316666781902313,0.5024999976158142,0.3316666781902313,0.9975000023841858,0.0016666667070239782,0.9975000023841858,0.33500000834465027,0.5024999976158142,0.6650000214576721,0.5024999976158142,0.6650000214576721,0.9975000023841858,0.33500000834465027,0.9975000023841858,0.6683333516120911,0.5024999976158142,0.9983333349227905,0.5024999976158142,0.9983333349227905,0.9975000023841858,0.6683333516120911,0.9975000023841858,0.0016666667070239782,0.0024999999441206455,0.3316666781902313,0.0024999999441206455,0.3316666781902313,0.4975000023841858,0.0016666667070239782,0.4975000023841858,0.33500000834465027,0.0024999999441206455,0.6650000214576721,0.0024999999441206455,0.6650000214576721,0.4975000023841858,0.33500000834465027,0.4975000023841858,0.6683333516120911,0.0024999999441206455,0.9983333349227905,0.0024999999441206455,0.9983333349227905,0.4975000023841858,0.6683333516120911,0.4975000023841858);
+        index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
         uv_data.push(1,1, 1,0, 0,1, 0,0);
         for(var i = 0; i < 4; i++){
-            // rotation_data.push(0, 3.141592653589793, 0);
             rotation_data.push(0, 0, 0);
             position_data.push(0, 0, 0);
             scale_data.push(1, 1, 1);            
@@ -195,20 +193,14 @@
         function start(){
             gl.clearColor(1, 1, 1, 1);  
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-            
-            for(var j = 0; j < 12; j++){
-                rotation_data[j] += 0.1;
-            }
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);        
-
                         
             gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);    
                                         
-            gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
         }
         
-    })(this, 120, 200);
+    })(this, 400, 300);
 </script>
 </html>

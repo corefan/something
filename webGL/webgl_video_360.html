@@ -2,7 +2,7 @@
 <html>
 <head lang="ko">
     <meta charset="UTF-8">
-    <title>webgl</title>
+    <title>360_video</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
     <style>
         body {
@@ -13,9 +13,28 @@
     </style>
     <script>
         function _click(){
-            _vd.src = "http://172.10.12.61:9090/media/151020 트와이스(TWICE) 쇼케이스  OOHAHH하게 쯔위 직캠.mp4";
+            _vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
         }        
     </script>
+    <script id="v" type="text/v">
+attribute vec3 aVertexPosition;
+attribute vec2 aTextureCoord;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+varying highp vec2 vTextureCoord;
+void main(void) {
+    gl_Position = uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0);
+    vTextureCoord = aTextureCoord;
+}
+	</script>
+	
+	<script id="f" type="text/f">
+varying highp vec2 vTextureCoord;
+uniform sampler2D uSampler;
+void main(void) {
+    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+}    
+	</script>
 </head>
 <body>
 <div style="position: absolute; left:30px; top:30px; width: 512px; height: 512px; border: 3px solid #eeeeee;">    
@@ -51,62 +70,13 @@
         cv.parentNode.style.width = width + "px";
         cv.parentNode.style.height = height + "px";
         var gl = cv.getContext("webgl");
-        
-        var vertexShaderSource =    "" +
-                                    "attribute vec3 aVertexPosition;\n" +
-                                    "attribute vec3 aPosition;\n" +
-                                    "attribute vec3 aScale;\n" +
-                                    "attribute vec3 aRotation;\n" +
-                                    "attribute vec2 aUV;\n" +
-                                    "varying vec2 vUV;\n" + 
-                                    "varying vec3 vColor;\n" +
-                                    "" +
-                                    "mat4 positionMTX(vec3 p){\n" +
-                                    "   return mat4(1,0,0,0,  0,1,0,0,  0,0,1,0,  p[0],p[1],p[2],1);\n" +
-                                    "}\n" +
-                                    "mat4 scaleMTX(vec3 sc){\n" +
-                                    "   return mat4(sc[0],0,0,0,  0,sc[1],0,0,  0,0,sc[2],0,  0,0,0,1);\n" +
-                                    "}\n" +
-                                    "mat4 rotationMTX(vec3 r){\n" +
-                                    "   float s, c;\n" +
-                                    "   s = sin(r[0]), c = cos(r[0]);\n" +
-                                    "   mat4 mx = mat4(1,0,0,0,  0,c,-s,0,  0,s,c,0,  0,0,0,1);\n" +
-                                    "   s = sin(r[1]), c = cos(r[1]);\n" +
-                                    "   mat4 my = mat4(c,0,-s,0,  0,1,0,0,  s,0,c,0,  0,0,0,1);\n" +
-                                    "   s = sin(r[2]), c = cos(r[2]);\n" +
-                                    "   mat4 mz = mat4(c,-s,0,0,  s,c,0,0,  0,0,1,0,  0,0,0,1);\n" +
-                                    "   return mx*my*mz;\n" +
-                                    "}\n" +
-                                    "" +
-                                    "void main(void){\n" +
-                                    "   vColor = aPosition;\n" +
-                                    "   vUV = aUV;\n" +
-                                    "   gl_Position = vec4(aVertexPosition, 1.0);\n" +
-                                    // "   gl_Position = positionMTX(aPosition)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
-                                    // "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
-                                    "   gl_PointSize = 2.0;\n" +
-                                    "" +
-                                    "}";
-
-        var fragmentShaderSource =  "" +
-                                    "precision lowp float;\n" +
-                                    "uniform sampler2D uSampler;\n" +
-                                    "varying vec3 vColor;\n" +
-                                    "varying vec2 vUV;\n" + 
-                                    "void main(void){\n" +
-                                    "" +
-                                    // "   gl_FragColor = vec4(vColor, 1.0);\n" +
-                                    // "   gl_FragColor = vec4(1, 0, 0, 1.0);\n" +
-                                    "   gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));" +
-                                    "" +
-                                    "}\n";
-        
+                
         var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vertexShader, vertexShaderSource);
+        gl.shaderSource(vertexShader, document.getElementById("v").text);
         gl.compileShader(vertexShader);
         
         var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(fragmentShader, fragmentShaderSource);
+        gl.shaderSource(fragmentShader, document.getElementById("f").text);
         gl.compileShader(fragmentShader);
         
         var program = gl.createProgram();
@@ -117,36 +87,29 @@
         
         program.aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
         gl.enableVertexAttribArray(program.aVertexPosition);
-        program.aPosition = gl.getAttribLocation(program, "aPosition");
-        gl.enableVertexAttribArray(program.aPosition);
-        program.aScale = gl.getAttribLocation(program, "aScale");
-        gl.enableVertexAttribArray(program.aScale);
-        program.aRotation = gl.getAttribLocation(program, "aRotation");
-        gl.enableVertexAttribArray(program.aRotation);                
+        program.aTextureCoord = gl.getAttribLocation(program, "aTextureCoord");
+        gl.enableVertexAttribArray(program.aTextureCoord);
         
-        program.aUV = gl.getAttribLocation(program, "aUV");
-        gl.enableVertexAttribArray(program.aUV);        
-        
+        program.uPMatrix = gl.getUniformLocation(program, "uPMatrix");
+        gl.enableVertexAttribArray(program.aTextureCoord);       
+        program.uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
+        gl.enableVertexAttribArray(program.aTextureCoord);                      
         program.uSampler = gl.getUniformLocation(program, "uSampler");                       
                        
         gl.viewport(0,0, width, height);
         
         var vertex_data = [];       
         var index_data = [];
-        var position_data = [];
-        var scale_data = [];
-        var rotation_data = [];
         var uv_data = [];
         
-        vertex_data.push(0.0016666667070239782,0.5024999976158142,0.3316666781902313,0.5024999976158142,0.3316666781902313,0.9975000023841858,0.0016666667070239782,0.9975000023841858,0.33500000834465027,0.5024999976158142,0.6650000214576721,0.5024999976158142,0.6650000214576721,0.9975000023841858,0.33500000834465027,0.9975000023841858,0.6683333516120911,0.5024999976158142,0.9983333349227905,0.5024999976158142,0.9983333349227905,0.9975000023841858,0.6683333516120911,0.9975000023841858,0.0016666667070239782,0.0024999999441206455,0.3316666781902313,0.0024999999441206455,0.3316666781902313,0.4975000023841858,0.0016666667070239782,0.4975000023841858,0.33500000834465027,0.0024999999441206455,0.6650000214576721,0.0024999999441206455,0.6650000214576721,0.4975000023841858,0.33500000834465027,0.4975000023841858,0.6683333516120911,0.0024999999441206455,0.9983333349227905,0.0024999999441206455,0.9983333349227905,0.4975000023841858,0.6683333516120911,0.4975000023841858);
+        var p_data = [0.8021504282951355, 0, 0, 0, 0, 1.4281480312347412, 0, 0, 0, 0, -1.0020020008087158, -1, 0, 0, -0.20020020008087158, 0];
+        var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
+        
+        uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
         index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
-        uv_data.push(1,1, 1,0, 0,1, 0,0);
-        for(var i = 0; i < 4; i++){
-            rotation_data.push(0, 0, 0);
-            position_data.push(0, 0, 0);
-            scale_data.push(1, 1, 1);            
-        }
-
+        vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
+        
+        
 
         var cubeTexture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
@@ -159,31 +122,19 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertex_data), gl.STATIC_DRAW);
         gl.vertexAttribPointer(program.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
-        
-        var positionBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(position_data), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(program.aPosition, 3, gl.FLOAT, false, 0, 0);
-        
-        var scaleBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
-        gl.bindBuffer(gl.ARRAY_BUFFER, scaleBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(scale_data), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(program.aScale, 3, gl.FLOAT, false, 0, 0);
-        
+               
         var uvBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv_data), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(program.aUV, 2, gl.FLOAT, false, 0, 0);
-        
-        var roatationBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(program.aRotation, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(program.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
         
         var indexBuffer = gl.createBuffer(gl.ELEMENT_ARRAY_BUFFER);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
         
+        
+        gl.uniformMatrix4fv(program.uPMatrix, false, p_data);
+        gl.uniformMatrix4fv(program.uMVMatrix, false, mv_data);
         gl.uniform1i(program.uSampler, 0);
         
         // gl.enable(gl.DEPTH_TEST); 
@@ -198,9 +149,9 @@
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);    
                                         
-            gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
         }
         
-    })(this, 250, 400);
+    })(this, 400, 300);
 </script>
 </html>
