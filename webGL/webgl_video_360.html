@@ -31,9 +31,14 @@ void main(void) {
 	<script id="f" type="text/f">
 varying highp vec2 vTextureCoord;
 uniform sampler2D uSampler;
+uniform lowp vec4 uColor;
 void main(void) {
-    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-}    
+    if(uColor[0] > 1.0){
+        gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    }else{
+        gl_FragColor = uColor;
+    }
+}
 	</script>
 </head>
 <body>
@@ -91,9 +96,8 @@ void main(void) {
         gl.enableVertexAttribArray(program.aTextureCoord);
         
         program.uPMatrix = gl.getUniformLocation(program, "uPMatrix");
-        gl.enableVertexAttribArray(program.aTextureCoord);       
         program.uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
-        gl.enableVertexAttribArray(program.aTextureCoord);                      
+        program.uColor = gl.getUniformLocation(program, "uColor");
         program.uSampler = gl.getUniformLocation(program, "uSampler");                       
                        
         gl.viewport(0,0, width, height);
@@ -147,9 +151,12 @@ void main(void) {
                         
             gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);    
-                                        
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);
+            
+            gl.uniform4fv(program.uColor, [3.0, 3.0, 3.0, 1.0]);                     
             gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+            gl.uniform4fv(program.uColor, [1.0, 1.0, 0.0, 1.0]);
+            gl.drawElements(gl.LINES, 36, gl.UNSIGNED_SHORT, 0);
         }
         
     })(this, 400, 300);

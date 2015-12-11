@@ -2188,6 +2188,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer4.pMatrixUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uPMatrix');
         this.$VideoSphericalRenderer4.mvMatrixUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uMVMatrix');
         this.$VideoSphericalRenderer4.samplerUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uSampler');
+        this.$VideoSphericalRenderer4.uFlag = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uFlag');
         return true;
     };
     n.prototype.$VideoSphericalRenderer22 = function() {
@@ -2321,7 +2322,12 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
     n.prototype.$VideoSphericalRenderer23 = function() {
         'use strict';
         var o = this.$VideoSphericalRenderer1.createShader(this.$VideoSphericalRenderer1.VERTEX_SHADER),
-            p = '\n      attribute vec3 aVertexPosition;\n      attribute vec2 aTextureCoord;\n\n      uniform mat4 uMVMatrix;\n      uniform mat4 uPMatrix;\n\n      varying highp vec2 vTextureCoord;\n\n      void main(void) {\n        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n        vTextureCoord = aTextureCoord;\n      }\n    ';
+            p = '\n      attribute vec3 aVertexPosition;\n      attribute vec2 aTextureCoord;\n\n      uniform mat4 uMVMatrix;\n      uniform mat4 uPMatrix;\n\n'+
+            'varying highp vec2 vTextureCoord;\n\n'+
+            'void main(void) {\n'+
+            '   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n'+
+            '   vTextureCoord = aTextureCoord;\n'+
+            '}\n    ';
         this.$VideoSphericalRenderer1.shaderSource(o, p);
         this.$VideoSphericalRenderer1.compileShader(o);
         if (!this.$VideoSphericalRenderer1.getShaderParameter(o, this.$VideoSphericalRenderer1.COMPILE_STATUS)) return null;
@@ -2330,7 +2336,18 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
     n.prototype.$VideoSphericalRenderer24 = function() {
         'use strict';
         var o = this.$VideoSphericalRenderer1.createShader(this.$VideoSphericalRenderer1.FRAGMENT_SHADER),
-            p = '\n      varying highp vec2 vTextureCoord;\n\n      uniform sampler2D uSampler;\n\n      void main(void) {\n        gl_FragColor = texture2D(\n          uSampler,\n          vec2(vTextureCoord.s, vTextureCoord.t)\n        );\n      }\n    ';
+            p = "" +
+"varying highp vec2 vTextureCoord;\n"+
+"uniform sampler2D uSampler;\n"+
+"uniform lowp vec2 uFlag;\n"+
+"void main(void) {\n"+
+"   if(uFlag[0] > 0.0){\n"+
+"       gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"+
+"   }else{\n"+
+"       gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n"+
+"   }\n"+
+"}";
+            
         this.$VideoSphericalRenderer1.shaderSource(o, p);
         this.$VideoSphericalRenderer1.compileShader(o);
         if (!this.$VideoSphericalRenderer1.getShaderParameter(o, this.$VideoSphericalRenderer1.COMPILE_STATUS)) return null;
@@ -2349,7 +2366,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
     };
     n.prototype.render = function(o, p) {
         'use strict';
-        console.log(o, p);
+        // console.log(o, p);
         if (this.$VideoSphericalRenderer11) return;
         if (this.$VideoSphericalRenderer6) this.$VideoSphericalRenderer25();
         l.identity(this.$VideoSphericalRenderer10);
@@ -2369,7 +2386,10 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
 		// console.log(this.$VideoSphericalRenderer10);
         this.$VideoSphericalRenderer1.uniformMatrix4fv(this.$VideoSphericalRenderer4.pMatrixUniform, false, this.$VideoSphericalRenderer9);
         this.$VideoSphericalRenderer1.uniformMatrix4fv(this.$VideoSphericalRenderer4.mvMatrixUniform, false, this.$VideoSphericalRenderer10);
+        this.$VideoSphericalRenderer1.uniform2fv(this.$VideoSphericalRenderer4.uFlag, [0.0, 0.0]);
         this.$VideoSphericalRenderer1.drawElements(this.$VideoSphericalRenderer1.TRIANGLES, this.$VideoSphericalRenderer14.numItems, this.$VideoSphericalRenderer1.UNSIGNED_SHORT, 0);
+        this.$VideoSphericalRenderer1.uniform2fv(this.$VideoSphericalRenderer4.uFlag, [1.0, 0.0]);
+        this.$VideoSphericalRenderer1.drawArrays(this.$VideoSphericalRenderer1.LINE_LOOP, 0, 24);
         this.$VideoSphericalRenderer1.bindTexture(this.$VideoSphericalRenderer1.TEXTURE_2D, null);
     };
     f.exports = n;

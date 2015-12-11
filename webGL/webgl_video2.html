@@ -37,6 +37,7 @@
         function startVideo(){
             start();
             intervalID = setInterval(start, 64);
+            vd.volume = 0;
             vd.play();
         }
         
@@ -57,9 +58,12 @@
                                     "attribute vec3 aPosition;\n" +
                                     "attribute vec3 aScale;\n" +
                                     "attribute vec3 aRotation;\n" +
+                                    "attribute vec3 aColor;\n" +
+                                    "attribute vec3 aLine;\n" +
                                     "attribute vec2 aUV;\n" +
                                     "varying vec2 vUV;\n" + 
                                     "varying vec3 vColor;\n" +
+                                    "varying vec3 vLine;\n" +
                                     "" +
                                     "mat4 positionMTX(vec3 p){\n" +
                                     "   return mat4(1,0,0,0,  0,1,0,0,  0,0,1,0,  p[0],p[1],p[2],1);\n" +
@@ -79,11 +83,13 @@
                                     "}\n" +
                                     "" +
                                     "void main(void){\n" +
-                                    "   vColor = aPosition;\n" +
+                                    // "   vColor = aPosition;\n" +
+                                    "   vColor = aColor;\n" +
+                                    "   vLine = aLine;\n" +
                                     "   vUV = aUV;\n" +
-                                    "   gl_Position = vec4(aVertexPosition, 1.0);\n" +
+                                    // "   gl_Position = vec4(aVertexPosition, 1.0);\n" +
                                     // "   gl_Position = positionMTX(aPosition)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
-                                    // "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
+                                    "   gl_Position = positionMTX(aPosition)*rotationMTX(aRotation)*scaleMTX(aScale)*vec4(aVertexPosition, 1.0);\n" +
                                     "   gl_PointSize = 2.0;\n" +
                                     "" +
                                     "}";
@@ -92,12 +98,20 @@
                                     "precision lowp float;\n" +
                                     "uniform sampler2D uSampler;\n" +
                                     "varying vec3 vColor;\n" +
+                                    "varying vec3 vLine;\n" +
                                     "varying vec2 vUV;\n" + 
+                                    "uniform vec2 uFlag;\n" + 
                                     "void main(void){\n" +
                                     "" +
+                                    "   if(uFlag[0] > 0.5){\n" +
+                                    "       gl_FragColor = vec4(vLine, 1.0);\n" +
+                                    "   }else{\n" +
+                                    // "       gl_FragColor = vec4(vColor, 1.0);\n" +
+                                    "      gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));" +
+                                    "   }\n" +
                                     // "   gl_FragColor = vec4(vColor, 1.0);\n" +
                                     // "   gl_FragColor = vec4(1, 0, 0, 1.0);\n" +
-                                    "   gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));" +
+                                    // "   gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));" +
                                     "" +
                                     "}\n";
         
@@ -122,11 +136,15 @@
         program.aScale = gl.getAttribLocation(program, "aScale");
         gl.enableVertexAttribArray(program.aScale);
         program.aRotation = gl.getAttribLocation(program, "aRotation");
-        gl.enableVertexAttribArray(program.aRotation);                
-        
+        gl.enableVertexAttribArray(program.aRotation);
+        program.aColor = gl.getAttribLocation(program, "aColor");
+        gl.enableVertexAttribArray(program.aColor);
+        program.aLine = gl.getAttribLocation(program, "aLine");
+        gl.enableVertexAttribArray(program.aLine);             
         program.aUV = gl.getAttribLocation(program, "aUV");
-        gl.enableVertexAttribArray(program.aUV);        
+        gl.enableVertexAttribArray(program.aUV);
         
+        program.uFlag = gl.getUniformLocation(program, "uFlag");        
         program.uSampler = gl.getUniformLocation(program, "uSampler");                       
                        
         gl.viewport(0,0, width, height);
@@ -137,14 +155,18 @@
         var scale_data = [];
         var rotation_data = [];
         var uv_data = [];
+        var color_data = [];
+        var line_color_data = [];
         
-        vertex_data.push(0.0016666667070239782,0.5024999976158142,0.3316666781902313,0.5024999976158142,0.3316666781902313,0.9975000023841858,0.0016666667070239782,0.9975000023841858,0.33500000834465027,0.5024999976158142,0.6650000214576721,0.5024999976158142,0.6650000214576721,0.9975000023841858,0.33500000834465027,0.9975000023841858,0.6683333516120911,0.5024999976158142,0.9983333349227905,0.5024999976158142,0.9983333349227905,0.9975000023841858,0.6683333516120911,0.9975000023841858,0.0016666667070239782,0.0024999999441206455,0.3316666781902313,0.0024999999441206455,0.3316666781902313,0.4975000023841858,0.0016666667070239782,0.4975000023841858,0.33500000834465027,0.0024999999441206455,0.6650000214576721,0.0024999999441206455,0.6650000214576721,0.4975000023841858,0.33500000834465027,0.4975000023841858,0.6683333516120911,0.0024999999441206455,0.9983333349227905,0.0024999999441206455,0.9983333349227905,0.4975000023841858,0.6683333516120911,0.4975000023841858);
+        uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
         index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
-        uv_data.push(1,1, 1,0, 0,1, 0,0);
-        for(var i = 0; i < 4; i++){
+        vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);        
+        for(var i = 0; i < 24; i++){
             rotation_data.push(0, 0, 0);
-            position_data.push(0, 0, 0);
-            scale_data.push(1, 1, 1);            
+            position_data.push(0, 0, 0.5);
+            scale_data.push(1, 1, 1);
+            color_data.push(0.7, 0.7, 0.7);
+            line_color_data.push(0.0, 0.0, 1.0);
         }
 
 
@@ -175,32 +197,57 @@
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv_data), gl.STATIC_DRAW);
         gl.vertexAttribPointer(program.aUV, 2, gl.FLOAT, false, 0, 0);
         
+        var colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(color_data), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(program.aColor, 3, gl.FLOAT, false, 0, 0);
+        
+        var lineBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, lineBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(line_color_data), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(program.aLine, 3, gl.FLOAT, false, 0, 0);
+        
         var roatationBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, roatationBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);
         gl.vertexAttribPointer(program.aRotation, 3, gl.FLOAT, false, 0, 0);
-        
+                
         var indexBuffer = gl.createBuffer(gl.ELEMENT_ARRAY_BUFFER);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
         
-        gl.uniform1i(program.uSampler, 0);
+        gl.uniform1i(program.uSampler, 0);        
         
-        // gl.enable(gl.DEPTH_TEST); 
-        // gl.depthFunc(gl.LESS);
+        gl.enable(gl.DEPTH_TEST); 
+        gl.depthFunc(gl.LESS);
   
                 
         function start(){
             gl.clearColor(1, 1, 1, 1);  
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-                        
+
             gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);    
-                                        
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);
+            
+            for(var j = 1, len = rotation_data.length; j < len; j+=3){
+                rotation_data[j] += 0.01;
+                // rotation_data[j+1] += 0.01;
+            }
+            
+            // for(var j = 0, len = rotation_data.length; j < len; j++){
+            //     rotation_data[j] += 0.01;
+            // }
+
+            
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rotation_data), gl.STATIC_DRAW);
+
+            gl.uniform2fv(program.uFlag, [0.0, 0.0]);
             gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+            gl.uniform2fv(program.uFlag, [1.0, 0.0]);
+            gl.drawArrays(gl.LINE_LOOP, 0, 24);
         }
         
-    })(this, 400, 300);
+    })(this, 512, 512);
 </script>
 </html>
