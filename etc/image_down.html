@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+	function _loaded() {
+		var images = document.getElementsByTagName("img");
+		var ilen = images.length;
+
+//		var fName = prompt("파일이름 입력 하세요(저장용 다른이름)");
+
+		var aNode = document.getElementById("a00");
+
+		for ( var i = 0; i < ilen; i++) {
+			aNode.href = images[i].src;
+// 			if (i < 10) {
+// 				aNode.download = fName + "0" + i;
+// 			} else {
+// 				aNode.download = fName + i;
+// 			}
+			aNode.click();
+		}
+	}
+</script>
+<body onload="_loaded()">
+
+	<a id="a00" href="#" download="a"></a>
+	<div class="document_321440_4 xe_content">
+
+		<!-- =======================================  이 사이에 넣으면 됨   ============================================================ -->
+
+
+
+
+
+
+		<!-- =======================================  이 사이에 넣으면 됨   ============================================================ -->
+
+	</div>
+</body>
+</html>

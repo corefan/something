@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>clip board</title>
+	<script>
+		function _loaded(){
+			var inputDiv = document.getElementById("inp");
+			inputDiv.addEventListener("copy", _copy);
+			inputDiv.addEventListener("cut", _cut);
+			inputDiv.addEventListener("paste", _paste);
+		}
+		
+		function _cut(e){
+			e.preventDefault();
+			e.stopPropagation();			
+		}
+		
+		function _copy(e){
+			e.preventDefault();
+			e.stopPropagation();				
+			var str = window.getSelection().toString();
+			
+			e.clipboardData.setData('text/plain', str + ' suck');
+			// e.clipboardData.setData('text/html', '<b>wow!!</b>');
+		}		
+		
+		function _paste(e){
+			// e.preventDefault();
+			// e.stopPropagation();
+			
+			// console.log('text', e.clipboardData.getData('text/plain'));
+			// console.log('html', e.clipboardData.getData('text/html'));
+		}				
+	</script>
+</head>
+<body onload="_loaded()">
+	<div id="inp" contenteditable="true" style="position:absolute; width:500px; height:500px; border:1px solid skyblue;">
+		
+	</div>
+</body>
+</html>

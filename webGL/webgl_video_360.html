@@ -13,7 +13,7 @@
     </style>
     <script>
         function _click(){
-            _vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
+            vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
         }        
     </script>
     <script id="v" type="text/v">
@@ -54,9 +54,10 @@ void main(void) {
     (function(win, width, height){
         var intervalID;
         // var vd = document.getElementById("video");
-        var vd = window._vd = document.createElement("video");
+        var vd = document.createElement("video");
         vd.addEventListener("canplaythrough", startVideo, false);
         vd.addEventListener("ended", endVideo , false);
+        vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
         
         function startVideo(){
             start();
@@ -159,6 +160,6 @@ void main(void) {
             gl.drawElements(gl.LINES, 36, gl.UNSIGNED_SHORT, 0);
         }
         
-    })(this, 400, 300);
+    })(this, 512, 512);
 </script>
 </html>

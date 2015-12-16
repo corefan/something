@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>webgl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+<script src="./glMatrix/gl-matrix.js"></script>
+<script id="v" type="text/v">
+attribute vec3 aVertexPosition;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+void main(void){
+    gl_Position = uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0);
+}
+</script>
+<script id="f" type="text/f">
+void main(void){
+    gl_FragColor = vec4(1.0, 0, 0, 1.0);
+}
+</script>
+</head>
+<body>
+<div style="position: absolute; left:30px; top:50px; width: 512px; height: 512px; border: 3px solid #eeeeee;">
+	<canvas id="gl_canvas" width="512" height="512">
+	</canvas>
+</div>
+</body>
+<script>
+    (function(win, w, h){
+        var cv = document.getElementById("gl_canvas");
+        var gl = cv.getContext("webgl");
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, document.getElementById("v").innerText);
+        gl.compileShader(vertexShader);        
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, document.getElementById("f").innerText);
+        gl.compileShader(fragmentShader);
+        
+        var program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+        
+        program.aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
+        gl.enableVertexAttribArray(program.aVertexPosition);
+        
+        program.uPMatrix = gl.getUniformLocation(program, "uPMatrix");
+        program.uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
+        
+        
+        var vertex_data = [];
+        var vertex_index_data = [];
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create();
+        
+        vertex_data.push(-1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, -1.0, 0.0);
+        vertex_index_data.push(0, 1, 2, 1, 2, 3);
+                
+        gl.viewport(0, 0, w, h);
+        gl.enable(gl.DEPTH_TEST);
+        
+        //                  out, fovy, aspect, near, far
+        mat4.perspective(pMatrix, 45, w / h, 0.1, 10000.0);
+        // mat4.translate(mvMatrix, mvMatrix, [0, 0, -5.0]);
+        mat4.fromTranslation(mvMatrix, [0, 0, -5.0]);
+//        mat4.lookAt(mvMatrix, [0,0,1], [0,0,0], [1, 1, Math.sin(30)]);
+        
+        var vertexBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertex_data), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(program.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+        
+        var indexBuffer = gl.createBuffer(gl.ELEMENT_ARRAY_BUFFER);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertex_index_data), gl.STATIC_DRAW);
+        
+        // var count = 1;
+        gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
+        gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);
+        
+        gl.clearColor(1, 1, 1, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT, gl.DEPTH_BUFFER_BIT);
+        
+        gl.drawElements(gl.LINE_LOOP, 6, gl.UNSIGNED_SHORT, 0);
+
+        
+        /*
+        setInterval(function(){
+            // mat4.translate(mvMatrix, mvMatrix, [Math.sin(count / 10), 0, 0]);
+            // count++;
+            gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
+            gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);
+            
+            gl.clearColor(1, 1, 1, 1);
+            gl.clear(gl.COLOR_BUFFER_BIT, gl.DEPTH_BUFFER_BIT);
+            
+            gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+        }, 64);
+        */
+        
+    })(window, 512, 512);
+</script>
+</html>
