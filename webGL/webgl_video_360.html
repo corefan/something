@@ -11,11 +11,7 @@
             height: 100%;
         }
     </style>
-    <script>
-        function _click(){
-            vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
-        }        
-    </script>
+    <script src="./glMatrix/gl-matrix.js"></script>
     <script id="v" type="text/v">
 attribute vec3 aVertexPosition;
 attribute vec2 aTextureCoord;
@@ -43,7 +39,7 @@ void main(void) {
 </head>
 <body>
 <div style="position: absolute; left:30px; top:30px; width: 512px; height: 512px; border: 3px solid #eeeeee;">    
-	<canvas id="gl_canvas" width="512" height="512" onclick="_click()">
+	<canvas id="gl_canvas" width="512" height="512">
 	</canvas>
 </div>
 <!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
@@ -52,12 +48,42 @@ void main(void) {
 </body>
 <script>
     (function(win, width, height){
+        var cv = document.getElementById("gl_canvas");
+        cv.width = width;
+        cv.height = height;
+        cv.parentNode.style.width = width + "px";
+        cv.parentNode.style.height = height + "px";
+        var gl = cv.getContext("webgl");
         var intervalID;
         // var vd = document.getElementById("video");
         var vd = document.createElement("video");
         vd.addEventListener("canplaythrough", startVideo, false);
         vd.addEventListener("ended", endVideo , false);
         vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
+        var is_pushed = false;
+        var mouseX = 0;
+        var mouseY = 0;
+        window.addEventListener("mousedown", function(evt){
+            if(evt.target != cv){
+                return;
+            }
+            is_pushed = true;
+        }, false);
+        window.addEventListener("mouseup", function(evt){
+            if(evt.target != cv){
+                return;
+            }
+            is_pushed = false;
+        }, false);
+        window.addEventListener("mousemove", function(evt){                
+            if(!is_pushed){
+                return;
+            }
+            evt.offsetX = evt.offsetX || evt.pageX - this.offsetLeft;
+            evt.offsetY = evt.offsetY || evt.pageY - this.offsetTop;
+            mouseX = evt.offsetX - width/2;
+            mouseY = evt.offsetY - height/2;
+        }, false);  
         
         function startVideo(){
             start();
@@ -70,12 +96,7 @@ void main(void) {
             // clearInterval(intervalID);
         }
         
-        var cv = document.getElementById("gl_canvas");
-        cv.width = width;
-        cv.height = height;
-        cv.parentNode.style.width = width + "px";
-        cv.parentNode.style.height = height + "px";
-        var gl = cv.getContext("webgl");
+
                 
         var vertexShader = gl.createShader(gl.VERTEX_SHADER);
         gl.shaderSource(vertexShader, document.getElementById("v").text);
@@ -106,13 +127,20 @@ void main(void) {
         var vertex_data = [];       
         var index_data = [];
         var uv_data = [];
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create();
         
-        var p_data = [0.8021504282951355, 0, 0, 0, 0, 1.4281480312347412, 0, 0, 0, 0, -1.0020020008087158, -1, 0, 0, -0.20020020008087158, 0];
-        var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
+        // var p_data = [0.8021504282951355, 0, 0, 0, 0, 1.4281480312347412, 0, 0, 0, 0, -1.0020020008087158, -1, 0, 0, -0.20020020008087158, 0];
+        // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
         
         uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
         index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
         vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
+
+
+        mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
+        // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
+        mat4.fromTranslation(mvMatrix, [0, 0, 0]);
         
         
 
@@ -138,15 +166,20 @@ void main(void) {
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
         
         
-        gl.uniformMatrix4fv(program.uPMatrix, false, p_data);
-        gl.uniformMatrix4fv(program.uMVMatrix, false, mv_data);
+        // gl.uniformMatrix4fv(program.uPMatrix, false, p_data);
+        // gl.uniformMatrix4fv(program.uMVMatrix, false, mv_data);              
         gl.uniform1i(program.uSampler, 0);
+        gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
         
         // gl.enable(gl.DEPTH_TEST); 
         // gl.depthFunc(gl.LESS);
   
                 
         function start(){
+            mat4.lookAt(mvMatrix, [Math.sin(mouseX/90), 0, Math.cos(mouseX/90)], [0, 0, 0], [0, 1, 0]);
+            
+            gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);
+
             gl.clearColor(1, 1, 1, 1);  
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
                         
