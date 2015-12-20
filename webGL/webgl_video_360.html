@@ -9,9 +9,10 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            overflow: hidden;
         }
     </style>
-    <script src="./glMatrix/gl-matrix.js"></script>
+    <script src="./glMatrix/f_gl-matrix.js"></script>
     <script id="v" type="text/v">
 attribute vec3 aVertexPosition;
 attribute vec2 aTextureCoord;
@@ -38,8 +39,8 @@ void main(void) {
 	</script>
 </head>
 <body>
-<div style="position: absolute; left:30px; top:30px; width: 512px; height: 512px; border: 3px solid #eeeeee;">    
-	<canvas id="gl_canvas" width="512" height="512">
+<div style="position: absolute; left:0px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
+	<canvas id="gl_canvas" width="512" height="512" style="cursor:-webkit-grab;">
 	</canvas>
 </div>
 <!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
@@ -59,41 +60,58 @@ void main(void) {
         var vd = document.createElement("video");
         vd.addEventListener("canplaythrough", startVideo, false);
         vd.addEventListener("ended", endVideo , false);
-//        vd.src = "http://172.10.12.61:9090/media/12244877_133753896986094_1384461755_n.mp4";
-        vd.src = "https://video.xx.fbcdn.net/hvideo-xpf1/v/t42.1790-2/12222474_1005092622883718_299255991_n.mp4?efg=eyJ2ZW5jb2RlX3RhZyI6InFmXzY0MHdfY3JmXzIzX21haW5fNC4yX3AxMF9zZCJ9&oh=0068aaf8dde403b3102f641e305ccc7d&oe=5673F1D2";
+        vd.volume = 0.1;
+        vd.src = "./media/north_korea.mp4";
         var is_pushed = false;
-        var mouseX = 0;
-        var mouseY = 0;
-        window.addEventListener("mousedown", function(evt){
+        var mouseXY = {
+            "X" : 0,
+            "Y" : 0,
+            "preX" : 0,
+            "preY" : 0            
+        }
+        var customPlay = {
+            27:vd.pause,
+            32:vd.play
+        };
+        window.addEventListener("keydown", function(evt){
+            customPlay[evt.keyCode] && customPlay[evt.keyCode].call(vd);
+        }, false);
+        window.addEventListener("mousedown", function(evt){            
             if(evt.target != cv){
                 return;
             }
+            mouseXY["preX"] = evt.screenX;
+            mouseXY["preY"] = evt.screenY;
+            cv.style.cursor = "-webkit-grabbing";
             is_pushed = true;
         }, false);
         window.addEventListener("mouseup", function(evt){
-            if(evt.target != cv){
-                return;
-            }
+            cv.style.cursor = "-webkit-grab";
+            is_pushed = false;
+        }, false);
+        cv.addEventListener("mouseleave", function(evt){
+            cv.style.cursor = "-webkit-grab";
             is_pushed = false;
         }, false);
         window.addEventListener("mousemove", function(evt){                
             if(!is_pushed){
                 return;
             }
-            evt.offsetX = evt.offsetX || evt.pageX - this.offsetLeft;
-            evt.offsetY = evt.offsetY || evt.pageY - this.offsetTop;
-            mouseX = evt.offsetX - width/2;
-            mouseY = evt.offsetY - height/2;
+            mouseXY["X"] += (evt.screenX - mouseXY["preX"]) * 0.1;
+            mouseXY["Y"] += (evt.screenY - mouseXY["preY"]) * 0.1;
+            mouseXY["preX"] = evt.screenX;
+            mouseXY["preY"] = evt.screenY;
         }, false);  
         
         function startVideo(){
-            start();
-            intervalID = setInterval(start, 64);
             vd.play();
+            // start();
+            intervalID = setInterval(start, 64);
+            // vd.pause();
         }
         
         function endVideo(){
-            vd.play();
+            // vd.play();
             // clearInterval(intervalID);
         }
         
@@ -129,9 +147,9 @@ void main(void) {
         var index_data = [];
         var uv_data = [];
         var mvMatrix = mat4.create();
-        var pMatrix = mat4.create();
+        var pMatrix = mat4.create2();
         
-        // var p_data = [0.8021504282951355, 0, 0, 0, 0, 1.4281480312347412, 0, 0, 0, 0, -1.0020020008087158, -1, 0, 0, -0.20020020008087158, 0];
+        // var p_data = [0.8021504282951355,0,0,0,  0,1.4281480312347412,0,0,   0,0,-1.0020020008087158,-1,     0,0,-0.20020020008087158,0];
         // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
         
         uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
@@ -139,9 +157,10 @@ void main(void) {
         vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
 
 
-        mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
+        // mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
+        mat4.perspective2(70, width / height, 0.1, 100.0, pMatrix);
         // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
-        mat4.fromTranslation(mvMatrix, [0, 0, 0]);
+        // mat4.fromTranslation(mvMatrix, [0, 0, 0]);
         
         
 
@@ -172,12 +191,30 @@ void main(void) {
         gl.uniform1i(program.uSampler, 0);
         gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
         
-        // gl.enable(gl.DEPTH_TEST); 
-        // gl.depthFunc(gl.LESS);
-  
+        gl.enable(gl.DEPTH_TEST); 
+        gl.depthFunc(gl.LESS);
+         
+        var x = y = 0;
                 
         function start(){
-            mat4.lookAt(mvMatrix, [Math.sin(mouseX/90), 0, Math.cos(mouseX/90)], [0, 0, 0], [0, 1, 0]);
+            // mat4.lookAt(mvMatrix, [Math.sin(mouseXY["X"]/360), 0, Math.cos(mouseXY["X"]/360)], [0, 0, 0], [0, 1, 0]);
+            
+            // console.log(Math.max(-90, Math.min(mouseXY["preX"] - mouseXY["Y"], 90)));
+            x = -mouseXY["X"] * Math.PI / 180;
+            y = Math.max(-90, Math.min(-mouseXY["Y"], 90)) * Math.PI / 180;
+            
+            console.log(x, y);
+            
+            mat4.identity(mvMatrix);
+            // mat4.rotatefY(mvMatrix, x * Math.PI / 180);
+            // mat4.rotatefX(mvMatrix, y * Math.PI / 180);
+            mat4.rotatefX(mvMatrix, y);
+            mat4.rotatefY(mvMatrix, x);
+            
+
+            // mat4.rotatefY(mvMatrix, -mouseXY["X"]/7200);
+            // mat4.rotatefX(mvMatrix, Math.max(-90, (Math.min(mouseXY["Y"], 90))/7200));
+            
             
             gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);
 
@@ -192,8 +229,10 @@ void main(void) {
             gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
             gl.uniform4fv(program.uColor, [1.0, 1.0, 0.0, 1.0]);
             gl.drawElements(gl.LINES, 36, gl.UNSIGNED_SHORT, 0);
+            
+            // requestAnimationFrame(start);
         }
         
-    })(this, 512, 512);
+    })(this, 720, 405);
 </script>
 </html>

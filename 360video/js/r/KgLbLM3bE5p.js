@@ -2096,7 +2096,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer6 = true;
         this.$VideoSphericalRenderer7 = o;
         this.$VideoSphericalRenderer8 = p;
-        this.$VideoSphericalRenderer9 = l.create();
+        this.$VideoSphericalRenderer9 = l.create();                
         this.$VideoSphericalRenderer10 = l.create();
         this.$VideoSphericalRenderer11 = false;
         this.$VideoSphericalRenderer12 = null;
@@ -2130,9 +2130,14 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
     };
     n.prototype.updateViewportDimensions = function(o, p) {
         'use strict';
+        // console.log(o, p);
+        // if(o > 0 && p >0){
+        //     o = 720;
+        //     p = 405;
+        // }
         this.$VideoSphericalRenderer8.width = o * m;
         this.$VideoSphericalRenderer8.height = p * m;
-        l.perspective(this.$VideoSphericalRenderer2.fieldOfView, this.$VideoSphericalRenderer8.width / this.$VideoSphericalRenderer8.height, .1, 100, this.$VideoSphericalRenderer9);
+        l.perspective(this.$VideoSphericalRenderer2.fieldOfView, this.$VideoSphericalRenderer8.width / this.$VideoSphericalRenderer8.height, 0.1, 100, this.$VideoSphericalRenderer9);
         this.$VideoSphericalRenderer1.viewport(0, 0, this.$VideoSphericalRenderer1.drawingBufferWidth, this.$VideoSphericalRenderer1.drawingBufferHeight);
     };
     n.prototype.$VideoSphericalRenderer17 = function() {
@@ -2188,7 +2193,10 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer4.pMatrixUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uPMatrix');
         this.$VideoSphericalRenderer4.mvMatrixUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uMVMatrix');
         this.$VideoSphericalRenderer4.samplerUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uSampler');
-        this.$VideoSphericalRenderer4.uFlag = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uFlag');
+        //pss
+        this.$VideoSphericalRenderer4.uFlag = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uFlag');        
+        this.$VideoSphericalRenderer1.enable(this.$VideoSphericalRenderer1.DEPTH_TEST);
+        this.$VideoSphericalRenderer1.enable(this.$VideoSphericalRenderer1.LESS);
         return true;
     };
     n.prototype.$VideoSphericalRenderer22 = function() {
@@ -2254,7 +2262,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer13.itemSize = 3;
         this.$VideoSphericalRenderer13.numItems = r.length / 3;
         this.$VideoSphericalRenderer14 = this.$VideoSphericalRenderer1.createBuffer();
-        this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ELEMENT_ARRAY_BUFFER, this.$VideoSphericalRenderer14);
+        this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ELEMENT_ARRAY_BUFFER, this.$VideoSphericalRenderer14);        
         this.$VideoSphericalRenderer1.bufferData(this.$VideoSphericalRenderer1.ELEMENT_ARRAY_BUFFER, new Uint16Array(ga), this.$VideoSphericalRenderer1.STATIC_DRAW);
         this.$VideoSphericalRenderer14.itemSize = 1;
         this.$VideoSphericalRenderer14.numItems = ga.length;
@@ -2276,6 +2284,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         }
         this.$VideoSphericalRenderer13 = this.$VideoSphericalRenderer1.createBuffer();
         this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ARRAY_BUFFER, this.$VideoSphericalRenderer13);
+        console.log(s);
         this.$VideoSphericalRenderer1.bufferData(this.$VideoSphericalRenderer1.ARRAY_BUFFER, new Float32Array(s), this.$VideoSphericalRenderer1.STATIC_DRAW);
         // console.log("3 : " + s);
         this.$VideoSphericalRenderer13.itemSize = 3;
@@ -2325,7 +2334,8 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
             p = '\n      attribute vec3 aVertexPosition;\n      attribute vec2 aTextureCoord;\n\n      uniform mat4 uMVMatrix;\n      uniform mat4 uPMatrix;\n\n'+
             'varying highp vec2 vTextureCoord;\n\n'+
             'void main(void) {\n'+
-            '   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n'+
+            // '   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n'+
+            '   gl_Position = uMVMatrix*mat4(0.5,0,0,0, 0,0.5,0,0, 0,0,0.5,0, 0,0,0,1)*vec4(aVertexPosition, 1.0);\n'+
             '   vTextureCoord = aTextureCoord;\n'+
             '}\n    ';
         this.$VideoSphericalRenderer1.shaderSource(o, p);
@@ -2366,10 +2376,13 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
     };
     n.prototype.render = function(o, p) {
         'use strict';
-        // console.log(o, p);
+        // console.log(11, o, p);
         if (this.$VideoSphericalRenderer11) return;
         if (this.$VideoSphericalRenderer6) this.$VideoSphericalRenderer25();
         l.identity(this.$VideoSphericalRenderer10);
+        var xxx = j(p);
+        var yyy = j(o + 90);
+        console.log(xxx, yyy);
         l.rotateX(this.$VideoSphericalRenderer10, j(p));
         l.rotateY(this.$VideoSphericalRenderer10, j(o + 90));
         this.$VideoSphericalRenderer1.clear(this.$VideoSphericalRenderer1.COLOR_BUFFER_BIT | this.$VideoSphericalRenderer1.DEPTH_BUFFER_BIT);
@@ -2383,7 +2396,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer1.vertexAttribPointer(this.$VideoSphericalRenderer4.textureCoordAttribute, this.$VideoSphericalRenderer12.itemSize, this.$VideoSphericalRenderer1.FLOAT, false, 0, 0);
         this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ELEMENT_ARRAY_BUFFER, this.$VideoSphericalRenderer14);
 		// console.log(this.$VideoSphericalRenderer9);
-		// console.log(this.$VideoSphericalRenderer10);
+		// console.log(this.$VideoSphericalRenderer10);       
         this.$VideoSphericalRenderer1.uniformMatrix4fv(this.$VideoSphericalRenderer4.pMatrixUniform, false, this.$VideoSphericalRenderer9);
         this.$VideoSphericalRenderer1.uniformMatrix4fv(this.$VideoSphericalRenderer4.mvMatrixUniform, false, this.$VideoSphericalRenderer10);
         this.$VideoSphericalRenderer1.uniform2fv(this.$VideoSphericalRenderer4.uFlag, [0.0, 0.0]);
@@ -2521,6 +2534,7 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
         if (this.$VideoPlayerHTML5Spherical1.readyState >= this.$VideoPlayerHTML5Spherical1.HAVE_CURRENT_DATA) {
             this.$VideoPlayerHTML5Spherical20++;
             if (this.$VideoPlayerHTML5Spherical33() || this.$VideoPlayerHTML5Spherical34) {
+                
                 this.$VideoPlayerHTML5Spherical30.render(this.$VideoPlayerHTML5Spherical21 - this.$VideoPlayerHTML5Spherical23 + this.$VideoPlayerHTML5Spherical7.yaw, Math.max(-90, Math.min(this.$VideoPlayerHTML5Spherical22 - this.$VideoPlayerHTML5Spherical24 - this.$VideoPlayerHTML5Spherical7.pitch, 90)));
                 this.$VideoPlayerHTML5Spherical34 = false;
             }
@@ -2540,6 +2554,7 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
     };
     ba.prototype.setViewport = function(ca, da) {
         'use strict';
+        // console.log(22, ca, da);
         this.$VideoPlayerHTML5Spherical35();
         this.$VideoPlayerHTML5Spherical21 = ca;
         this.$VideoPlayerHTML5Spherical22 = Math.max(-90, Math.min(90, da));
@@ -2580,10 +2595,17 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
             };
             this.$VideoPlayerHTML5Spherical43 = true;
             var da = this.$VideoPlayerHTML5Spherical44();
-            if (!this.$VideoPlayerHTML5Spherical25.length) this.$VideoPlayerHTML5Spherical23 = (ca.screenX - this.$VideoPlayerHTML5Spherical5.x) * da;
+            if (!this.$VideoPlayerHTML5Spherical25.length)
+                this.$VideoPlayerHTML5Spherical23 = (ca.screenX - this.$VideoPlayerHTML5Spherical5.x) * da;
             this.$VideoPlayerHTML5Spherical24 = (ca.screenY - this.$VideoPlayerHTML5Spherical5.y) * da;
             var ea = this.$VideoPlayerHTML5Spherical22,
                 fa = this.$VideoPlayerHTML5Spherical21;
+                // console.log(121, ea);
+                // console.log("sx", ca.screenX);
+                // console.log(123, this.$VideoPlayerHTML5Spherical23);
+                
+                // console.log(122, ea);               
+                // console.log(124, this.$VideoPlayerHTML5Spherical24);
             this.setViewport(fa, ea);
             this.$VideoPlayerHTML5Spherical6.update(ca.screenX, ca.screenY);
             h.kill(ca);
