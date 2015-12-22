@@ -55,19 +55,22 @@ void main(void) {
         cv.parentNode.style.width = width + "px";
         cv.parentNode.style.height = height + "px";
         var gl = cv.getContext("webgl");
-        var intervalID;
+        var startIntervalID, smoothIntervalID;
         // var vd = document.getElementById("video");
         var vd = document.createElement("video");
         vd.addEventListener("canplaythrough", startVideo, false);
         vd.addEventListener("ended", endVideo , false);
         vd.volume = 0.1;
-        vd.src = "./media/north_korea.mp4";
-        var is_pushed = false;
+        // vd.src = "./media/north_korea.mp4";
+        vd.src = "http://172.10.12.61:9090/media/surfing.mp4";
+        var is_pushed = false, count = 0;
         var mouseXY = {
             "X" : 0,
             "Y" : 0,
             "preX" : 0,
-            "preY" : 0            
+            "preY" : 0,
+            "gapX" : 0,
+            "gapY" : 0
         }
         var customPlay = {
             27:vd.pause,
@@ -84,8 +87,17 @@ void main(void) {
             mouseXY["preY"] = evt.screenY;
             cv.style.cursor = "-webkit-grabbing";
             is_pushed = true;
+            // if(smoothIntervalID != null){
+            //     clearInterval(smoothIntervalID);
+            //     smoothIntervalID = null;
+            // }            
         }, false);
         window.addEventListener("mouseup", function(evt){
+            // if(is_pushed){
+            //     mouseXY["gapX"] = mouseXY["X"];
+            //     mouseXY["gapY"] = mouseXY["Y"];
+            //     smoothIntervalID = setInterval(smooth_rotate, 64);
+            // }
             cv.style.cursor = "-webkit-grab";
             is_pushed = false;
         }, false);
@@ -101,18 +113,38 @@ void main(void) {
             mouseXY["Y"] += (evt.screenY - mouseXY["preY"]) * 0.1;
             mouseXY["preX"] = evt.screenX;
             mouseXY["preY"] = evt.screenY;
-        }, false);  
-        
+        }, false);
+                
+        function smooth_rotate(){
+            console.log(mouseXY["gapX"], mouseXY["gapY"]);
+            mouseXY["X"] += mouseXY["gapX"] * 0.1;
+            mouseXY["Y"] += mouseXY["gapY"] * 0.1; 
+                       
+            mouseXY["gapX"] = mouseXY["gapX"] / 0.5;
+            mouseXY["gapY"] = mouseXY["gapY"] / 0.5;
+            
+            if(count++ > 5){
+                 clearInterval(smoothIntervalID);
+                 smoothIntervalID = null;
+            }
+            
+
+            // mouseXY["X"] += mouseXY["gapX"] * 0.1;
+            // mouseXY["Y"] += mouseXY["gapY"] * 0.1; 
+            
+            // console.log(mouseXY["gapX"], mouseXY["gapY"]);
+            
+        }          
         function startVideo(){
             vd.play();
             // start();
-            intervalID = setInterval(start, 64);
+            startIntervalID = setInterval(start, 64);
             // vd.pause();
         }
         
         function endVideo(){
             // vd.play();
-            // clearInterval(intervalID);
+            clearInterval(startIntervalID);
         }
         
 
@@ -191,8 +223,8 @@ void main(void) {
         gl.uniform1i(program.uSampler, 0);
         gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
         
-        gl.enable(gl.DEPTH_TEST); 
-        gl.depthFunc(gl.LESS);
+        // gl.enable(gl.DEPTH_TEST); 
+        // gl.depthFunc(gl.LESS);
          
         var x = y = 0;
                 
@@ -203,7 +235,7 @@ void main(void) {
             x = -mouseXY["X"] * Math.PI / 180;
             y = Math.max(-90, Math.min(-mouseXY["Y"], 90)) * Math.PI / 180;
             
-            console.log(x, y);
+            // console.log(x, y);
             
             mat4.identity(mvMatrix);
             // mat4.rotatefY(mvMatrix, x * Math.PI / 180);

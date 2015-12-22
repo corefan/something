@@ -2194,9 +2194,9 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer4.mvMatrixUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uMVMatrix');
         this.$VideoSphericalRenderer4.samplerUniform = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uSampler');
         //pss
-        this.$VideoSphericalRenderer4.uFlag = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uFlag');        
-        this.$VideoSphericalRenderer1.enable(this.$VideoSphericalRenderer1.DEPTH_TEST);
-        this.$VideoSphericalRenderer1.enable(this.$VideoSphericalRenderer1.LESS);
+        this.$VideoSphericalRenderer4.uFlag = this.$VideoSphericalRenderer1.getUniformLocation(this.$VideoSphericalRenderer4, 'uFlag');
+        // this.$VideoSphericalRenderer1.enable(this.$VideoSphericalRenderer1.DEPTH_TEST);
+        // this.$VideoSphericalRenderer1.enable(this.$VideoSphericalRenderer1.LESS);
         return true;
     };
     n.prototype.$VideoSphericalRenderer22 = function() {
@@ -2284,9 +2284,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         }
         this.$VideoSphericalRenderer13 = this.$VideoSphericalRenderer1.createBuffer();
         this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ARRAY_BUFFER, this.$VideoSphericalRenderer13);
-        console.log(s);
         this.$VideoSphericalRenderer1.bufferData(this.$VideoSphericalRenderer1.ARRAY_BUFFER, new Float32Array(s), this.$VideoSphericalRenderer1.STATIC_DRAW);
-        // console.log("3 : " + s);
         this.$VideoSphericalRenderer13.itemSize = 3;
         this.$VideoSphericalRenderer13.numItems = s.length / 3;
         var x = [],
@@ -2309,7 +2307,6 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer12 = this.$VideoSphericalRenderer1.createBuffer();
         this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ARRAY_BUFFER, this.$VideoSphericalRenderer12);
         this.$VideoSphericalRenderer1.bufferData(this.$VideoSphericalRenderer1.ARRAY_BUFFER, new Float32Array(x), this.$VideoSphericalRenderer1.STATIC_DRAW);
-        // console.log("2 : " + x);
         this.$VideoSphericalRenderer12.itemSize = 2;
         this.$VideoSphericalRenderer12.numItems = x.length / 2;
         var fa = [];
@@ -2324,7 +2321,6 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         this.$VideoSphericalRenderer14 = this.$VideoSphericalRenderer1.createBuffer();
         this.$VideoSphericalRenderer1.bindBuffer(this.$VideoSphericalRenderer1.ELEMENT_ARRAY_BUFFER, this.$VideoSphericalRenderer14);
         this.$VideoSphericalRenderer1.bufferData(this.$VideoSphericalRenderer1.ELEMENT_ARRAY_BUFFER, new Uint16Array(fa), this.$VideoSphericalRenderer1.STATIC_DRAW);
-        // console.log("1 : " + fa);
         this.$VideoSphericalRenderer14.itemSize = 1;
         this.$VideoSphericalRenderer14.numItems = fa.length;
     };
@@ -2334,8 +2330,8 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
             p = '\n      attribute vec3 aVertexPosition;\n      attribute vec2 aTextureCoord;\n\n      uniform mat4 uMVMatrix;\n      uniform mat4 uPMatrix;\n\n'+
             'varying highp vec2 vTextureCoord;\n\n'+
             'void main(void) {\n'+
-            // '   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n'+
-            '   gl_Position = uMVMatrix*mat4(0.5,0,0,0, 0,0.5,0,0, 0,0,0.5,0, 0,0,0,1)*vec4(aVertexPosition, 1.0);\n'+
+            '   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n'+
+            // '   gl_Position = uMVMatrix*mat4(0.5,0,0,0, 0,0.5,0,0, 0,0,0.5,0, 0,0,0,1)*vec4(aVertexPosition, 1.0);\n'+
             '   vTextureCoord = aTextureCoord;\n'+
             '}\n    ';
         this.$VideoSphericalRenderer1.shaderSource(o, p);
@@ -2380,9 +2376,6 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
         if (this.$VideoSphericalRenderer11) return;
         if (this.$VideoSphericalRenderer6) this.$VideoSphericalRenderer25();
         l.identity(this.$VideoSphericalRenderer10);
-        var xxx = j(p);
-        var yyy = j(o + 90);
-        console.log(xxx, yyy);
         l.rotateX(this.$VideoSphericalRenderer10, j(p));
         l.rotateY(this.$VideoSphericalRenderer10, j(o + 90));
         this.$VideoSphericalRenderer1.clear(this.$VideoSphericalRenderer1.COLOR_BUFFER_BIT | this.$VideoSphericalRenderer1.DEPTH_BUFFER_BIT);
@@ -2735,10 +2728,13 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
         'use strict';
         var ca = this.$VideoPlayerHTML5Spherical37;
         if (!ca || !this.$VideoPlayerHTML5Spherical48) return;
-        var da = ca.update(this.$VideoPlayerHTML5Spherical48.x, this.$VideoPlayerHTML5Spherical48.y),
-            ea = this.$VideoPlayerHTML5Spherical44(),
-            fa = (1000 - da) / 1000 * ca.getVelocityX() * ea,
-            ga = (1000 - da) / 1000 * ca.getVelocityY() * ea;
+        var da, ea, fa, ga;
+        da = ca.update(this.$VideoPlayerHTML5Spherical48.x, this.$VideoPlayerHTML5Spherical48.y);
+            ea = this.$VideoPlayerHTML5Spherical44();
+            // fa = (1000 - da) / 1000 * ca.getVelocityX() * ea;
+            // ga = (1000 - da) / 1000 * ca.getVelocityY() * ea;
+            fa = 0.1 * ca.getVelocityX();
+            ga = 0.1 * ca.getVelocityY();
         this.$VideoPlayerHTML5Spherical32(-fa, -ga);
         if (Math.trunc(fa * 10) || Math.trunc(ga * 10)) u((function() {
             return this.$VideoPlayerHTML5Spherical49();
