@@ -40,7 +40,7 @@ void main(void) {
 </head>
 <body>
 <div style="position: absolute; left:0px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
-	<canvas id="gl_canvas" width="512" height="512" style="cursor:-webkit-grab;">
+	<canvas id="stage" width="512" height="512" style="cursor:-webkit-grab;">
 	</canvas>
 </div>
 <!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
@@ -49,7 +49,7 @@ void main(void) {
 </body>
 <script>
     (function(win, width, height){
-        var cv = document.getElementById("gl_canvas");
+        var cv = document.getElementById("stage");
         cv.width = width;
         cv.height = height;
         cv.parentNode.style.width = width + "px";

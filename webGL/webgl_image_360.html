@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>webgl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+<script src="./glMatrix/f_gl-matrix.js"></script>
+<script id="v" type="text/v">
+attribute vec3 aVertexPosition;
+attribute vec2 aUV;
+varying vec2 vUV;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+void main(void){
+    vUV = aUV;
+    gl_Position = uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0);
+}
+</script>
+<script id="f" type="text/f">
+precision lowp float;
+varying vec2 vUV;
+uniform sampler2D uSampler;
+void main(void){
+    gl_FragColor = texture2D(uSampler, vec2(vUV[0], vUV[1]));
+}
+</script>
+</head>
+<body>
+<div style="position: absolute; left:0px; top:0px; width: 720px; height: 405px; border: 3px solid #eeeeee;">    
+	<canvas id="gl_canvas" width="720" height="405">
+	</canvas>
+</div>
+</body>
+<script>
+    (function(win, w, h){
+        var img = new Image();
+        var is_pushed = false;
+        var mouseX = 0;
+        var mouseY = 0;
+        var is_loaded = false;
+        var model_data;
+                
+        function loaded(){            
+            var cv = document.getElementById("gl_canvas");
+            var gl = cv.getContext("webgl");
+            
+            var mouseXY = {
+                "X" : 0,
+                "Y" : 0,
+                "preX" : 0,
+                "preY" : 0,
+                "gapX" : 0,
+                "gapY" : 0
+            }
+            window.addEventListener("keydown", function(evt){
+                customPlay[evt.keyCode] && customPlay[evt.keyCode].call(vd);
+            }, false);
+            window.addEventListener("mousedown", function(evt){            
+                if(evt.target != cv){
+                    return;
+                }
+                mouseXY["preX"] = evt.screenX;
+                mouseXY["preY"] = evt.screenY;
+                cv.style.cursor = "-webkit-grabbing";
+                is_pushed = true;
+            }, false);
+            window.addEventListener("mouseup", function(evt){
+                cv.style.cursor = "-webkit-grab";
+                is_pushed = false;
+            }, false);
+            cv.addEventListener("mouseleave", function(evt){
+                cv.style.cursor = "-webkit-grab";
+                is_pushed = false;
+            }, false);
+            window.addEventListener("mousemove", function(evt){                
+                if(!is_pushed){
+                    return;
+                }
+                mouseXY["X"] += (evt.screenX - mouseXY["preX"]) * 0.1;
+                mouseXY["Y"] += (evt.screenY - mouseXY["preY"]) * 0.1;
+                mouseXY["preX"] = evt.screenX;
+                mouseXY["preY"] = evt.screenY;
+            }, false);
+            
+            
+            var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vertexShader, document.getElementById("v").innerText);
+            gl.compileShader(vertexShader);        
+            var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fragmentShader, document.getElementById("f").innerText);
+            gl.compileShader(fragmentShader);
+            
+            var program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+            gl.useProgram(program);
+            
+            program.aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
+            gl.enableVertexAttribArray(program.aVertexPosition);
+            program.aUV = gl.getAttribLocation(program, "aUV");
+            gl.enableVertexAttribArray(program.aUV);
+
+            
+            program.uPMatrix = gl.getUniformLocation(program, "uPMatrix");
+            program.uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
+            program.uSampler = gl.getUniformLocation(program, "uSampler");
+                        
+            var mvMatrix = mat4.create();
+            var pMatrix = mat4.create();
+            
+                    
+            gl.viewport(0, 0, w, h);
+            // gl.enable(gl.DEPTH_TEST);
+            
+            //                  out, fovy, aspect, near, far
+            mat4.perspective2(70, w / h, 0.1, 100.0, pMatrix);
+            mat4.rotateX(pMatrix, pMatrix, 3.14);            
+            
+                        
+            var vertexBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model_data["vertices"]), gl.STATIC_DRAW);
+            gl.vertexAttribPointer(program.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+            
+            var uvBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
+            gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model_data["uvs"]), gl.STATIC_DRAW);
+            gl.vertexAttribPointer(program.aUV, 2, gl.FLOAT, false, 0, 0);
+            
+            var indexBuffer = gl.createBuffer(gl.ELEMENT_ARRAY_BUFFER);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(model_data["indices"]), gl.STATIC_DRAW);
+            
+            var texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.uniform1i(program.uSampler, 0);
+            gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);            
+            
+            // gl.enable(gl.BLEND);
+            // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                        
+            setInterval(function (){
+                // console.log((Math.abs(mouseX) + Math.abs(mouseY))*0.05);
+                //              out,    eye,       center,    up
+                // mat4.lookAt(mvMatrix, [-mouseXY["X"], mouseXY["Y"], 0], [0, 0, 0], [0, 0, 1]);
+                
+                x = -mouseXY["X"] * Math.PI / 180;
+                y = Math.max(-80, Math.min(-mouseXY["Y"], 80)) * Math.PI / 180;
+            
+                // console.log(x, y);
+            
+                mat4.identity(mvMatrix);
+                mat4.rotatefX(mvMatrix, y);
+                mat4.rotatefY(mvMatrix, x);
+
+                // gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
+                // mat4.rotateY(mvMatrix, mvMatrix, 0.01);
+                gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);
+                
+                gl.clearColor(0, 0, 0, 1);
+                gl.clear(gl.COLOR_BUFFER_BIT, gl.DEPTH_BUFFER_BIT);
+                
+                gl.drawElements(gl.TRIANGLES, 23400, gl.UNSIGNED_SHORT, 0);
+            }, 64);
+        }        
+        
+        img.onload = function(){
+            if(is_loaded){
+                loaded();
+            }else{
+                is_loaded = true;
+            }
+        };
+        img.src = "./img/06.jpg";
+        
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "./model/sphere.json", true);
+        xmlhttp.onreadystatechange = function(){
+            if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                if(is_loaded){
+                    model_data = JSON.parse(xmlhttp.responseText);
+                    loaded();
+                }else{
+                    is_loaded = true;
+                }
+            }
+        }
+        xmlhttp.send();
+
+    })(window, 720, 405);
+</script>
+</html>
