@@ -11,7 +11,7 @@
             height: 100%;
         }
     </style>
-<script src="./glMatrix/f_gl-matrix.js"></script>
+<script src="./js/glMatrix/f_gl-matrix.js"></script>
 <script id="v" type="text/v">
 attribute vec3 aVertexPosition;
 attribute vec2 aUV;
@@ -156,7 +156,7 @@ void main(void){
                 //              out,    eye,       center,    up
                 // mat4.lookAt(mvMatrix, [-mouseXY["X"], mouseXY["Y"], 0], [0, 0, 0], [0, 0, 1]);
                 
-                x = -mouseXY["X"] * Math.PI / 180;
+                x = mouseXY["X"] * Math.PI / 180;
                 y = Math.max(-80, Math.min(-mouseXY["Y"], 80)) * Math.PI / 180;
             
                 // console.log(x, y);
@@ -186,7 +186,7 @@ void main(void){
         img.src = "./img/06.jpg";
         
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "./model/sphere.json", true);
+        xmlhttp.open("GET", "./json/sphere.json", true);
         xmlhttp.onreadystatechange = function(){
             if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
                 if(is_loaded){

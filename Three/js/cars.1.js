@@ -16059,49 +16059,49 @@ THREE["SceneLoader"]["prototype"] = {
                 _0xf6d8x4d["object"]["target"]["userData"]["targetInverse"] = _0xf6d8x4d["object"];
             };
         };
-        var _0xf6d8x4f = function(ssTemp_050) {
-            _0xf6d8x19 -= ssTemp_050;
+        var _0xf6d8x4f = function(_0xf6d8x50) {
+            _0xf6d8x19 -= _0xf6d8x50;
             _0xf6d8x4a();
             _0xf6d8x5["onLoadComplete"]();
         };
-        var ssTemp_051 = function(ssTemp_050) {
+        var _0xf6d8x51 = function(_0xf6d8x50) {
             return function() {
-                _0xf6d8x4f(ssTemp_050);
+                _0xf6d8x4f(_0xf6d8x50);
             };
         };
 
-        function ssTemp_052(_0xf6d8x31, ssTemp_053) {
-            ssTemp_053(_0xf6d8x31);
+        function _0xf6d8x52(_0xf6d8x31, _0xf6d8x53) {
+            _0xf6d8x53(_0xf6d8x31);
             if (_0xf6d8x31["children"] !== undefined) {
-                for (var ssTemp_054 in _0xf6d8x31["children"]) {
-                    ssTemp_052(_0xf6d8x31["children"][ssTemp_054], ssTemp_053);
+                for (var _0xf6d8x54 in _0xf6d8x31["children"]) {
+                    _0xf6d8x52(_0xf6d8x31["children"][_0xf6d8x54], _0xf6d8x53);
                 };
             };
         };
-        var ssTemp_055, ssTemp_056;
-        for (ssTemp_055 in _0xf6d8x1e["fogs"]) {
-            ssTemp_056 = _0xf6d8x1e["fogs"][ssTemp_055];
-            if (ssTemp_056["type"] === "linear") {
-                _0xf6d8x11 = new THREE.Fog(0x000000, ssTemp_056["near"], ssTemp_056["far"]);
+        var _0xf6d8x55, _0xf6d8x56;
+        for (_0xf6d8x55 in _0xf6d8x1e["fogs"]) {
+            _0xf6d8x56 = _0xf6d8x1e["fogs"][_0xf6d8x55];
+            if (_0xf6d8x56["type"] === "linear") {
+                _0xf6d8x11 = new THREE.Fog(0x000000, _0xf6d8x56["near"], _0xf6d8x56["far"]);
             } else {
-                if (ssTemp_056["type"] === "exp2") {
-                    _0xf6d8x11 = new THREE.FogExp2(0x000000, ssTemp_056["density"]);
+                if (_0xf6d8x56["type"] === "exp2") {
+                    _0xf6d8x11 = new THREE.FogExp2(0x000000, _0xf6d8x56["density"]);
                 };
             };
-            _0xf6d8x14 = ssTemp_056["color"];
+            _0xf6d8x14 = _0xf6d8x56["color"];
             _0xf6d8x11["color"]["setRGB"](_0xf6d8x14[0], _0xf6d8x14[1], _0xf6d8x14[2]);
-            _0xf6d8x1c["fogs"][ssTemp_055] = _0xf6d8x11;
+            _0xf6d8x1c["fogs"][_0xf6d8x55] = _0xf6d8x11;
         };
-        var ssTemp_057, ssTemp_058;
-        for (ssTemp_057 in _0xf6d8x1e["geometries"]) {
-            ssTemp_058 = _0xf6d8x1e["geometries"][ssTemp_057];
-            if (ssTemp_058["type"] in this["geometryHandlers"]) {
+        var _0xf6d8x57, _0xf6d8x58;
+        for (_0xf6d8x57 in _0xf6d8x1e["geometries"]) {
+            _0xf6d8x58 = _0xf6d8x1e["geometries"][_0xf6d8x57];
+            if (_0xf6d8x58["type"] in this["geometryHandlers"]) {
                 _0xf6d8x18 += 1;
                 _0xf6d8x5["onLoadStart"]();
             };
         };
         for (var _0xf6d8x2f in _0xf6d8x1e["objects"]) {
-            ssTemp_052(_0xf6d8x1e["objects"][_0xf6d8x2f], function(_0xf6d8x31) {
+            _0xf6d8x52(_0xf6d8x1e["objects"][_0xf6d8x2f], function(_0xf6d8x31) {
                 if (_0xf6d8x31["type"] && (_0xf6d8x31["type"] in _0xf6d8x5["hierarchyHandlers"])) {
                     _0xf6d8x18 += 1;
                     _0xf6d8x5["onLoadStart"]();
@@ -16109,56 +16109,56 @@ THREE["SceneLoader"]["prototype"] = {
             });
         };
         _0xf6d8x1a = _0xf6d8x18;
-        for (ssTemp_057 in _0xf6d8x1e["geometries"]) {
-            ssTemp_058 = _0xf6d8x1e["geometries"][ssTemp_057];
-            if (ssTemp_058["type"] === "cube") {
-                _0xf6d8xe = new THREE.BoxGeometry(ssTemp_058["width"], ssTemp_058["height"], ssTemp_058["depth"], ssTemp_058["widthSegments"], ssTemp_058["heightSegments"], ssTemp_058["depthSegments"]);
-                _0xf6d8xe["name"] = ssTemp_057;
-                _0xf6d8x1c["geometries"][ssTemp_057] = _0xf6d8xe;
+        for (_0xf6d8x57 in _0xf6d8x1e["geometries"]) {
+            _0xf6d8x58 = _0xf6d8x1e["geometries"][_0xf6d8x57];
+            if (_0xf6d8x58["type"] === "cube") {
+                _0xf6d8xe = new THREE.BoxGeometry(_0xf6d8x58["width"], _0xf6d8x58["height"], _0xf6d8x58["depth"], _0xf6d8x58["widthSegments"], _0xf6d8x58["heightSegments"], _0xf6d8x58["depthSegments"]);
+                _0xf6d8xe["name"] = _0xf6d8x57;
+                _0xf6d8x1c["geometries"][_0xf6d8x57] = _0xf6d8xe;
             } else {
-                if (ssTemp_058["type"] === "plane") {
-                    _0xf6d8xe = new THREE.PlaneGeometry(ssTemp_058["width"], ssTemp_058["height"], ssTemp_058["widthSegments"], ssTemp_058["heightSegments"]);
-                    _0xf6d8xe["name"] = ssTemp_057;
-                    _0xf6d8x1c["geometries"][ssTemp_057] = _0xf6d8xe;
+                if (_0xf6d8x58["type"] === "plane") {
+                    _0xf6d8xe = new THREE.PlaneGeometry(_0xf6d8x58["width"], _0xf6d8x58["height"], _0xf6d8x58["widthSegments"], _0xf6d8x58["heightSegments"]);
+                    _0xf6d8xe["name"] = _0xf6d8x57;
+                    _0xf6d8x1c["geometries"][_0xf6d8x57] = _0xf6d8xe;
                 } else {
-                    if (ssTemp_058["type"] === "sphere") {
-                        _0xf6d8xe = new THREE.SphereGeometry(ssTemp_058["radius"], ssTemp_058["widthSegments"], ssTemp_058["heightSegments"]);
-                        _0xf6d8xe["name"] = ssTemp_057;
-                        _0xf6d8x1c["geometries"][ssTemp_057] = _0xf6d8xe;
+                    if (_0xf6d8x58["type"] === "sphere") {
+                        _0xf6d8xe = new THREE.SphereGeometry(_0xf6d8x58["radius"], _0xf6d8x58["widthSegments"], _0xf6d8x58["heightSegments"]);
+                        _0xf6d8xe["name"] = _0xf6d8x57;
+                        _0xf6d8x1c["geometries"][_0xf6d8x57] = _0xf6d8xe;
                     } else {
-                        if (ssTemp_058["type"] === "cylinder") {
-                            _0xf6d8xe = new THREE.CylinderGeometry(ssTemp_058["topRad"], ssTemp_058["botRad"], ssTemp_058["height"], ssTemp_058["radSegs"], ssTemp_058["heightSegs"]);
-                            _0xf6d8xe["name"] = ssTemp_057;
-                            _0xf6d8x1c["geometries"][ssTemp_057] = _0xf6d8xe;
+                        if (_0xf6d8x58["type"] === "cylinder") {
+                            _0xf6d8xe = new THREE.CylinderGeometry(_0xf6d8x58["topRad"], _0xf6d8x58["botRad"], _0xf6d8x58["height"], _0xf6d8x58["radSegs"], _0xf6d8x58["heightSegs"]);
+                            _0xf6d8xe["name"] = _0xf6d8x57;
+                            _0xf6d8x1c["geometries"][_0xf6d8x57] = _0xf6d8xe;
                         } else {
-                            if (ssTemp_058["type"] === "torus") {
-                                _0xf6d8xe = new THREE.TorusGeometry(ssTemp_058["radius"], ssTemp_058["tube"], ssTemp_058["segmentsR"], ssTemp_058["segmentsT"]);
-                                _0xf6d8xe["name"] = ssTemp_057;
-                                _0xf6d8x1c["geometries"][ssTemp_057] = _0xf6d8xe;
+                            if (_0xf6d8x58["type"] === "torus") {
+                                _0xf6d8xe = new THREE.TorusGeometry(_0xf6d8x58["radius"], _0xf6d8x58["tube"], _0xf6d8x58["segmentsR"], _0xf6d8x58["segmentsT"]);
+                                _0xf6d8xe["name"] = _0xf6d8x57;
+                                _0xf6d8x1c["geometries"][_0xf6d8x57] = _0xf6d8xe;
                             } else {
-                                if (ssTemp_058["type"] === "icosahedron") {
-                                    _0xf6d8xe = new THREE.IcosahedronGeometry(ssTemp_058["radius"], ssTemp_058["subdivisions"]);
-                                    _0xf6d8xe["name"] = ssTemp_057;
-                                    _0xf6d8x1c["geometries"][ssTemp_057] = _0xf6d8xe;
+                                if (_0xf6d8x58["type"] === "icosahedron") {
+                                    _0xf6d8xe = new THREE.IcosahedronGeometry(_0xf6d8x58["radius"], _0xf6d8x58["subdivisions"]);
+                                    _0xf6d8xe["name"] = _0xf6d8x57;
+                                    _0xf6d8x1c["geometries"][_0xf6d8x57] = _0xf6d8xe;
                                 } else {
-                                    if (ssTemp_058["type"] in this["geometryHandlers"]) {
+                                    if (_0xf6d8x58["type"] in this["geometryHandlers"]) {
                                         var _0xf6d8x33 = {};
-                                        for (var _0xf6d8x34 in ssTemp_058) {
+                                        for (var _0xf6d8x34 in _0xf6d8x58) {
                                             if (_0xf6d8x34 !== "type" && _0xf6d8x34 !== "url") {
-                                                _0xf6d8x33[_0xf6d8x34] = ssTemp_058[_0xf6d8x34];
+                                                _0xf6d8x33[_0xf6d8x34] = _0xf6d8x58[_0xf6d8x34];
                                             };
                                         };
-                                        var _0xf6d8x6 = this["geometryHandlers"][ssTemp_058["type"]]["loaderObject"];
-                                        _0xf6d8x6["load"](_0xf6d8x22(ssTemp_058["url"], _0xf6d8x1e["urlBaseType"]), _0xf6d8x46(ssTemp_057), _0xf6d8x33);
+                                        var _0xf6d8x6 = this["geometryHandlers"][_0xf6d8x58["type"]]["loaderObject"];
+                                        _0xf6d8x6["load"](_0xf6d8x22(_0xf6d8x58["url"], _0xf6d8x1e["urlBaseType"]), _0xf6d8x46(_0xf6d8x57), _0xf6d8x33);
                                     } else {
-                                        if (ssTemp_058["type"] === "embedded") {
-                                            var ssTemp_059 = _0xf6d8x1e["embeds"][ssTemp_058["id"]],
-                                                ssTemp_05a = "";
-                                            ssTemp_059["metadata"] = _0xf6d8x1e["metadata"];
-                                            if (ssTemp_059) {
-                                                var ssTemp_05b = this["geometryHandlers"]["ascii"]["loaderObject"];
-                                                var ssTemp_05c = ssTemp_05b["parse"](ssTemp_059, ssTemp_05a);
-                                                _0xf6d8x49(ssTemp_057)(ssTemp_05c["geometry"], ssTemp_05c["materials"]);
+                                        if (_0xf6d8x58["type"] === "embedded") {
+                                            var _0xf6d8x59 = _0xf6d8x1e["embeds"][_0xf6d8x58["id"]],
+                                                _0xf6d8x5a = "";
+                                            _0xf6d8x59["metadata"] = _0xf6d8x1e["metadata"];
+                                            if (_0xf6d8x59) {
+                                                var _0xf6d8x5b = this["geometryHandlers"]["ascii"]["loaderObject"];
+                                                var _0xf6d8x5c = _0xf6d8x5b["parse"](_0xf6d8x59, _0xf6d8x5a);
+                                                _0xf6d8x49(_0xf6d8x57)(_0xf6d8x5c["geometry"], _0xf6d8x5c["materials"]);
                                             };
                                         };
                                     };
@@ -16169,12 +16169,12 @@ THREE["SceneLoader"]["prototype"] = {
                 };
             };
         };
-        var ssTemp_05d, ssTemp_05e;
-        for (ssTemp_05d in _0xf6d8x1e["textures"]) {
-            ssTemp_05e = _0xf6d8x1e["textures"][ssTemp_05d];
-            if (ssTemp_05e["url"] instanceof Array) {
-                _0xf6d8x19 += ssTemp_05e["url"]["length"];
-                for (var ssTemp_05f = 0; ssTemp_05f < ssTemp_05e["url"]["length"]; ssTemp_05f++) {
+        var _0xf6d8x5d, _0xf6d8x5e;
+        for (_0xf6d8x5d in _0xf6d8x1e["textures"]) {
+            _0xf6d8x5e = _0xf6d8x1e["textures"][_0xf6d8x5d];
+            if (_0xf6d8x5e["url"] instanceof Array) {
+                _0xf6d8x19 += _0xf6d8x5e["url"]["length"];
+                for (var _0xf6d8x5f = 0; _0xf6d8x5f < _0xf6d8x5e["url"]["length"]; _0xf6d8x5f++) {
                     _0xf6d8x5["onLoadStart"]();
                 };
             } else {
@@ -16183,28 +16183,28 @@ THREE["SceneLoader"]["prototype"] = {
             };
         };
         _0xf6d8x1b = _0xf6d8x19;
-        for (ssTemp_05d in _0xf6d8x1e["textures"]) {
-            ssTemp_05e = _0xf6d8x1e["textures"][ssTemp_05d];
-            if (ssTemp_05e["mapping"] !== undefined && THREE[ssTemp_05e["mapping"]] !== undefined) {
-                ssTemp_05e["mapping"] = new THREE[ssTemp_05e["mapping"]]();
+        for (_0xf6d8x5d in _0xf6d8x1e["textures"]) {
+            _0xf6d8x5e = _0xf6d8x1e["textures"][_0xf6d8x5d];
+            if (_0xf6d8x5e["mapping"] !== undefined && THREE[_0xf6d8x5e["mapping"]] !== undefined) {
+                _0xf6d8x5e["mapping"] = new THREE[_0xf6d8x5e["mapping"]]();
             };
             var _0xf6d8x12;
-            if (ssTemp_05e["url"] instanceof Array) {
-                var ssTemp_050 = ssTemp_05e["url"]["length"];
+            if (_0xf6d8x5e["url"] instanceof Array) {
+                var _0xf6d8x50 = _0xf6d8x5e["url"]["length"];
                 var _0xf6d8x60 = [];
-                for (var _0xf6d8x36 = 0; _0xf6d8x36 < ssTemp_050; _0xf6d8x36++) {
-                    _0xf6d8x60[_0xf6d8x36] = _0xf6d8x22(ssTemp_05e["url"][_0xf6d8x36], _0xf6d8x1e["urlBaseType"]);
+                for (var _0xf6d8x36 = 0; _0xf6d8x36 < _0xf6d8x50; _0xf6d8x36++) {
+                    _0xf6d8x60[_0xf6d8x36] = _0xf6d8x22(_0xf6d8x5e["url"][_0xf6d8x36], _0xf6d8x1e["urlBaseType"]);
                 };
                 var _0xf6d8x6 = THREE["Loader"]["Handlers"]["get"](_0xf6d8x60[0]);
                 if (_0xf6d8x6 !== null) {
-                    _0xf6d8x12 = _0xf6d8x6["load"](_0xf6d8x60, ssTemp_051(ssTemp_050));
-                    _0xf6d8x12["mapping"] = ssTemp_05e["mapping"];
+                    _0xf6d8x12 = _0xf6d8x6["load"](_0xf6d8x60, _0xf6d8x51(_0xf6d8x50));
+                    _0xf6d8x12["mapping"] = _0xf6d8x5e["mapping"];
                 } else {
-                    _0xf6d8x12 = THREE["ImageUtils"]["loadTextureCube"](_0xf6d8x60, ssTemp_05e["mapping"], ssTemp_051(ssTemp_050));
+                    _0xf6d8x12 = THREE["ImageUtils"]["loadTextureCube"](_0xf6d8x60, _0xf6d8x5e["mapping"], _0xf6d8x51(_0xf6d8x50));
                 };
             } else {
-                var _0xf6d8x61 = _0xf6d8x22(ssTemp_05e["url"], _0xf6d8x1e["urlBaseType"]);
-                var _0xf6d8x62 = ssTemp_051(1);
+                var _0xf6d8x61 = _0xf6d8x22(_0xf6d8x5e["url"], _0xf6d8x1e["urlBaseType"]);
+                var _0xf6d8x62 = _0xf6d8x51(1);
                 var _0xf6d8x6 = THREE["Loader"]["Handlers"]["get"](_0xf6d8x61);
                 if (_0xf6d8x6 !== null) {
                     _0xf6d8x12 = _0xf6d8x6["load"](_0xf6d8x61, _0xf6d8x62);
@@ -16219,42 +16219,42 @@ THREE["SceneLoader"]["prototype"] = {
                         });
                     })(_0xf6d8x12);
                 };
-                _0xf6d8x12["mapping"] = ssTemp_05e["mapping"];
-                if (THREE[ssTemp_05e["minFilter"]] !== undefined) {
-                    _0xf6d8x12["minFilter"] = THREE[ssTemp_05e["minFilter"]];
+                _0xf6d8x12["mapping"] = _0xf6d8x5e["mapping"];
+                if (THREE[_0xf6d8x5e["minFilter"]] !== undefined) {
+                    _0xf6d8x12["minFilter"] = THREE[_0xf6d8x5e["minFilter"]];
                 };
-                if (THREE[ssTemp_05e["magFilter"]] !== undefined) {
-                    _0xf6d8x12["magFilter"] = THREE[ssTemp_05e["magFilter"]];
+                if (THREE[_0xf6d8x5e["magFilter"]] !== undefined) {
+                    _0xf6d8x12["magFilter"] = THREE[_0xf6d8x5e["magFilter"]];
                 };
-                if (ssTemp_05e["anisotropy"]) {
-                    _0xf6d8x12["anisotropy"] = ssTemp_05e["anisotropy"];
+                if (_0xf6d8x5e["anisotropy"]) {
+                    _0xf6d8x12["anisotropy"] = _0xf6d8x5e["anisotropy"];
                 };
-                if (ssTemp_05e["repeat"]) {
-                    _0xf6d8x12["repeat"]["set"](ssTemp_05e["repeat"][0], ssTemp_05e["repeat"][1]);
-                    if (ssTemp_05e["repeat"][0] !== 1) {
+                if (_0xf6d8x5e["repeat"]) {
+                    _0xf6d8x12["repeat"]["set"](_0xf6d8x5e["repeat"][0], _0xf6d8x5e["repeat"][1]);
+                    if (_0xf6d8x5e["repeat"][0] !== 1) {
                         _0xf6d8x12["wrapS"] = THREE["RepeatWrapping"];
                     };
-                    if (ssTemp_05e["repeat"][1] !== 1) {
+                    if (_0xf6d8x5e["repeat"][1] !== 1) {
                         _0xf6d8x12["wrapT"] = THREE["RepeatWrapping"];
                     };
                 };
-                if (ssTemp_05e["offset"]) {
-                    _0xf6d8x12["offset"]["set"](ssTemp_05e["offset"][0], ssTemp_05e["offset"][1]);
+                if (_0xf6d8x5e["offset"]) {
+                    _0xf6d8x12["offset"]["set"](_0xf6d8x5e["offset"][0], _0xf6d8x5e["offset"][1]);
                 };
-                if (ssTemp_05e["wrap"]) {
+                if (_0xf6d8x5e["wrap"]) {
                     var _0xf6d8x64 = {
                         "repeat": THREE["RepeatWrapping"],
                         "mirror": THREE["MirroredRepeatWrapping"]
                     };
-                    if (_0xf6d8x64[ssTemp_05e["wrap"][0]] !== undefined) {
-                        _0xf6d8x12["wrapS"] = _0xf6d8x64[ssTemp_05e["wrap"][0]];
+                    if (_0xf6d8x64[_0xf6d8x5e["wrap"][0]] !== undefined) {
+                        _0xf6d8x12["wrapS"] = _0xf6d8x64[_0xf6d8x5e["wrap"][0]];
                     };
-                    if (_0xf6d8x64[ssTemp_05e["wrap"][1]] !== undefined) {
-                        _0xf6d8x12["wrapT"] = _0xf6d8x64[ssTemp_05e["wrap"][1]];
+                    if (_0xf6d8x64[_0xf6d8x5e["wrap"][1]] !== undefined) {
+                        _0xf6d8x12["wrapT"] = _0xf6d8x64[_0xf6d8x5e["wrap"][1]];
                     };
                 };
             };
-            _0xf6d8x1c["textures"][ssTemp_05d] = _0xf6d8x12;
+            _0xf6d8x1c["textures"][_0xf6d8x5d] = _0xf6d8x12;
         };
         var _0xf6d8x65, _0xf6d8x66;
         var _0xf6d8x67;
@@ -17373,19 +17373,19 @@ THREE["OrbitControls"]["prototype"] = Object["create"](THREE["EventDispatcher"][
                 status: _0xf6d8xc1["QUEUED"]
             });
         };
-        this["addEventListener"] = function(_0xf6d8xc5, ssTemp_053, _0xf6d8xc6) {
+        this["addEventListener"] = function(_0xf6d8xc5, _0xf6d8x53, _0xf6d8xc6) {
             switch (_0xf6d8xc5) {
                 case "load":
                     ;
                 case "complete":
-                    _0xf6d8xc8(ssTemp_053, _0xf6d8xc6);
+                    _0xf6d8xc8(_0xf6d8x53, _0xf6d8xc6);
                     break;;
                 case "progress":
-                    _0xf6d8xc7(ssTemp_053, _0xf6d8xc6);
+                    _0xf6d8xc7(_0xf6d8x53, _0xf6d8xc6);
                     break;;
             };
         };
-        this["removeEventListener"] = function(_0xf6d8xc5, ssTemp_053) {
+        this["removeEventListener"] = function(_0xf6d8xc5, _0xf6d8x53) {
             switch (_0xf6d8xc5) {
                 case "load":
                     ;
@@ -17393,22 +17393,22 @@ THREE["OrbitControls"]["prototype"] = Object["create"](THREE["EventDispatcher"][
                     ;
                 case "complete":
                     _0xf6d8xbe = null;
-                    ssTemp_053 = null;
+                    _0xf6d8x53 = null;
                     break;;
             };
         };
-        var _0xf6d8xc7 = function(ssTemp_053, _0xf6d8xc6) {
+        var _0xf6d8xc7 = function(_0xf6d8x53, _0xf6d8xc6) {
             _0xf6d8xbe["push"]({
-                callback: ssTemp_053,
+                callback: _0xf6d8x53,
                 tags: new _0xf6d8xe8(_0xf6d8xc6)
             });
         };
-        var _0xf6d8xc8 = function(ssTemp_053, _0xf6d8xc6) {
+        var _0xf6d8xc8 = function(_0xf6d8x53, _0xf6d8xc6) {
             _0xf6d8xbe["push"]({
                 tags: new _0xf6d8xe8(_0xf6d8xc6),
                 callback: function(_0xf6d8xc9) {
                     if (_0xf6d8xc9["completedCount"] === _0xf6d8xc9["totalCount"]) {
-                        ssTemp_053(_0xf6d8xc9);
+                        _0xf6d8x53(_0xf6d8xc9);
                     };
                 }
             });
@@ -17845,7 +17845,7 @@ PLUS360DEGREES["Rims"] = function(_0xf6d8x83, _0xf6d8xf9) {
     _0xf6d8x5["add"](_0xf6d8x101);
 };
 PLUS360DEGREES["Rims"]["prototype"] = Object["create"](THREE["Object3D"]["prototype"]);
-PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8, ssTemp_053) {
+PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8, _0xf6d8x53) {
     THREE["Object3D"]["call"](this);
     var _0xf6d8x5 = this;
     _0xf6d8x5["cars"] = [];
@@ -18158,8 +18158,8 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
             PLUS360DEGREES["MeshUtils"]["toggleObject3D"](_0xf6d8x5["cars"][_0xf6d8x36], false);
         };
         PLUS360DEGREES["MeshUtils"]["toggleObject3D"](_0xf6d8x5["cars"][0], true);
-        if (ssTemp_053 && typeof(ssTemp_053) === "function") {
-            ssTemp_053();
+        if (_0xf6d8x53 && typeof(_0xf6d8x53) === "function") {
+            _0xf6d8x53();
         };
         _0xf6d8x6 = null;
         _0xf6d8x5["isLoaded"] = true;
