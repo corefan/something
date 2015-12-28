@@ -210,7 +210,7 @@ void main(void){
         }
         
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "./model/sphere.json", true);
+        xmlhttp.open("GET", "./json/sphere.json", true);
         xmlhttp.onreadystatechange = function(){
             if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
                 if(is_loaded){

@@ -33,9 +33,9 @@ __d("createExponentialMovingAverage", [], function a(b, c, d, e, f, g) {
     }
 
     function j(k) {
-        var l = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1],
-            m = l,
-            n = i(k);
+        var l = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+        var m = l;
+        var n = i(k);
         return function(o, p) {
             return m += n(p) * (o - m);
         };
@@ -2559,7 +2559,7 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
         this.forceUpdateNextFrame();
     };
     ba.prototype.$VideoPlayerHTML5Spherical13 = function(ca) {
-        'use strict';
+        'use strict'; // m_down;
         this.$VideoPlayerHTML5Spherical36 = true;
         this.$VideoPlayerHTML5Spherical37 = null;
         j.addClass(z, "_2a6t");
@@ -2580,7 +2580,7 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
         h.kill(ca);
     };
     ba.prototype.$VideoPlayerHTML5Spherical40 = function(ca) {
-        'use strict';
+        'use strict'; // m_drag
         if (this.$VideoPlayerHTML5Spherical36) {
             this.$VideoPlayerHTML5Spherical4 = {
                 x: ca.clientX,
@@ -2694,7 +2694,7 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
         j.removeClass(z, "_2a6v");
     };
     ba.prototype.$VideoPlayerHTML5Spherical42 = function(ca) {
-        'use strict';
+        'use strict'; // m_up
         if (this.$VideoPlayerHTML5Spherical36) {
             this.$VideoPlayerHTML5Spherical36 = false;
             j.removeClass(z, "_2a6t");

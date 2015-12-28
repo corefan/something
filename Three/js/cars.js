@@ -15348,7 +15348,8 @@ var Stats = function() {
             if (this.load = function() {
                     return d ? (this.sound.load(), this) : this
                 }, this.play = function() {
-                    return d ? (this.sound.play(), this) : this
+                    // return d ? (this.sound.play(), this) : this
+                    return this;
                 }, this.togglePlay = function() {
                     return d ? (this.sound.paused ? this.sound.play() : this.sound.pause(), this) : this
                 }, this.pause = function() {
@@ -15361,7 +15362,8 @@ var Stats = function() {
                     return d ? this.sound.ended : null
                 }, this.loop = function() {
                     return d ? (this.sound.loop = "loop", this.bind("ended.buzzloop", function() {
-                        this.currentTime = 0, this.play()
+                        // this.currentTime = 0, this.play()
+                        this.currentTime = 0;
                     }), this) : this
                 }, this.unloop = function() {
                     return d ? (this.sound.removeAttribute("loop"), this.unbind("ended.buzzloop"), this) : this
@@ -15665,11 +15667,11 @@ THREE["SceneLoader"] = function() {
 THREE["SceneLoader"]["prototype"] = {
     constructor: THREE["SceneLoader"],
     load: function(_0xf6d8x1, _0xf6d8x2, _0xf6d8x3, _0xf6d8x4) {
-        var _0xf6d8x5 = this;
-        var _0xf6d8x6 = new THREE.XHRLoader(_0xf6d8x5["manager"]);
+        var pThis = this;
+        var _0xf6d8x6 = new THREE.XHRLoader(pThis["manager"]);
         _0xf6d8x6["setCrossOrigin"](this["crossOrigin"]);
         _0xf6d8x6["load"](_0xf6d8x1, function(_0xf6d8x7) {
-            _0xf6d8x5["parse"](JSON["parse"](_0xf6d8x7), _0xf6d8x2, _0xf6d8x1);
+            pThis["parse"](JSON["parse"](_0xf6d8x7), _0xf6d8x2, _0xf6d8x1);
         });
     },
     setCrossOrigin: function(_0xf6d8x8) {
@@ -15686,7 +15688,7 @@ THREE["SceneLoader"]["prototype"] = {
         };
     },
     parse: function(_0xf6d8xb, _0xf6d8xc, _0xf6d8x1) {
-        var _0xf6d8x5 = this;
+        var pThis = this;
         var _0xf6d8xd = THREE["Loader"]["prototype"]["extractUrlBase"](_0xf6d8x1);
         var _0xf6d8xe, _0xf6d8xf, camera, _0xf6d8x11, _0xf6d8x12, _0xf6d8x13, _0xf6d8x14, _0xf6d8x15, _0xf6d8x16, _0xf6d8x17, _0xf6d8x18, _0xf6d8x19, _0xf6d8x1a, _0xf6d8x1b, _0xf6d8x1c;
         var _0xf6d8x1d = [];
@@ -15751,7 +15753,7 @@ THREE["SceneLoader"]["prototype"] = {
                 var _0xf6d8x30 = _0xf6d8x1c["objects"][_0xf6d8x2f];
                 var _0xf6d8x31 = _0xf6d8x28[_0xf6d8x2f];
                 if (_0xf6d8x30 === undefined) {
-                    if (_0xf6d8x31["type"] && (_0xf6d8x31["type"] in _0xf6d8x5["hierarchyHandlers"])) {
+                    if (_0xf6d8x31["type"] && (_0xf6d8x31["type"] in pThis["hierarchyHandlers"])) {
                         if (_0xf6d8x31["loading"] === undefined) {
                             var _0xf6d8x32 = {
                                 "type": 1,
@@ -15776,7 +15778,7 @@ THREE["SceneLoader"]["prototype"] = {
                             };
                             _0xf6d8xf = _0xf6d8x1c["materials"][_0xf6d8x31["material"]];
                             _0xf6d8x31["loading"] = true;
-                            var _0xf6d8x6 = _0xf6d8x5["hierarchyHandlers"][_0xf6d8x31["type"]]["loaderObject"];
+                            var _0xf6d8x6 = pThis["hierarchyHandlers"][_0xf6d8x31["type"]]["loaderObject"];
                             if (_0xf6d8x6["options"]) {
                                 _0xf6d8x6["load"](_0xf6d8x22(_0xf6d8x31["url"], _0xf6d8x1e["urlBaseType"]), _0xf6d8x47(_0xf6d8x2f, _0xf6d8x27, _0xf6d8xf, _0xf6d8x31));
                             } else {
@@ -15999,7 +16001,7 @@ THREE["SceneLoader"]["prototype"] = {
                 _0xf6d8x3b["name"] = _0xf6d8x3c;
                 _0xf6d8x3a(_0xf6d8x3b, _0xf6d8x29, _0xf6d8x3c);
                 _0xf6d8x18 -= 1;
-                _0xf6d8x5["onLoadComplete"]();
+                pThis["onLoadComplete"]();
                 _0xf6d8x4a();
             };
         };
@@ -16018,7 +16020,7 @@ THREE["SceneLoader"]["prototype"] = {
                 };
                 _0xf6d8x3d(_0xf6d8x1c, _0xf6d8x3c, _0xf6d8x27, _0xf6d8xf, _0xf6d8x3f);
                 _0xf6d8x18 -= 1;
-                _0xf6d8x5["onLoadComplete"]();
+                pThis["onLoadComplete"]();
                 _0xf6d8x4a();
             };
         };
@@ -16038,8 +16040,8 @@ THREE["SceneLoader"]["prototype"] = {
                 loadedModels: _0xf6d8x1a - _0xf6d8x18,
                 loadedTextures: _0xf6d8x1b - _0xf6d8x19
             };
-            _0xf6d8x5["callbackProgress"](_0xf6d8x4b, _0xf6d8x1c);
-            _0xf6d8x5["onLoadProgress"]();
+            pThis["callbackProgress"](_0xf6d8x4b, _0xf6d8x1c);
+            pThis["onLoadProgress"]();
             if (_0xf6d8x18 === 0 && _0xf6d8x19 === 0) {
                 _0xf6d8x4c();
                 _0xf6d8xc(_0xf6d8x1c);
@@ -16062,7 +16064,7 @@ THREE["SceneLoader"]["prototype"] = {
         var _0xf6d8x4f = function(ssTemp_050) {
             _0xf6d8x19 -= ssTemp_050;
             _0xf6d8x4a();
-            _0xf6d8x5["onLoadComplete"]();
+            pThis["onLoadComplete"]();
         };
         var ssTemp_051 = function(ssTemp_050) {
             return function() {
@@ -16097,14 +16099,14 @@ THREE["SceneLoader"]["prototype"] = {
             ssTemp_058 = _0xf6d8x1e["geometries"][ssTemp_057];
             if (ssTemp_058["type"] in this["geometryHandlers"]) {
                 _0xf6d8x18 += 1;
-                _0xf6d8x5["onLoadStart"]();
+                pThis["onLoadStart"]();
             };
         };
         for (var _0xf6d8x2f in _0xf6d8x1e["objects"]) {
             ssTemp_052(_0xf6d8x1e["objects"][_0xf6d8x2f], function(_0xf6d8x31) {
-                if (_0xf6d8x31["type"] && (_0xf6d8x31["type"] in _0xf6d8x5["hierarchyHandlers"])) {
+                if (_0xf6d8x31["type"] && (_0xf6d8x31["type"] in pThis["hierarchyHandlers"])) {
                     _0xf6d8x18 += 1;
-                    _0xf6d8x5["onLoadStart"]();
+                    pThis["onLoadStart"]();
                 };
             });
         };
@@ -16175,11 +16177,11 @@ THREE["SceneLoader"]["prototype"] = {
             if (ssTemp_05e["url"] instanceof Array) {
                 _0xf6d8x19 += ssTemp_05e["url"]["length"];
                 for (var ssTemp_05f = 0; ssTemp_05f < ssTemp_05e["url"]["length"]; ssTemp_05f++) {
-                    _0xf6d8x5["onLoadStart"]();
+                    pThis["onLoadStart"]();
                 };
             } else {
                 _0xf6d8x19 += 1;
-                _0xf6d8x5["onLoadStart"]();
+                pThis["onLoadStart"]();
             };
         };
         _0xf6d8x1b = _0xf6d8x19;
@@ -16380,7 +16382,7 @@ THREE["SceneLoader"]["prototype"] = {
         if (_0xf6d8x1c["fogs"] && _0xf6d8x1e["defaults"]["fog"]) {
             _0xf6d8x1c["scene"]["fog"] = _0xf6d8x1c["fogs"][_0xf6d8x1e["defaults"]["fog"]];
         };
-        _0xf6d8x5["callbackSync"](_0xf6d8x1c);
+        pThis["callbackSync"](_0xf6d8x1c);
         _0xf6d8x4a();
     }
 };
@@ -16866,7 +16868,7 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
         BOTTOM: 40
     };
     this["deceleration"] = 0.8;
-    var _0xf6d8x5 = this;
+    var pThis = this;
     var _0xf6d8x8b = 0.000001;
     var _0xf6d8x8c = new THREE.Vector2();
     var _0xf6d8x8d = new THREE.Vector2();
@@ -16884,7 +16886,7 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
     var _0xf6d8x21 = 1;
     var _0xf6d8x99 = new THREE.Vector3();
     var _0xf6d8x9a = new THREE.Vector3();
-    var _0xf6d8x9b = {
+    var RotationType = {
         NONE: -1,
         ROTATE: 0,
         DOLLY: 1,
@@ -16893,7 +16895,7 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
         TOUCH_DOLLY: 4,
         TOUCH_PAN: 5
     };
-    var _0xf6d8x9c = _0xf6d8x9b["NONE"];
+    var _0xf6d8x9c = RotationType["NONE"];
     this["light"] = undefined;
     this["target0"] = this["target"]["clone"]();
     this["position0"] = this["object"]["position"]["clone"]();
@@ -16917,21 +16919,21 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
         _0xf6d8x98 -= _0xf6d8xa3;
     };
     this["updateTheta"] = function(_0xf6d8xa3) {
-        if (_0xf6d8x5["autoRotate"] && _0xf6d8xa2) {
-            if (_0xf6d8x5["autoRotateDirection"] == Directions["RIGHT"]) {
+        if (pThis["autoRotate"] && _0xf6d8xa2) {
+            if (pThis["autoRotateDirection"] == Directions["RIGHT"]) {
                 _0xf6d8x98 -= _0xf6d8xa3;
             };
-            if (_0xf6d8x5["autoRotateDirection"] == Directions["LEFT"]) {
+            if (pThis["autoRotateDirection"] == Directions["LEFT"]) {
                 _0xf6d8x98 += _0xf6d8xa3;
             };
         } else {
-            if (_0xf6d8x5["autoRotate"]) {
-                if (_0xf6d8x5["autoRotateDirection"] == Directions["RIGHT"]) {
+            if (pThis["autoRotate"]) {
+                if (pThis["autoRotateDirection"] == Directions["RIGHT"]) {
                     _0xf6d8x98 += _0xf6d8xa3;
                 };
             };
         };
-        if (_0xf6d8x5["autoRotateDirection"] == Directions["LEFT"] || !_0xf6d8x5["autoRotate"]) {
+        if (pThis["autoRotateDirection"] == Directions["LEFT"] || !pThis["autoRotate"]) {
             _0xf6d8x98 += _0xf6d8xa3;
         };
     };
@@ -16942,17 +16944,17 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
         _0xf6d8x97 -= _0xf6d8xa3;
     };
     this["updatePhi"] = function(_0xf6d8xa3, _0xf6d8xa4) {
-        if (_0xf6d8x5["enabledAutoRotatePhi"] && !_0xf6d8xa2) {
-            if (_0xf6d8xa4 < _0xf6d8x5["maxPolarAngle"] - 0.01 && _0xf6d8xa1 == Directions["DOWN"]) {
-                _0xf6d8x97 += (_0xf6d8xa3 * _0xf6d8x5["phiRotationSpeed"]);
+        if (pThis["enabledAutoRotatePhi"] && !_0xf6d8xa2) {
+            if (_0xf6d8xa4 < pThis["maxPolarAngle"] - 0.01 && _0xf6d8xa1 == Directions["DOWN"]) {
+                _0xf6d8x97 += (_0xf6d8xa3 * pThis["phiRotationSpeed"]);
             } else {
-                if (_0xf6d8xa4 > _0xf6d8x5["maxPolarAngle"] - 0.02 && _0xf6d8xa1 == Directions["DOWN"]) {
+                if (_0xf6d8xa4 > pThis["maxPolarAngle"] - 0.02 && _0xf6d8xa1 == Directions["DOWN"]) {
                     _0xf6d8xa1 = Directions["UP"];
                 } else {
-                    if (_0xf6d8xa4 > _0xf6d8x5["minPolarAngle"] + 0.01 && _0xf6d8xa1 == Directions["UP"]) {
-                        _0xf6d8x97 -= (_0xf6d8xa3 * _0xf6d8x5["phiRotationSpeed"]);
+                    if (_0xf6d8xa4 > pThis["minPolarAngle"] + 0.01 && _0xf6d8xa1 == Directions["UP"]) {
+                        _0xf6d8x97 -= (_0xf6d8xa3 * pThis["phiRotationSpeed"]);
                     } else {
-                        if (_0xf6d8xa4 < _0xf6d8x5["minPolarAngle"] + 0.02 && _0xf6d8xa1 == Directions["UP"]) {
+                        if (_0xf6d8xa4 < pThis["minPolarAngle"] + 0.02 && _0xf6d8xa1 == Directions["UP"]) {
                             _0xf6d8xa1 = Directions["DOWN"];
                         };
                     };
@@ -16975,18 +16977,18 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
         _0xf6d8x99["add"](_0xf6d8x92);
     };
     this["pan"] = function(_0xf6d8xa6, _0xf6d8xa7) {
-        var _0xf6d8xa8 = _0xf6d8x5["domElement"] === document ? _0xf6d8x5["domElement"]["body"] : _0xf6d8x5["domElement"];
-        if (_0xf6d8x5["object"]["fov"] !== undefined) {
-            var _0xf6d8x1f = _0xf6d8x5["object"]["position"];
-            var _0xf6d8x93 = _0xf6d8x1f["clone"]()["sub"](_0xf6d8x5["target"]);
+        var _0xf6d8xa8 = pThis["domElement"] === document ? pThis["domElement"]["body"] : pThis["domElement"];
+        if (pThis["object"]["fov"] !== undefined) {
+            var _0xf6d8x1f = pThis["object"]["position"];
+            var _0xf6d8x93 = _0xf6d8x1f["clone"]()["sub"](pThis["target"]);
             var _0xf6d8xa9 = _0xf6d8x93["length"]();
-            _0xf6d8xa9 *= Math["tan"]((_0xf6d8x5["object"]["fov"] / 2) * Math["PI"] / 180.0);
-            _0xf6d8x5["panLeft"](2 * _0xf6d8xa6 * _0xf6d8xa9 / _0xf6d8xa8["clientHeight"]);
-            _0xf6d8x5["panUp"](2 * _0xf6d8xa7 * _0xf6d8xa9 / _0xf6d8xa8["clientHeight"]);
+            _0xf6d8xa9 *= Math["tan"]((pThis["object"]["fov"] / 2) * Math["PI"] / 180.0);
+            pThis["panLeft"](2 * _0xf6d8xa6 * _0xf6d8xa9 / _0xf6d8xa8["clientHeight"]);
+            pThis["panUp"](2 * _0xf6d8xa7 * _0xf6d8xa9 / _0xf6d8xa8["clientHeight"]);
         } else {
-            if (_0xf6d8x5["object"]["top"] !== undefined) {
-                _0xf6d8x5["panLeft"](_0xf6d8xa6 * (_0xf6d8x5["object"]["right"] - _0xf6d8x5["object"]["left"]) / _0xf6d8xa8["clientWidth"]);
-                _0xf6d8x5["panUp"](_0xf6d8xa7 * (_0xf6d8x5["object"]["top"] - _0xf6d8x5["object"]["bottom"]) / _0xf6d8xa8["clientHeight"]);
+            if (pThis["object"]["top"] !== undefined) {
+                pThis["panLeft"](_0xf6d8xa6 * (pThis["object"]["right"] - pThis["object"]["left"]) / _0xf6d8xa8["clientWidth"]);
+                pThis["panUp"](_0xf6d8xa7 * (pThis["object"]["top"] - pThis["object"]["bottom"]) / _0xf6d8xa8["clientHeight"]);
             } else {
                 console["warn"]("WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.");
             };
@@ -17050,88 +17052,88 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
         };
     };
     this["reset"] = function() {
-        _0xf6d8x9c = _0xf6d8x9b["NONE"];
+        _0xf6d8x9c = RotationType["NONE"];
         this["target"]["copy"](this["target0"]);
         this["object"]["position"]["copy"](this["position0"]);
         this["update"]();
     };
 
     function _0xf6d8xad() {
-        return 2 * Math["PI"] / 60 / 60 * _0xf6d8x5["autoRotateSpeed"];
+        return 2 * Math["PI"] / 60 / 60 * pThis["autoRotateSpeed"];
     };
 
     function _0xf6d8xae() {
-        return Math["pow"](0.95, _0xf6d8x5["zoomSpeed"]);
+        return Math["pow"](0.95, pThis["zoomSpeed"]);
     };
 
     function _0xf6d8xaf(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
         _0xf6d8x48["preventDefault"]();
         if (_0xf6d8x48["button"] === 0) {
-            if (_0xf6d8x5["noRotate"] === true) {
+            if (pThis["noRotate"] === true) {
                 return;
             };
-            _0xf6d8x9c = _0xf6d8x9b["ROTATE"];
+            _0xf6d8x9c = RotationType["ROTATE"];
             _0xf6d8x8c["set"](_0xf6d8x48["clientX"], _0xf6d8x48["clientY"]);
         } else {
             if (_0xf6d8x48["button"] === 1) {
-                if (_0xf6d8x5["noZoom"] === true) {
+                if (pThis["noZoom"] === true) {
                     return;
                 };
-                _0xf6d8x9c = _0xf6d8x9b["DOLLY"];
+                _0xf6d8x9c = RotationType["DOLLY"];
                 _0xf6d8x94["set"](_0xf6d8x48["clientX"], _0xf6d8x48["clientY"]);
             } else {
                 if (_0xf6d8x48["button"] === 2) {
-                    if (_0xf6d8x5["noPan"] === true) {
+                    if (pThis["noPan"] === true) {
                         return;
                     };
-                    _0xf6d8x9c = _0xf6d8x9b["PAN"];
+                    _0xf6d8x9c = RotationType["PAN"];
                     _0xf6d8x8f["set"](_0xf6d8x48["clientX"], _0xf6d8x48["clientY"]);
                 };
             };
         };
         _0xf6d8xa2 = true;
-        _0xf6d8x5["dispatchEvent"](_0xf6d8x9f);
+        pThis["dispatchEvent"](_0xf6d8x9f);
     };
 
     function _0xf6d8xb0(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
         _0xf6d8x48["preventDefault"]();
-        var _0xf6d8xa8 = _0xf6d8x5["domElement"] === document ? _0xf6d8x5["domElement"]["body"] : _0xf6d8x5["domElement"];
-        if (_0xf6d8x9c === _0xf6d8x9b["ROTATE"]) {
-            if (_0xf6d8x5["noRotate"] === true) {
+        var _0xf6d8xa8 = pThis["domElement"] === document ? pThis["domElement"]["body"] : pThis["domElement"];
+        if (_0xf6d8x9c === RotationType["ROTATE"]) {
+            if (pThis["noRotate"] === true) {
                 return;
             };
             _0xf6d8x8d["set"](_0xf6d8x48["clientX"], _0xf6d8x48["clientY"]);
             _0xf6d8x8e["subVectors"](_0xf6d8x8d, _0xf6d8x8c);
-            _0xf6d8x5["rotateTheta"](2 * Math["PI"] * _0xf6d8x8e["x"] / _0xf6d8xa8["clientWidth"] * _0xf6d8x5["rotateSpeed"]);
-            _0xf6d8x5["rotatePhi"](2 * Math["PI"] * _0xf6d8x8e["y"] / _0xf6d8xa8["clientHeight"] * _0xf6d8x5["rotateSpeed"]);
+            pThis["rotateTheta"](2 * Math["PI"] * _0xf6d8x8e["x"] / _0xf6d8xa8["clientWidth"] * pThis["rotateSpeed"]);
+            pThis["rotatePhi"](2 * Math["PI"] * _0xf6d8x8e["y"] / _0xf6d8xa8["clientHeight"] * pThis["rotateSpeed"]);
             _0xf6d8x8c["copy"](_0xf6d8x8d);
         } else {
-            if (_0xf6d8x9c === _0xf6d8x9b["DOLLY"]) {
-                if (_0xf6d8x5["noZoom"] === true) {
+            if (_0xf6d8x9c === RotationType["DOLLY"]) {
+                if (pThis["noZoom"] === true) {
                     return;
                 };
                 _0xf6d8x95["set"](_0xf6d8x48["clientX"], _0xf6d8x48["clientY"]);
                 _0xf6d8x96["subVectors"](_0xf6d8x95, _0xf6d8x94);
                 if (_0xf6d8x96["y"] > 0) {
-                    _0xf6d8x5["dollyIn"]();
+                    pThis["dollyIn"]();
                 } else {
-                    _0xf6d8x5["dollyOut"]();
+                    pThis["dollyOut"]();
                 };
                 _0xf6d8x94["copy"](_0xf6d8x95);
             } else {
-                if (_0xf6d8x9c === _0xf6d8x9b["PAN"]) {
-                    if (_0xf6d8x5["noPan"] === true) {
+                if (_0xf6d8x9c === RotationType["PAN"]) {
+                    if (pThis["noPan"] === true) {
                         return;
                     };
                     _0xf6d8x90["set"](_0xf6d8x48["clientX"], _0xf6d8x48["clientY"]);
                     _0xf6d8x91["subVectors"](_0xf6d8x90, _0xf6d8x8f);
-                    _0xf6d8x5["pan"](_0xf6d8x91["x"], _0xf6d8x91["y"]);
+                    pThis["pan"](_0xf6d8x91["x"], _0xf6d8x91["y"]);
                     _0xf6d8x8f["copy"](_0xf6d8x90);
                 };
             };
@@ -17139,16 +17141,16 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
     };
 
     function _0xf6d8xb1(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
-        _0xf6d8x5["dispatchEvent"](_0xf6d8xa0);
-        _0xf6d8x9c = _0xf6d8x9b["NONE"];
+        pThis["dispatchEvent"](_0xf6d8xa0);
+        _0xf6d8x9c = RotationType["NONE"];
         _0xf6d8xa2 = false;
     };
 
     function _0xf6d8xb2(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false || _0xf6d8x5["noZoom"] === true) {
+        if (pThis["enabled"] === false || pThis["noZoom"] === true) {
             return;
         };
         _0xf6d8x48["preventDefault"]();
@@ -17162,100 +17164,100 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
             };
         };
         if (_0xf6d8xb3 > 0) {
-            _0xf6d8x5["dollyOut"]();
+            pThis["dollyOut"]();
         } else {
-            _0xf6d8x5["dollyIn"]();
+            pThis["dollyIn"]();
         };
-        _0xf6d8x5["dispatchEvent"](_0xf6d8x9f);
-        _0xf6d8x5["dispatchEvent"](_0xf6d8xa0);
+        pThis["dispatchEvent"](_0xf6d8x9f);
+        pThis["dispatchEvent"](_0xf6d8xa0);
     };
 
     function _0xf6d8xb4(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false || _0xf6d8x5["noKeys"] === true || _0xf6d8x5["noPan"] === true) {
+        if (pThis["enabled"] === false || pThis["noKeys"] === true || pThis["noPan"] === true) {
             return;
         };
         switch (_0xf6d8x48["keyCode"]) {
-            case _0xf6d8x5["keys"]["UP"]:
-                _0xf6d8x5["pan"](0, _0xf6d8x5["keyPanSpeed"]);
-                _0xf6d8x5["update"]();
+            case pThis["keys"]["UP"]:
+                pThis["pan"](0, pThis["keyPanSpeed"]);
+                pThis["update"]();
                 break;;
-            case _0xf6d8x5["keys"]["BOTTOM"]:
-                _0xf6d8x5["pan"](0, -_0xf6d8x5["keyPanSpeed"]);
-                _0xf6d8x5["update"]();
+            case pThis["keys"]["BOTTOM"]:
+                pThis["pan"](0, -pThis["keyPanSpeed"]);
+                pThis["update"]();
                 break;;
-            case _0xf6d8x5["keys"]["LEFT"]:
-                _0xf6d8x5["pan"](_0xf6d8x5["keyPanSpeed"], 0);
-                _0xf6d8x5["update"]();
+            case pThis["keys"]["LEFT"]:
+                pThis["pan"](pThis["keyPanSpeed"], 0);
+                pThis["update"]();
                 break;;
-            case _0xf6d8x5["keys"]["RIGHT"]:
-                _0xf6d8x5["pan"](-_0xf6d8x5["keyPanSpeed"], 0);
-                _0xf6d8x5["update"]();
+            case pThis["keys"]["RIGHT"]:
+                pThis["pan"](-pThis["keyPanSpeed"], 0);
+                pThis["update"]();
                 break;;
         };
     };
 
     function _0xf6d8xb5(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
         switch (_0xf6d8x48["touches"]["length"]) {
             case 1:
-                if (_0xf6d8x5["noRotate"] === true) {
+                if (pThis["noRotate"] === true) {
                     return;
                 };
-                _0xf6d8x9c = _0xf6d8x9b["TOUCH_ROTATE"];
+                _0xf6d8x9c = RotationType["TOUCH_ROTATE"];
                 _0xf6d8x8c["set"](_0xf6d8x48["touches"][0]["pageX"], _0xf6d8x48["touches"][0]["pageY"]);
                 break;;
             case 2:
-                if (_0xf6d8x5["noZoom"] === true) {
+                if (pThis["noZoom"] === true) {
                     return;
                 };
-                _0xf6d8x9c = _0xf6d8x9b["TOUCH_DOLLY"];
+                _0xf6d8x9c = RotationType["TOUCH_DOLLY"];
                 var _0xf6d8xb6 = _0xf6d8x48["touches"][0]["pageX"] - _0xf6d8x48["touches"][1]["pageX"];
                 var _0xf6d8xb7 = _0xf6d8x48["touches"][0]["pageY"] - _0xf6d8x48["touches"][1]["pageY"];
                 var _0xf6d8x37 = Math["sqrt"](_0xf6d8xb6 * _0xf6d8xb6 + _0xf6d8xb7 * _0xf6d8xb7);
                 _0xf6d8x94["set"](0, _0xf6d8x37);
                 break;;
             case 3:
-                if (_0xf6d8x5["noPan"] === true) {
+                if (pThis["noPan"] === true) {
                     return;
                 };
-                _0xf6d8x9c = _0xf6d8x9b["TOUCH_PAN"];
+                _0xf6d8x9c = RotationType["TOUCH_PAN"];
                 _0xf6d8x8f["set"](_0xf6d8x48["touches"][0]["pageX"], _0xf6d8x48["touches"][0]["pageY"]);
                 break;;
             default:
-                _0xf6d8x9c = _0xf6d8x9b["NONE"];;
+                _0xf6d8x9c = RotationType["NONE"];;
         };
-        _0xf6d8x5["dispatchEvent"](_0xf6d8x9f);
+        pThis["dispatchEvent"](_0xf6d8x9f);
     };
 
     function _0xf6d8xb8(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
         _0xf6d8x48["preventDefault"]();
         _0xf6d8x48["stopPropagation"]();
-        var _0xf6d8xa8 = _0xf6d8x5["domElement"] === document ? _0xf6d8x5["domElement"]["body"] : _0xf6d8x5["domElement"];
+        var _0xf6d8xa8 = pThis["domElement"] === document ? pThis["domElement"]["body"] : pThis["domElement"];
         switch (_0xf6d8x48["touches"]["length"]) {
             case 1:
-                if (_0xf6d8x5["noRotate"] === true) {
+                if (pThis["noRotate"] === true) {
                     return;
                 };
-                if (_0xf6d8x9c !== _0xf6d8x9b["TOUCH_ROTATE"]) {
+                if (_0xf6d8x9c !== RotationType["TOUCH_ROTATE"]) {
                     return;
                 };
                 _0xf6d8x8d["set"](_0xf6d8x48["touches"][0]["pageX"], _0xf6d8x48["touches"][0]["pageY"]);
                 _0xf6d8x8e["subVectors"](_0xf6d8x8d, _0xf6d8x8c);
-                _0xf6d8x5["rotateTheta"](2 * Math["PI"] * _0xf6d8x8e["x"] / _0xf6d8xa8["clientWidth"] * _0xf6d8x5["rotateSpeed"]);
-                _0xf6d8x5["rotatePhi"](2 * Math["PI"] * _0xf6d8x8e["y"] / _0xf6d8xa8["clientHeight"] * _0xf6d8x5["rotateSpeed"]);
+                pThis["rotateTheta"](2 * Math["PI"] * _0xf6d8x8e["x"] / _0xf6d8xa8["clientWidth"] * pThis["rotateSpeed"]);
+                pThis["rotatePhi"](2 * Math["PI"] * _0xf6d8x8e["y"] / _0xf6d8xa8["clientHeight"] * pThis["rotateSpeed"]);
                 _0xf6d8x8c["copy"](_0xf6d8x8d);
-                _0xf6d8x5["update"]();
+                pThis["update"]();
                 break;;
             case 2:
-                if (_0xf6d8x5["noZoom"] === true) {
+                if (pThis["noZoom"] === true) {
                     return;
                 };
-                if (_0xf6d8x9c !== _0xf6d8x9b["TOUCH_DOLLY"]) {
+                if (_0xf6d8x9c !== RotationType["TOUCH_DOLLY"]) {
                     return;
                 };
                 var _0xf6d8xb6 = _0xf6d8x48["touches"][0]["pageX"] - _0xf6d8x48["touches"][1]["pageX"];
@@ -17264,37 +17266,37 @@ THREE["OrbitControls"] = function(_0xf6d8x30, _0xf6d8x7d) {
                 _0xf6d8x95["set"](0, _0xf6d8x37);
                 _0xf6d8x96["subVectors"](_0xf6d8x95, _0xf6d8x94);
                 if (_0xf6d8x96["y"] > 0) {
-                    _0xf6d8x5["dollyOut"]();
+                    pThis["dollyOut"]();
                 } else {
-                    _0xf6d8x5["dollyIn"]();
+                    pThis["dollyIn"]();
                 };
                 _0xf6d8x94["copy"](_0xf6d8x95);
-                _0xf6d8x5["update"]();
+                pThis["update"]();
                 break;;
             case 3:
-                if (_0xf6d8x5["noPan"] === true) {
+                if (pThis["noPan"] === true) {
                     return;
                 };
-                if (_0xf6d8x9c !== _0xf6d8x9b["TOUCH_PAN"]) {
+                if (_0xf6d8x9c !== RotationType["TOUCH_PAN"]) {
                     return;
                 };
                 _0xf6d8x90["set"](_0xf6d8x48["touches"][0]["pageX"], _0xf6d8x48["touches"][0]["pageY"]);
                 _0xf6d8x91["subVectors"](_0xf6d8x90, _0xf6d8x8f);
-                _0xf6d8x5["pan"](_0xf6d8x91["x"], _0xf6d8x91["y"]);
+                pThis["pan"](_0xf6d8x91["x"], _0xf6d8x91["y"]);
                 _0xf6d8x8f["copy"](_0xf6d8x90);
-                _0xf6d8x5["update"]();
+                pThis["update"]();
                 break;;
             default:
-                _0xf6d8x9c = _0xf6d8x9b["NONE"];;
+                _0xf6d8x9c = RotationType["NONE"];;
         };
     };
 
     function _0xf6d8xb9() {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
-        _0xf6d8x5["dispatchEvent"](_0xf6d8xa0);
-        _0xf6d8x9c = _0xf6d8x9b["NONE"];
+        pThis["dispatchEvent"](_0xf6d8xa0);
+        _0xf6d8x9c = RotationType["NONE"];
     };
     this["enabledAll"] = function(_0xf6d8x8) {
         if (_0xf6d8x8) {
@@ -17745,69 +17747,69 @@ var anisotropy = 8;
 var carsRotation = 45;
 PLUS360DEGREES["BodyMaterial"] = function(_0xf6d8x14, _0xf6d8xf8) {
     THREE["MeshPhongMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["color"]["setStyle"](_0xf6d8x14);
-    _0xf6d8x5["reflectivity"] = 0.5;
-    _0xf6d8x5["combine"] = THREE["MixOperation"];
-    _0xf6d8x5["envMap"] = _0xf6d8xf8;
-    _0xf6d8x5["shininess"] = 60;
+    var pThis = this;
+    pThis["color"]["setStyle"](_0xf6d8x14);
+    pThis["reflectivity"] = 0.5;
+    pThis["combine"] = THREE["MixOperation"];
+    pThis["envMap"] = _0xf6d8xf8;
+    pThis["shininess"] = 60;
 };
 PLUS360DEGREES["BodyMaterial"]["prototype"] = Object["create"](THREE["MeshPhongMaterial"]["prototype"]);
 PLUS360DEGREES["RimMaterial"] = function(_0xf6d8xf8) {
     THREE["MeshPhongMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["color"]["setStyle"]("#b8b8b8");
-    _0xf6d8x5["reflectivity"] = 0.5;
-    _0xf6d8x5["combine"] = THREE["MixOperation"];
-    _0xf6d8x5["envMap"] = _0xf6d8xf8;
-    _0xf6d8x5["specular"]["setStyle"]("#202020");
+    var pThis = this;
+    pThis["color"]["setStyle"]("#b8b8b8");
+    pThis["reflectivity"] = 0.5;
+    pThis["combine"] = THREE["MixOperation"];
+    pThis["envMap"] = _0xf6d8xf8;
+    pThis["specular"]["setStyle"]("#202020");
 };
 PLUS360DEGREES["RimMaterial"]["prototype"] = Object["create"](THREE["MeshPhongMaterial"]["prototype"]);
 PLUS360DEGREES["GlassMaterial"] = function(_0xf6d8xf8) {
     THREE["MeshLambertMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["color"]["setStyle"]("#cccccc");
-    _0xf6d8x5["reflectivity"] = 1.0;
-    _0xf6d8x5["combine"] = THREE["MixOperation"];
-    _0xf6d8x5["envMap"] = _0xf6d8xf8;
-    _0xf6d8x5["transparent"] = true;
-    _0xf6d8x5["opacity"] = 0.3;
-    _0xf6d8x5["depthWrite"] = false;
+    var pThis = this;
+    pThis["color"]["setStyle"]("#cccccc");
+    pThis["reflectivity"] = 1.0;
+    pThis["combine"] = THREE["MixOperation"];
+    pThis["envMap"] = _0xf6d8xf8;
+    pThis["transparent"] = true;
+    pThis["opacity"] = 0.3;
+    pThis["depthWrite"] = false;
 };
 PLUS360DEGREES["GlassMaterial"]["prototype"] = Object["create"](THREE["MeshLambertMaterial"]["prototype"]);
 PLUS360DEGREES["BumperMaterial"] = function(_0xf6d8xf8) {
     THREE["MeshLambertMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["color"]["setStyle"]("#333333");
-    _0xf6d8x5["reflectivity"] = 0.5;
-    _0xf6d8x5["combine"] = THREE["MixOperation"];
-    _0xf6d8x5["envMap"] = _0xf6d8xf8;
+    var pThis = this;
+    pThis["color"]["setStyle"]("#333333");
+    pThis["reflectivity"] = 0.5;
+    pThis["combine"] = THREE["MixOperation"];
+    pThis["envMap"] = _0xf6d8xf8;
 };
 PLUS360DEGREES["BumperMaterial"]["prototype"] = Object["create"](THREE["MeshLambertMaterial"]["prototype"]);
 PLUS360DEGREES["InteriorMaterial"] = function(_0xf6d8x6b) {
     THREE["MeshBasicMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["map"] = _0xf6d8x6b || null;
+    var pThis = this;
+    pThis["map"] = _0xf6d8x6b || null;
 };
 PLUS360DEGREES["InteriorMaterial"]["prototype"] = Object["create"](THREE["MeshBasicMaterial"]["prototype"]);
 PLUS360DEGREES["ShadowMaterial"] = function(_0xf6d8x6b) {
     THREE["MeshBasicMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["map"] = _0xf6d8x6b || null;
-    _0xf6d8x5["transparent"] = true;
-    _0xf6d8x5["depthWrite"] = false;
+    var pThis = this;
+    pThis["map"] = _0xf6d8x6b || null;
+    pThis["transparent"] = true;
+    pThis["depthWrite"] = false;
 };
 PLUS360DEGREES["ShadowMaterial"]["prototype"] = Object["create"](THREE["MeshBasicMaterial"]["prototype"]);
 PLUS360DEGREES["WheelMaterial"] = function(_0xf6d8x6b) {
     THREE["MeshBasicMaterial"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["map"] = _0xf6d8x6b || null;
-    _0xf6d8x5["transparent"] = true;
+    var pThis = this;
+    pThis["map"] = _0xf6d8x6b || null;
+    pThis["transparent"] = true;
 };
 PLUS360DEGREES["WheelMaterial"]["prototype"] = Object["create"](THREE["MeshBasicMaterial"]["prototype"]);
 PLUS360DEGREES["Tyres"] = function(_0xf6d8x83, _0xf6d8xf9) {
     THREE["Object3D"]["call"](this);
-    var _0xf6d8x5 = this;
+    var pThis = this;
     var _0xf6d8xfa = _0xf6d8x83["clone"]();
     var _0xf6d8xfb = _0xf6d8x83["clone"]();
     var _0xf6d8xfc = _0xf6d8x83["clone"]();
@@ -17819,15 +17821,15 @@ PLUS360DEGREES["Tyres"] = function(_0xf6d8x83, _0xf6d8xf9) {
     _0xf6d8xfc["position"]["copy"](_0xf6d8xf9[2]);
     _0xf6d8xfc["rotation"]["y"] = THREE["Math"]["degToRad"](180);
     _0xf6d8xfd["position"]["copy"](_0xf6d8xf9[3]);
-    _0xf6d8x5["add"](_0xf6d8xfa);
-    _0xf6d8x5["add"](_0xf6d8xfb);
-    _0xf6d8x5["add"](_0xf6d8xfc);
-    _0xf6d8x5["add"](_0xf6d8xfd);
+    pThis["add"](_0xf6d8xfa);
+    pThis["add"](_0xf6d8xfb);
+    pThis["add"](_0xf6d8xfc);
+    pThis["add"](_0xf6d8xfd);
 };
 PLUS360DEGREES["Tyres"]["prototype"] = Object["create"](THREE["Object3D"]["prototype"]);
 PLUS360DEGREES["Rims"] = function(_0xf6d8x83, _0xf6d8xf9) {
     THREE["Object3D"]["call"](this);
-    var _0xf6d8x5 = this;
+    var pThis = this;
     var _0xf6d8xfe = _0xf6d8x83["clone"]();
     var _0xf6d8xff = _0xf6d8x83["clone"]();
     var _0xf6d8x100 = _0xf6d8x83["clone"]();
@@ -17839,18 +17841,18 @@ PLUS360DEGREES["Rims"] = function(_0xf6d8x83, _0xf6d8xf9) {
     _0xf6d8x100["position"]["copy"](_0xf6d8xf9[2]);
     _0xf6d8x100["rotation"]["y"] = THREE["Math"]["degToRad"](180);
     _0xf6d8x101["position"]["copy"](_0xf6d8xf9[3]);
-    _0xf6d8x5["add"](_0xf6d8xfe);
-    _0xf6d8x5["add"](_0xf6d8xff);
-    _0xf6d8x5["add"](_0xf6d8x100);
-    _0xf6d8x5["add"](_0xf6d8x101);
+    pThis["add"](_0xf6d8xfe);
+    pThis["add"](_0xf6d8xff);
+    pThis["add"](_0xf6d8x100);
+    pThis["add"](_0xf6d8x101);
 };
 PLUS360DEGREES["Rims"]["prototype"] = Object["create"](THREE["Object3D"]["prototype"]);
 PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8, ssTemp_053) {
     THREE["Object3D"]["call"](this);
-    var _0xf6d8x5 = this;
-    _0xf6d8x5["cars"] = [];
-    _0xf6d8x5["interiorTextures"] = [_0xf6d8x103[3], _0xf6d8x103[4], _0xf6d8x103[5], _0xf6d8x103[6], _0xf6d8x103[7], _0xf6d8x103[8], _0xf6d8x103[9], _0xf6d8x103[10]];
-    _0xf6d8x5["shadowTextures"] = [_0xf6d8x103[11], _0xf6d8x103[12], _0xf6d8x103[13], _0xf6d8x103[14], _0xf6d8x103[15], _0xf6d8x103[16], _0xf6d8x103[17], _0xf6d8x103[18]];
+    var pThis = this;
+    pThis["cars"] = [];
+    pThis["interiorTextures"] = [_0xf6d8x103[3], _0xf6d8x103[4], _0xf6d8x103[5], _0xf6d8x103[6], _0xf6d8x103[7], _0xf6d8x103[8], _0xf6d8x103[9], _0xf6d8x103[10]];
+    pThis["shadowTextures"] = [_0xf6d8x103[11], _0xf6d8x103[12], _0xf6d8x103[13], _0xf6d8x103[14], _0xf6d8x103[15], _0xf6d8x103[16], _0xf6d8x103[17], _0xf6d8x103[18]];
     var _0xf6d8x6 = new THREE.SceneLoader();
     var _0xf6d8x104 = new THREE.Object3D(),
         _0xf6d8x105 = new THREE.Object3D(),
@@ -17880,7 +17882,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
     var _0xf6d8x136, _0xf6d8x137, _0xf6d8x138, _0xf6d8x139, _0xf6d8x13a, _0xf6d8x13b;
     var _0xf6d8x13c, _0xf6d8x13d, _0xf6d8x13e, _0xf6d8x13f, _0xf6d8x140, _0xf6d8x141;
     var _0xf6d8x142 = new PLUS360DEGREES.BodyMaterial("#990000", _0xf6d8xf8);
-    var _0xf6d8x143 = new PLUS360DEGREES.InteriorMaterial(_0xf6d8x5["interiorTextures"][0]);
+    var _0xf6d8x143 = new PLUS360DEGREES.InteriorMaterial(pThis["interiorTextures"][0]);
     var _0xf6d8x144 = new PLUS360DEGREES.BumperMaterial(_0xf6d8xf8);
     var _0xf6d8x145 = new PLUS360DEGREES.GlassMaterial(_0xf6d8xf8);
     var _0xf6d8x146 = new PLUS360DEGREES.RimMaterial(_0xf6d8xf8);
@@ -17896,7 +17898,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         ambient: _0xf6d8x149
     });
     var _0xf6d8x14b = new PLUS360DEGREES.ShadowMaterial(_0xf6d8x103[0]);
-    var _0xf6d8x14c = new PLUS360DEGREES.ShadowMaterial(_0xf6d8x5["shadowTextures"][0]);
+    var _0xf6d8x14c = new PLUS360DEGREES.ShadowMaterial(pThis["shadowTextures"][0]);
     _0xf6d8x6["callbackProgress"] = function(_0xf6d8x4b, _0xf6d8x1c) {
         console["clear"]();
         var _0xf6d8x14d = 120;
@@ -18076,7 +18078,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x104["add"](_0xf6d8x10f);
         _0xf6d8x104["add"](_0xf6d8x110);
         _0xf6d8x104["add"](_0xf6d8x111);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x104);
+        pThis["cars"]["push"](_0xf6d8x104);
         _0xf6d8x104["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x116 = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[1]);
         _0xf6d8x117 = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[1]);
@@ -18086,7 +18088,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x105["add"](_0xf6d8x115);
         _0xf6d8x105["add"](_0xf6d8x116);
         _0xf6d8x105["add"](_0xf6d8x117);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x105);
+        pThis["cars"]["push"](_0xf6d8x105);
         _0xf6d8x105["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x11c = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[2]);
         _0xf6d8x11d = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[2]);
@@ -18096,7 +18098,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x106["add"](_0xf6d8x11b);
         _0xf6d8x106["add"](_0xf6d8x11c);
         _0xf6d8x106["add"](_0xf6d8x11d);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x106);
+        pThis["cars"]["push"](_0xf6d8x106);
         _0xf6d8x106["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x122 = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[3]);
         _0xf6d8x123 = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[3]);
@@ -18106,7 +18108,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x107["add"](_0xf6d8x121);
         _0xf6d8x107["add"](_0xf6d8x122);
         _0xf6d8x107["add"](_0xf6d8x123);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x107);
+        pThis["cars"]["push"](_0xf6d8x107);
         _0xf6d8x107["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x128 = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[4]);
         _0xf6d8x129 = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[4]);
@@ -18116,7 +18118,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x108["add"](_0xf6d8x127);
         _0xf6d8x108["add"](_0xf6d8x128);
         _0xf6d8x108["add"](_0xf6d8x129);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x108);
+        pThis["cars"]["push"](_0xf6d8x108);
         _0xf6d8x108["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x12e = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[5]);
         _0xf6d8x12f = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[5]);
@@ -18126,7 +18128,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x109["add"](_0xf6d8x12d);
         _0xf6d8x109["add"](_0xf6d8x12e);
         _0xf6d8x109["add"](_0xf6d8x12f);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x109);
+        pThis["cars"]["push"](_0xf6d8x109);
         _0xf6d8x109["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x134 = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[6]);
         _0xf6d8x135 = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[6]);
@@ -18136,7 +18138,7 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x10a["add"](_0xf6d8x133);
         _0xf6d8x10a["add"](_0xf6d8x134);
         _0xf6d8x10a["add"](_0xf6d8x135);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x10a);
+        pThis["cars"]["push"](_0xf6d8x10a);
         _0xf6d8x10a["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
         _0xf6d8x13a = new PLUS360DEGREES.Tyres(_0xf6d8x141, _0xf6d8xf9[7]);
         _0xf6d8x13b = new PLUS360DEGREES.Rims(_0xf6d8x140, _0xf6d8xf9[7]);
@@ -18146,27 +18148,27 @@ PLUS360DEGREES["CarVisualizer"] = function(_0xf6d8x102, _0xf6d8x103, _0xf6d8xf8,
         _0xf6d8x10b["add"](_0xf6d8x139);
         _0xf6d8x10b["add"](_0xf6d8x13a);
         _0xf6d8x10b["add"](_0xf6d8x13b);
-        _0xf6d8x5["cars"]["push"](_0xf6d8x10b);
+        pThis["cars"]["push"](_0xf6d8x10b);
         _0xf6d8x10b["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
-        _0xf6d8x5["add"](_0xf6d8x13f);
-        _0xf6d8x5["add"](_0xf6d8x13e);
-        _0xf6d8x5["add"](_0xf6d8x13d);
-        _0xf6d8x5["add"](_0xf6d8x13c);
+        pThis["add"](_0xf6d8x13f);
+        pThis["add"](_0xf6d8x13e);
+        pThis["add"](_0xf6d8x13d);
+        pThis["add"](_0xf6d8x13c);
         _0xf6d8x13c["rotation"]["y"] = THREE["Math"]["degToRad"](carsRotation);
-        for (var _0xf6d8x36 = 0, _0xf6d8x150 = _0xf6d8x5["cars"]["length"]; _0xf6d8x36 < _0xf6d8x150; _0xf6d8x36++) {
-            _0xf6d8x5["add"](_0xf6d8x5["cars"][_0xf6d8x36]);
-            PLUS360DEGREES["MeshUtils"]["toggleObject3D"](_0xf6d8x5["cars"][_0xf6d8x36], false);
+        for (var _0xf6d8x36 = 0, _0xf6d8x150 = pThis["cars"]["length"]; _0xf6d8x36 < _0xf6d8x150; _0xf6d8x36++) {
+            pThis["add"](pThis["cars"][_0xf6d8x36]);
+            PLUS360DEGREES["MeshUtils"]["toggleObject3D"](pThis["cars"][_0xf6d8x36], false);
         };
-        PLUS360DEGREES["MeshUtils"]["toggleObject3D"](_0xf6d8x5["cars"][0], true);
+        PLUS360DEGREES["MeshUtils"]["toggleObject3D"](pThis["cars"][0], true);
         if (ssTemp_053 && typeof(ssTemp_053) === "function") {
             ssTemp_053();
         };
         _0xf6d8x6 = null;
-        _0xf6d8x5["isLoaded"] = true;
-        _0xf6d8x5["bodyMaterial"] = _0xf6d8x142;
-        _0xf6d8x5["rimMaterial"] = _0xf6d8x146;
-        _0xf6d8x5["carShadowMaterial"] = _0xf6d8x14c;
-        _0xf6d8x5["interiorMaterial"] = _0xf6d8x143;
+        pThis["isLoaded"] = true;
+        pThis["bodyMaterial"] = _0xf6d8x142;
+        pThis["rimMaterial"] = _0xf6d8x146;
+        pThis["carShadowMaterial"] = _0xf6d8x14c;
+        pThis["interiorMaterial"] = _0xf6d8x143;
     };
 };
 PLUS360DEGREES["CarVisualizer"]["prototype"] = Object["create"](THREE["Object3D"]["prototype"]);
@@ -18187,7 +18189,7 @@ PLUS360DEGREES["CarVisualizer"]["prototype"]["setRimsColor"] = function(_0xf6d8x
 PLUS360DEGREES["ColorPicker"] = function() {
     this["enabled"] = true;
     this["color"] = new THREE.Color();
-    var _0xf6d8x5 = this;
+    var pThis = this;
     var _0xf6d8x152 = new Image();
     _0xf6d8x152["src"] = "gui/spectrumBitmap.jpg";
     var _0xf6d8x153 = PLUS360DEGREES["DOM"]["canvas"]("pickerCanvas")["cloneNode"](true),
@@ -18227,7 +18229,7 @@ PLUS360DEGREES["ColorPicker"] = function() {
     };
 
     function _0xf6d8x15b(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
         var _0xf6d8x1f = _0xf6d8x156(this);
@@ -18241,11 +18243,11 @@ PLUS360DEGREES["ColorPicker"] = function() {
         };
         var _0xf6d8x15e = _0xf6d8x154["getImageData"](_0xf6d8x15c, _0xf6d8x15d, 1, 1)["data"];
         _0xf6d8x16 = "#" + ("000000" + _0xf6d8x159(_0xf6d8x15e[0], _0xf6d8x15e[1], _0xf6d8x15e[2]))["slice"](-6);
-        _0xf6d8x5["color"]["setStyle"](_0xf6d8x16);
+        pThis["color"]["setStyle"](_0xf6d8x16);
     };
 
     function _0xf6d8x15f(_0xf6d8x48) {
-        if (_0xf6d8x5["enabled"] === false) {
+        if (pThis["enabled"] === false) {
             return;
         };
         var _0xf6d8x1f = _0xf6d8x156(this);
@@ -18259,7 +18261,7 @@ PLUS360DEGREES["ColorPicker"] = function() {
         };
         var _0xf6d8x15e = _0xf6d8x154["getImageData"](_0xf6d8x15c, _0xf6d8x15d, 1, 1)["data"];
         _0xf6d8x16 = "#" + ("000000" + _0xf6d8x159(_0xf6d8x15e[0], _0xf6d8x15e[1], _0xf6d8x15e[2]))["slice"](-6);
-        _0xf6d8x5["color"]["setStyle"](_0xf6d8x16);
+        pThis["color"]["setStyle"](_0xf6d8x16);
     };
     this["canvas"] = _0xf6d8x153;
 };
@@ -18267,20 +18269,20 @@ var PLUS360DEGREES = PLUS360DEGREES || {};
 var topDistace = 25;
 PLUS360DEGREES["ButtonBG"] = function(_0xf6d8x161, _0xf6d8x162, _0xf6d8x3c, _0xf6d8x163) {
     this["div"] = PLUS360DEGREES["DOM"]["div"](_0xf6d8x3c);
-    var _0xf6d8x5 = this;
+    var pThis = this;
     var _0xf6d8x164 = PLUS360DEGREES["DOM"]["div"]("background" + _0xf6d8x3c);
     _0xf6d8x164["classList"]["add"]("buttonBG");
     _0xf6d8x164["style"]["width"] = _0xf6d8x161 + "px";
     _0xf6d8x164["style"]["height"] = _0xf6d8x162 + "px";
     _0xf6d8x164["style"]["opacity"] = _0xf6d8x163;
     _0xf6d8x164["cloneNode"](true);
-    _0xf6d8x5["div"]["appendChild"](_0xf6d8x164);
+    pThis["div"]["appendChild"](_0xf6d8x164);
     var _0xf6d8x165 = PLUS360DEGREES["DOM"]["div"]("button" + _0xf6d8x3c);
     _0xf6d8x165["cloneNode"](true);
     _0xf6d8x165["classList"]["add"]("button");
     _0xf6d8x165["style"]["width"] = _0xf6d8x161 + "px";
     _0xf6d8x165["style"]["height"] = _0xf6d8x162 + "px";
-    _0xf6d8x5["div"]["appendChild"](_0xf6d8x165);
+    pThis["div"]["appendChild"](_0xf6d8x165);
     this["addText"] = function(_0xf6d8x7) {
         _0xf6d8x165["textContent"] = _0xf6d8x7;
     };
@@ -18292,33 +18294,33 @@ PLUS360DEGREES["ButtonBG"] = function(_0xf6d8x161, _0xf6d8x162, _0xf6d8x3c, _0xf
     };
     this["enabledButton"] = function(_0xf6d8x8) {
         if (_0xf6d8x8) {
-            _0xf6d8x5["div"]["style"]["visibility"] = "visible";
+            pThis["div"]["style"]["visibility"] = "visible";
         } else {
-            _0xf6d8x5["div"]["style"]["visibility"] = "hidden";
+            pThis["div"]["style"]["visibility"] = "hidden";
         };
     };
     this["positionBottom"] = function(_0xf6d8x8) {
-        _0xf6d8x5["div"]["style"]["bottom"] = _0xf6d8x164["style"]["bottom"] = _0xf6d8x165["style"]["bottom"] = _0xf6d8x8 + "px";
+        pThis["div"]["style"]["bottom"] = _0xf6d8x164["style"]["bottom"] = _0xf6d8x165["style"]["bottom"] = _0xf6d8x8 + "px";
     };
     this["positionRight"] = function(_0xf6d8x8) {
-        _0xf6d8x5["div"]["style"]["right"] = _0xf6d8x164["style"]["right"] = _0xf6d8x165["style"]["right"] = _0xf6d8x8 + "px";
+        pThis["div"]["style"]["right"] = _0xf6d8x164["style"]["right"] = _0xf6d8x165["style"]["right"] = _0xf6d8x8 + "px";
     };
     this["positionLeft"] = function(_0xf6d8x8) {
-        _0xf6d8x5["div"]["style"]["left"] = _0xf6d8x164["style"]["left"] = _0xf6d8x165["style"]["left"] = _0xf6d8x8 + "px";
+        pThis["div"]["style"]["left"] = _0xf6d8x164["style"]["left"] = _0xf6d8x165["style"]["left"] = _0xf6d8x8 + "px";
     };
     this["enabledButton"](false);
 };
 PLUS360DEGREES["ColorButtonBG"] = function(_0xf6d8x161, _0xf6d8x162, _0xf6d8x14, _0xf6d8x3c, _0xf6d8x163) {
     this["div"] = PLUS360DEGREES["DOM"]["div"](_0xf6d8x3c);
     this["div"]["cloneNode"](true);
-    var _0xf6d8x5 = this;
+    var pThis = this;
     var _0xf6d8x164 = PLUS360DEGREES["DOM"]["div"]("background" + _0xf6d8x3c);
     _0xf6d8x164["classList"]["add"]("buttonBG");
     _0xf6d8x164["style"]["width"] = _0xf6d8x161 + "px";
     _0xf6d8x164["style"]["height"] = _0xf6d8x162 + "px";
     _0xf6d8x164["style"]["opacity"] = _0xf6d8x163;
     _0xf6d8x164["cloneNode"](true);
-    _0xf6d8x5["div"]["appendChild"](_0xf6d8x164);
+    pThis["div"]["appendChild"](_0xf6d8x164);
     var _0xf6d8x166 = PLUS360DEGREES["DOM"]["div"]("colorBG" + _0xf6d8x3c);
     _0xf6d8x166["classList"]["add"]("colorBG");
     _0xf6d8x166["style"]["backgroundColor"] = _0xf6d8x14;
@@ -18327,13 +18329,13 @@ PLUS360DEGREES["ColorButtonBG"] = function(_0xf6d8x161, _0xf6d8x162, _0xf6d8x14,
     _0xf6d8x166["style"]["marginTop"] = "4px";
     _0xf6d8x166["style"]["marginLeft"] = "4px";
     _0xf6d8x166["cloneNode"](true);
-    _0xf6d8x5["div"]["appendChild"](_0xf6d8x166);
+    pThis["div"]["appendChild"](_0xf6d8x166);
     var _0xf6d8x165 = PLUS360DEGREES["DOM"]["div"]("button" + _0xf6d8x3c);
     _0xf6d8x165["cloneNode"](true);
     _0xf6d8x165["classList"]["add"]("button");
     _0xf6d8x165["style"]["width"] = _0xf6d8x161 + "px";
     _0xf6d8x165["style"]["height"] = _0xf6d8x162 + "px";
-    _0xf6d8x5["div"]["appendChild"](_0xf6d8x165);
+    pThis["div"]["appendChild"](_0xf6d8x165);
     this["addImage"] = function(_0xf6d8x63) {
         _0xf6d8x165["appendChild"](_0xf6d8x63);
     };
@@ -18342,16 +18344,16 @@ PLUS360DEGREES["ColorButtonBG"] = function(_0xf6d8x161, _0xf6d8x162, _0xf6d8x14,
     };
     this["enabledButton"] = function(_0xf6d8x8) {
         if (_0xf6d8x8) {
-            _0xf6d8x5["div"]["style"]["visibility"] = "visible";
+            pThis["div"]["style"]["visibility"] = "visible";
         } else {
-            _0xf6d8x5["div"]["style"]["visibility"] = "hidden";
+            pThis["div"]["style"]["visibility"] = "hidden";
         };
     };
     this["setColor"] = function(_0xf6d8x16) {
         _0xf6d8x166["style"]["backgroundColor"] = "#" + _0xf6d8x16;
     };
     this["positionLeft"] = function(_0xf6d8x8) {
-        _0xf6d8x5["div"]["style"]["left"] = _0xf6d8x164["style"]["left"] = _0xf6d8x165["style"]["left"] = _0xf6d8x166["style"]["left"] = _0xf6d8x8 + "px";
+        pThis["div"]["style"]["left"] = _0xf6d8x164["style"]["left"] = _0xf6d8x165["style"]["left"] = _0xf6d8x166["style"]["left"] = _0xf6d8x8 + "px";
     };
     this["enabledButton"](false);
 };
