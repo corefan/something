@@ -26,17 +26,18 @@ __d("createExponentialMovingAverage", [], function a(b, c, d, e, f, g) {
         };
     }
 
-    function i(k) {
-        return function(l) {
+    function i(k) { // k - 300, 50
+        return function(l) { // l - perfomace gap
+                console.log(k, l); 
             return 1 - Math.exp(-l / k);
         };
     }
 
-    function j(k) {
+    function j(k) { // k - 300, 50
         var l = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-        var m = l;
-        var n = i(k);
-        return function(o, p) {
+        var m = l; // m - x or y
+        var n = i(k); // 1 - Math.exp(-l / k);
+        return function(o, p) { // o - xy gap, p - perfomace gap
             return m += n(p) * (o - m);
         };
     }
@@ -69,7 +70,7 @@ __d('VelocityTracker', ['createExponentialMovingAverage', 'performanceNow'], fun
             this.$VelocityTracker6 = m;
             return 0;
         }
-        var n = m - this.$VelocityTracker6;
+        var n = m - this.$VelocityTracker6;        
         this.$VelocityTracker1 = this.$VelocityTracker3(k - this.$VelocityTracker5.x, n);
         this.$VelocityTracker2 = this.$VelocityTracker4(l - this.$VelocityTracker5.y, n);
         this.$VelocityTracker5 = {

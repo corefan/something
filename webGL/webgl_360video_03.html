@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>360_video</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <script src="./js/glMatrix/f_gl-matrix.js"></script>
+    <script id="v" type="text/v">
+attribute vec3 aVertexPosition;
+attribute vec2 aTextureCoord;
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+varying highp vec2 vTextureCoord;
+void main(void) {
+    gl_Position = uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0);
+    vTextureCoord = aTextureCoord;
+}
+	</script>
+	
+	<script id="f" type="text/f">
+varying highp vec2 vTextureCoord;
+uniform sampler2D uSampler;
+uniform lowp vec4 uColor;
+void main(void) {
+    if(uColor[0] > 1.0){
+        gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    }else{
+        gl_FragColor = uColor;
+    }
+}
+	</script>
+</head>
+<body>
+<div style="position: absolute; left:0px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
+	<canvas id="stage" width="512" height="512" style="cursor:-webkit-grab;">
+	</canvas>
+</div>
+<!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
+    <video id="video" width="400px" height="300px"></video>
+</div>-->
+</body>
+<script>
+    (function(win, width, height){
+        var cv = document.getElementById("stage");
+        cv.width = width;
+        cv.height = height;
+        cv.parentNode.style.width = width + "px";
+        cv.parentNode.style.height = height + "px";
+        var gl = cv.getContext("webgl");
+        var startIntervalID, smoothIntervalID;
+        // var vd = document.getElementById("video");
+        var vd = document.createElement("video");
+        vd.addEventListener("canplaythrough", startVideo, false);
+        vd.addEventListener("ended", endVideo , false);
+        vd.volume = 0.1;
+        vd.src = "./media/north_korea.mp4";
+        // vd.src = "http://172.10.12.61:9090/media/surfing.mp4";
+        var is_pushed = false, count = 0;
+        var time = {
+            "preT" : 0,
+            "curT" : 0
+        };
+        var mouseXY = {
+            "gapX" : 0,
+            "gapY" : 0,
+            "preX" : 0,
+            "preY" : 0,
+            "gapX" : 0,
+            "gapY" : 0
+        }
+        var customPlay = {
+            27:vd.pause,
+            32:vd.play
+        };
+        window.addEventListener("keydown", function(evt){
+            customPlay[evt.keyCode] && customPlay[evt.keyCode].call(vd);
+        }, false);
+        window.addEventListener("mousedown", function(evt){            
+            if(evt.target != cv){
+                return;
+            }
+            mouseXY["preX"] = evt.screenX;
+            mouseXY["preY"] = evt.screenY;
+            time["preT"] = performance.now();
+            
+            cv.style.cursor = "-webkit-grabbing";
+            is_pushed = true;
+        }, false);
+        window.addEventListener("mouseup", function(evt){
+            mouseXY["X"] = evt.screenX;
+            mouseXY["Y"] = evt.screenY;            
+            time["curT"] = performance.now();
+            smooth_move(300);
+            mouseXY["preX"] = mouseXY["X"];
+            mouseXY["preY"] = mouseXY["Y"];
+            time["preT"] = time["curT"];
+            cv.style.cursor = "-webkit-grab";
+            is_pushed = false;
+        }, false);
+        cv.addEventListener("mouseleave", function(evt){
+            cv.style.cursor = "-webkit-grab";
+            is_pushed = false;
+        }, false);
+        window.addEventListener("mousemove", function(evt){                
+            if(!is_pushed){
+                return;
+            }
+            mouseXY["X"] = evt.screenX;
+            mouseXY["Y"] = evt.screenY;
+            time["curT"] = performance.now();
+            smooth_move(50);
+            // mouseXY["gapX"] += mouseXY["X"] - mouseXY["preX"];
+            // mouseXY["gapY"] += mouseXY["Y"] - mouseXY["preY"];
+            mouseXY["preX"] = mouseXY["X"];
+            mouseXY["preY"] = mouseXY["Y"];
+            time["preT"] = time["curT"];
+        }, false);
+                
+        function smooth_move(t){
+            mouseXY["gapX"] += (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["preX"] - mouseXY["X"]));
+            mouseXY["gapY"] += (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["preY"] - mouseXY["Y"]));
+            
+            console.log(mouseXY["gapX"]);
+            console.log(mouseXY["gapY"]);            
+        }          
+        function startVideo(){
+            vd.play();
+            // start();
+            startIntervalID = setInterval(start, 64);
+            // vd.pause();
+        }
+        
+        function endVideo(){
+            // vd.play();
+            clearInterval(startIntervalID);
+        }
+        
+
+                
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, document.getElementById("v").text);
+        gl.compileShader(vertexShader);
+        
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, document.getElementById("f").text);
+        gl.compileShader(fragmentShader);
+        
+        var program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);        
+        gl.useProgram(program);
+        
+        program.aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
+        gl.enableVertexAttribArray(program.aVertexPosition);
+        program.aTextureCoord = gl.getAttribLocation(program, "aTextureCoord");
+        gl.enableVertexAttribArray(program.aTextureCoord);
+        
+        program.uPMatrix = gl.getUniformLocation(program, "uPMatrix");
+        program.uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
+        program.uColor = gl.getUniformLocation(program, "uColor");
+        program.uSampler = gl.getUniformLocation(program, "uSampler");                       
+                       
+        gl.viewport(0,0, width, height);
+        
+        var vertex_data = [];       
+        var index_data = [];
+        var uv_data = [];
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create2();
+        
+        // var p_data = [0.8021504282951355,0,0,0,  0,1.4281480312347412,0,0,   0,0,-1.0020020008087158,-1,     0,0,-0.20020020008087158,0];
+        // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
+        
+        uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
+        index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
+        vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
+
+
+        // mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
+        mat4.perspective2(70, width / height, 0.1, 100.0, pMatrix);
+        // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
+        // mat4.fromTranslation(mvMatrix, [0, 0, 0]);
+        
+        
+
+        var cubeTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                
+        var vertexBuffer = gl.createBuffer(gl.ARRAY_BUFFER);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertex_data), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(program.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+               
+        var uvBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv_data), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(program.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
+        
+        var indexBuffer = gl.createBuffer(gl.ELEMENT_ARRAY_BUFFER);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(index_data), gl.STATIC_DRAW);        
+        
+        
+        // gl.uniformMatrix4fv(program.uPMatrix, false, p_data);
+        // gl.uniformMatrix4fv(program.uMVMatrix, false, mv_data);              
+        gl.uniform1i(program.uSampler, 0);
+        gl.uniformMatrix4fv(program.uPMatrix, false, pMatrix);
+        
+        // gl.enable(gl.DEPTH_TEST); 
+        // gl.depthFunc(gl.LESS);
+         
+        // var x = y = 0;
+                
+        function start(){
+            if (Math.trunc(mouseXY["gapX"] * 10) || Math.trunc(mouseXY["gapY"] * 10) ){
+                mouseXY["gapX"] = 0.1 * Math.trunc(mouseXY["gapX"]);
+                mouseXY["gapY"] = 0.1 * Math.trunc(mouseXY["gapY"])
+            } 
+            
+            // mat4.lookAt(mvMatrix, [Math.sin(mouseXY["gapX"]/360), 0, Math.cos(mouseXY["gapX"]/360)], [0, 0, 0], [0, 1, 0]);
+            
+            // console.log(Math.max(-90, Math.min(mouseXY["preX"] - mouseXY["gapY"], 90)));
+            mouseXY["gapX"] = -mouseXY["gapX"] *0.1 * Math.PI / 180;
+            mouseXY["gapY"] = Math.max(-90, Math.min(-mouseXY["gapY"] * 0.1, 90)) * Math.PI / 180;
+            
+            // console.log(x, y);
+            
+            mat4.identity(mvMatrix);
+            // mat4.rotatefY(mvMatrix, x * Math.PI / 180);
+            // mat4.rotatefX(mvMatrix, y * Math.PI / 180);
+            mat4.rotatefX(mvMatrix, mouseXY["gapX"]);
+            mat4.rotatefY(mvMatrix, mouseXY["gapY"]);
+            
+
+            // mat4.rotatefY(mvMatrix, -mouseXY["gapX"]/7200);
+            // mat4.rotatefX(mvMatrix, Math.max(-90, (Math.min(mouseXY["gapY"], 90))/7200));
+            
+            
+            gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);
+
+            gl.clearColor(1, 1, 1, 1);  
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                        
+            gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vd);
+            
+            gl.uniform4fv(program.uColor, [3.0, 3.0, 3.0, 1.0]);                     
+            gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+            gl.uniform4fv(program.uColor, [1.0, 1.0, 0.0, 1.0]);
+            gl.drawElements(gl.LINES, 36, gl.UNSIGNED_SHORT, 0);
+            
+            // requestAnimationFrame(start);
+        }
+        
+    })(this, 720, 405);
+</script>
+</html>
