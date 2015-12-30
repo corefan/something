@@ -125,11 +125,11 @@ void main(void) {
         }, false);
                 
         function smooth_move(t){
-            mouseXY["gapX"] += (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["preX"] - mouseXY["X"]));
-            mouseXY["gapY"] += (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["preY"] - mouseXY["Y"]));
+            mouseXY["gapX"] = mouseXY["X"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["preX"] - mouseXY["X"]));
+            // mouseXY["gapY"] = mouseXY["Y"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["preY"] - mouseXY["Y"]));
             
             console.log(mouseXY["gapX"]);
-            console.log(mouseXY["gapY"]);            
+            // console.log(mouseXY["gapY"]);
         }          
         function startVideo(){
             vd.play();
@@ -227,7 +227,7 @@ void main(void) {
         function start(){
             if (Math.trunc(mouseXY["gapX"] * 10) || Math.trunc(mouseXY["gapY"] * 10) ){
                 mouseXY["gapX"] = 0.1 * Math.trunc(mouseXY["gapX"]);
-                mouseXY["gapY"] = 0.1 * Math.trunc(mouseXY["gapY"])
+                mouseXY["gapY"] = 0.1 * Math.trunc(mouseXY["gapY"]);
             } 
             
             // mat4.lookAt(mvMatrix, [Math.sin(mouseXY["gapX"]/360), 0, Math.cos(mouseXY["gapX"]/360)], [0, 0, 0], [0, 1, 0]);

@@ -64,13 +64,19 @@ void main(void) {
         vd.src = "./media/north_korea.mp4";
         // vd.src = "http://172.10.12.61:9090/media/surfing.mp4";
         var is_pushed = false, count = 0;
+        var time = {
+            "preT" : 0,
+            "curT" : 0
+        };
         var mouseXY = {
-            "X" : 0,
-            "Y" : 0,
+            "gapX" : 0,
+            "gapY" : 0,
             "preX" : 0,
             "preY" : 0,
             "gapX" : 0,
-            "gapY" : 0
+            "gapY" : 0,
+            "sX" : 0,
+            "sY" : 0
         }
         var customPlay = {
             27:vd.pause,
@@ -85,19 +91,19 @@ void main(void) {
             }
             mouseXY["preX"] = evt.screenX;
             mouseXY["preY"] = evt.screenY;
+            time["preT"] = performance.now();
+            
             cv.style.cursor = "-webkit-grabbing";
             is_pushed = true;
-            // if(smoothIntervalID != null){
-            //     clearInterval(smoothIntervalID);
-            //     smoothIntervalID = null;
-            // }            
         }, false);
         window.addEventListener("mouseup", function(evt){
-            // if(is_pushed){
-            //     mouseXY["gapX"] = mouseXY["X"];
-            //     mouseXY["gapY"] = mouseXY["Y"];
-            //     smoothIntervalID = setInterval(smooth_rotate, 64);
-            // }
+            mouseXY["X"] = evt.screenX;
+            mouseXY["Y"] = evt.screenY;            
+            time["curT"] = performance.now();
+            smooth_move(300);
+            mouseXY["preX"] = mouseXY["X"];
+            mouseXY["preY"] = mouseXY["Y"];
+            time["preT"] = time["curT"];
             cv.style.cursor = "-webkit-grab";
             is_pushed = false;
         }, false);
@@ -109,31 +115,25 @@ void main(void) {
             if(!is_pushed){
                 return;
             }
-            mouseXY["X"] += (evt.screenX - mouseXY["preX"]) * 0.125;
-            mouseXY["Y"] += (evt.screenY - mouseXY["preY"]) * 0.125;
-            mouseXY["preX"] = evt.screenX;
-            mouseXY["preY"] = evt.screenY;
+            mouseXY["X"] = evt.screenX;
+            mouseXY["Y"] = evt.screenY;
+            time["curT"] = performance.now();
+            smooth_move(50);
+            // mouseXY["gapX"] += mouseXY["X"] - mouseXY["preX"];
+            // mouseXY["gapY"] += mouseXY["Y"] - mouseXY["preY"];
+            mouseXY["preX"] = mouseXY["X"];
+            mouseXY["preY"] = mouseXY["Y"];
+            time["preT"] = time["curT"];
         }, false);
                 
-        function smooth_rotate(){
-            console.log(mouseXY["gapX"], mouseXY["gapY"]);
-            mouseXY["X"] += mouseXY["gapX"] * 0.125;
-            mouseXY["Y"] += mouseXY["gapY"] * 0.125; 
-                       
-            mouseXY["gapX"] = mouseXY["gapX"] / 0.5;
-            mouseXY["gapY"] = mouseXY["gapY"] / 0.5;
+        function smooth_move(t){
+            mouseXY["gapX"] = mouseXY["gapX"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["X"] - mouseXY["preX"] - mouseXY["gapX"]));
+            mouseXY["gapY"] = mouseXY["gapX"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["Y"] - mouseXY["preY"] - mouseXY["gapX"]));
             
-            if(count++ > 5){
-                 clearInterval(smoothIntervalID);
-                 smoothIntervalID = null;
-            }
-            
-
-            // mouseXY["X"] += mouseXY["gapX"] * 0.1;
-            // mouseXY["Y"] += mouseXY["gapY"] * 0.1; 
-            
-            // console.log(mouseXY["gapX"], mouseXY["gapY"]);
-            
+            mouseXY["sX"] = 0.125 * Math.trunc(mouseXY["gapX"]);
+            mouseXY["sY"] = 0.125 * Math.trunc(mouseXY["gapY"]);
+            // console.log(mouseXY["gapX"]);
+            // console.log(mouseXY["gapY"]);
         }          
         function startVideo(){
             vd.play();
@@ -226,26 +226,33 @@ void main(void) {
         // gl.enable(gl.DEPTH_TEST); 
         // gl.depthFunc(gl.LESS);
          
-        var x = y = 0;
+        var xRad = 0, yRad = 0;
                 
         function start(){
-            // mat4.lookAt(mvMatrix, [Math.sin(mouseXY["X"]/360), 0, Math.cos(mouseXY["X"]/360)], [0, 0, 0], [0, 1, 0]);
+            if (Math.trunc(mouseXY["sX"] * 10) || Math.trunc(mouseXY["sX"] * 10) ){
+                mouseXY["sX"] *= 0.125;
+                mouseXY["sX"] *= 0.125;
+                mouseXY["gapX"] -= Math.trunc(mouseXY["sX"]);
+                mouseXY["gapY"] -= Math.trunc(mouseXY["sX"]);
+            } 
             
-            // console.log(Math.max(-90, Math.min(mouseXY["preX"] - mouseXY["Y"], 90)));                       
-            x = -mouseXY["X"] * Math.PI / 180;
-            y = Math.max(-90, Math.min(-mouseXY["Y"], 90)) * Math.PI / 180;
+            // mat4.lookAt(mvMatrix, [Math.sin(mouseXY["gapX"]/360), 0, Math.cos(mouseXY["gapX"]/360)], [0, 0, 0], [0, 1, 0]);
             
-            console.log(x, y);
+            // console.log(Math.max(-90, Math.min(mouseXY["preX"] - mouseXY["gapY"], 90)));
+            xRad += -mouseXY["gapX"] * Math.PI / 180;
+            yRad += Math.max(-90, Math.min(-mouseXY["gapY"], 90)) * Math.PI / 180;
+            
+            console.log(yRad);
             
             mat4.identity(mvMatrix);
             // mat4.rotatefY(mvMatrix, x * Math.PI / 180);
             // mat4.rotatefX(mvMatrix, y * Math.PI / 180);
-            mat4.rotatefX(mvMatrix, y);
-            mat4.rotatefY(mvMatrix, x);
+            mat4.rotatefX(mvMatrix, yRad);
+            mat4.rotatefY(mvMatrix, xRad);
             
 
-            // mat4.rotatefY(mvMatrix, -mouseXY["X"]/7200);
-            // mat4.rotatefX(mvMatrix, Math.max(-90, (Math.min(mouseXY["Y"], 90))/7200));
+            // mat4.rotatefY(mvMatrix, -mouseXY["gapX"]/7200);
+            // mat4.rotatefX(mvMatrix, Math.max(-90, (Math.min(mouseXY["gapY"], 90))/7200));
             
             
             gl.uniformMatrix4fv(program.uMVMatrix, false, mvMatrix);

@@ -28,17 +28,20 @@ __d("createExponentialMovingAverage", [], function a(b, c, d, e, f, g) {
 
     function i(k) { // k - 300, 50
         return function(l) { // l - perfomace gap
-                console.log(k, l); 
+                // console.log(k, l); 
             return 1 - Math.exp(-l / k);
         };
     }
 
-    function j(k) { // k - 300, 50
+    function j(k) { // createContinuous    k - 300, 50
         var l = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-        var m = l; // m - x or y
+        var m = l; // m - pre velocity
         var n = i(k); // 1 - Math.exp(-l / k);
-        return function(o, p) { // o - xy gap, p - perfomace gap
-            return m += n(p) * (o - m);
+        return function(o, p) { //$VelocityTracker3  o - xy gap, p - perfomace gap
+            // return m += n(p) * (o - m);
+            var aaa = n(p); 
+            // console.log(p, aaa, m, o);            
+            return m += aaa * (o - m);            
         };
     }
     h.createContinuous = j;
@@ -2060,7 +2063,7 @@ __d("degToRad", [], function a(b, c, d, e, f, g) {
     if (c.__markCompiled) c.__markCompiled();
 
     function h(i) {
-        return i * Math.PI / 180;
+        return i * Math.PI / 180; 
     }
     f.exports = h;
 }, null);
@@ -2373,7 +2376,7 @@ __d('VideoSphericalRenderer', ['VideoProjection', 'GLMatrix', 'degToRad', 'getEr
     };
     n.prototype.render = function(o, p) {
         'use strict';
-        // console.log(11, o, p);
+        // console.log(11111, o, p);
         if (this.$VideoSphericalRenderer11) return;
         if (this.$VideoSphericalRenderer6) this.$VideoSphericalRenderer25();
         l.identity(this.$VideoSphericalRenderer10);
@@ -2509,15 +2512,15 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
     ba.prototype.$VideoPlayerHTML5Spherical29 = function() {
         'use strict';
         var ca = t(),
-            da = ca - this.$VideoPlayerHTML5Spherical19;
+            da = ca - this.$VideoPlayerHTML5Spherical19;    
         if (this.$VideoPlayerHTML5Spherical31) {
             var ea = 0;
             if (q(this.$VideoPlayerHTML5Spherical25, 'left')) ea = da;
             if (q(this.$VideoPlayerHTML5Spherical25, 'right')) ea = -da;
-            var fa = this.$VideoPlayerHTML5Spherical2.dragVelocityFactor || .08;
+            var fa = this.$VideoPlayerHTML5Spherical2.dragVelocityFactor || .08;            
             this.setViewport(this.$VideoPlayerHTML5Spherical21 + ea * fa, this.$VideoPlayerHTML5Spherical22);
         }
-        if (this.$VideoPlayerHTML5Spherical26) {
+        if (this.$VideoPlayerHTML5Spherical26) {            
             var ga = this.$VideoPlayerHTML5Spherical2.keyboardVelocityFactor || .08,
                 ha = da * (-this.$VideoPlayerHTML5Spherical27.left + this.$VideoPlayerHTML5Spherical27.right),
                 ia = da * (-this.$VideoPlayerHTML5Spherical27.up + this.$VideoPlayerHTML5Spherical27.down);
@@ -2548,8 +2551,8 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
     };
     ba.prototype.setViewport = function(ca, da) {
         'use strict';
-        // console.log(22, ca, da);
-        this.$VideoPlayerHTML5Spherical35();
+        // console.log(333, ca);
+        this.$VideoPlayerHTML5Spherical35();        
         this.$VideoPlayerHTML5Spherical21 = ca;
         this.$VideoPlayerHTML5Spherical22 = Math.max(-90, Math.min(90, da));
         this.forceUpdateNextFrame();
@@ -2734,10 +2737,12 @@ __d('VideoPlayerHTML5Spherical', ['Event', 'EventEmitter', 'CSS', 'DOM', 'DOMQue
             ea = this.$VideoPlayerHTML5Spherical44();
             // fa = (1000 - da) / 1000 * ca.getVelocityX() * ea;
             // ga = (1000 - da) / 1000 * ca.getVelocityY() * ea;
-            fa = 0.1 * ca.getVelocityX();
-            ga = 0.1 * ca.getVelocityY();
+            fa = 0.125 * ca.getVelocityX();
+            ga = 0.125 * ca.getVelocityY();
+            
         this.$VideoPlayerHTML5Spherical32(-fa, -ga);
         if (Math.trunc(fa * 10) || Math.trunc(ga * 10)) u((function() {
+            console.log(fa, ga);
             return this.$VideoPlayerHTML5Spherical49();
         }).bind(this));
     };
