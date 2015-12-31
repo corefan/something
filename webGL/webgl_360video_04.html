@@ -130,8 +130,8 @@ void main(void) {
             mouseXY["gapX"] = mouseXY["gapX"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["X"] - mouseXY["preX"] - mouseXY["gapX"]));
             mouseXY["gapY"] = mouseXY["gapX"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["Y"] - mouseXY["preY"] - mouseXY["gapX"]));
             
-            mouseXY["sX"] = 0.125 * Math.trunc(mouseXY["gapX"]);
-            mouseXY["sY"] = 0.125 * Math.trunc(mouseXY["gapY"]);
+            mouseXY["sX"] = 0.5 * mouseXY["gapX"];
+            mouseXY["sY"] = 0.5 * mouseXY["gapY"];
             // console.log(mouseXY["gapX"]);
             // console.log(mouseXY["gapY"]);
         }          
@@ -229,27 +229,35 @@ void main(void) {
         var xRad = 0, yRad = 0;
                 
         function start(){
-            if (Math.trunc(mouseXY["sX"] * 10) || Math.trunc(mouseXY["sX"] * 10) ){
-                mouseXY["sX"] *= 0.125;
-                mouseXY["sX"] *= 0.125;
-                mouseXY["gapX"] -= Math.trunc(mouseXY["sX"]);
-                mouseXY["gapY"] -= Math.trunc(mouseXY["sX"]);
+            if(Math.trunc(mouseXY["sX"])){
+                console.log(mouseXY["sX"]);                
+            }
+
+            if (Math.trunc(mouseXY["sX"]) || Math.trunc(mouseXY["sY"]) ){
+                mouseXY["gapX"] = mouseXY["gapX"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["X"] - mouseXY["preX"] - mouseXY["gapX"]));
+                mouseXY["gapY"] = mouseXY["gapX"] - (1 - Math.exp((time["curT"] - time["preT"]) / t) * (mouseXY["Y"] - mouseXY["preY"] - mouseXY["gapX"]));
+                mouseXY["gapX"] -= mouseXY["sX"];
+                mouseXY["gapY"] -= mouseXY["sY"];                
+            }else{
+                mouseXY["sX"] = 0;
+                mouseXY["sY"] = 0;
+                mouseXY["gapX"] = 0;
+                mouseXY["gapY"] = 0;
             } 
             
             // mat4.lookAt(mvMatrix, [Math.sin(mouseXY["gapX"]/360), 0, Math.cos(mouseXY["gapX"]/360)], [0, 0, 0], [0, 1, 0]);
             
             // console.log(Math.max(-90, Math.min(mouseXY["preX"] - mouseXY["gapY"], 90)));
-            xRad += -mouseXY["gapX"] * Math.PI / 180;
-            yRad += Math.max(-90, Math.min(-mouseXY["gapY"], 90)) * Math.PI / 180;
-            
-            console.log(yRad);
-            
-            mat4.identity(mvMatrix);
-            // mat4.rotatefY(mvMatrix, x * Math.PI / 180);
-            // mat4.rotatefX(mvMatrix, y * Math.PI / 180);
-            mat4.rotatefX(mvMatrix, yRad);
-            mat4.rotatefY(mvMatrix, xRad);
-            
+            xRad = -mouseXY["gapX"] * Math.PI / 180;
+            yRad = Math.max(-90, Math.min(-mouseXY["gapY"], 90)) * Math.PI / 180;
+                        
+            // mat4.identity(mvMatrix);
+            // mat4.rotatefX(mvMatrix, yRad);
+            // mat4.rotatefY(mvMatrix, xRad);
+           
+            mat4.rotateX(mvMatrix, mvMatrix, yRad);
+            mat4.rotateY(mvMatrix, mvMatrix, xRad);
+
 
             // mat4.rotatefY(mvMatrix, -mouseXY["gapX"]/7200);
             // mat4.rotatefX(mvMatrix, Math.max(-90, (Math.min(mouseXY["gapY"], 90))/7200));
