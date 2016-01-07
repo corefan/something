@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>360_video</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <script src="../webGL/js/glMatrix/f_gl-matrix.js"></script>
+</head>
+<body>
+<div style="position: absolute; left:0px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
+	<canvas id="stage" width="512" height="512" style="cursor:-webkit-grab;">
+	</canvas>
+</div>
+<!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
+    <video id="video" width="400px" height="300px"></video>
+</div>-->
+</body>
+<script>
+    (function(win, width, height){
+        var cv = document.getElementById("stage");
+        cv.width = width;
+        cv.height = height;
+        cv.parentNode.style.width = width + "px";
+        cv.parentNode.style.height = height + "px";
+        var ctx = cv.getContext("2d");
+
+        var is_pushed = false, count = 0;
+        var mouseXY = {
+            "X" : 0,
+            "Y" : 0,
+            "preX" : 0,
+            "preY" : 0,
+            "gapX" : 0,
+            "gapY" : 0
+        }
+        
+        // window.addEventListener("keydown", function(evt){
+        //     customPlay[evt.keyCode] && customPlay[evt.keyCode].call(vd);
+        // }, false);
+        window.addEventListener("mousedown", function(evt){            
+            if(evt.target != cv){
+                return;
+            }
+            mouseXY["preX"] = evt.screenX;
+            mouseXY["preY"] = evt.screenY;
+            cv.style.cursor = "-webkit-grabbing";
+            is_pushed = true;
+            // if(smoothIntervalID != null){
+            //     clearInterval(smoothIntervalID);
+            //     smoothIntervalID = null;
+            // }            
+        }, false);
+        window.addEventListener("mouseup", function(evt){
+            // if(is_pushed){
+            //     mouseXY["gapX"] = mouseXY["X"];
+            //     mouseXY["gapY"] = mouseXY["Y"];
+            //     smoothIntervalID = setInterval(smooth_rotate, 64);
+            // }
+            cv.style.cursor = "-webkit-grab";
+            is_pushed = false;
+        }, false);
+        cv.addEventListener("mouseleave", function(evt){
+            cv.style.cursor = "-webkit-grab";
+            is_pushed = false;
+        }, false);
+        window.addEventListener("mousemove", function(evt){                
+            if(!is_pushed){
+                return;
+            }
+            mouseXY["X"] += (evt.screenX - mouseXY["preX"]) * 0.125;
+            mouseXY["Y"] += (evt.screenY - mouseXY["preY"]) * 0.125;
+            mouseXY["preX"] = evt.screenX;
+            mouseXY["preY"] = evt.screenY;
+        }, false);
+                
+        function smooth_rotate(){
+            console.log(mouseXY["gapX"], mouseXY["gapY"]);
+            mouseXY["X"] += mouseXY["gapX"] * 0.125;
+            mouseXY["Y"] += mouseXY["gapY"] * 0.125; 
+                       
+            mouseXY["gapX"] = mouseXY["gapX"] / 0.5;
+            mouseXY["gapY"] = mouseXY["gapY"] / 0.5;
+            
+            if(count++ > 5){
+                 clearInterval(smoothIntervalID);
+                 smoothIntervalID = null;
+            }
+            
+
+            // mouseXY["X"] += mouseXY["gapX"] * 0.1;
+            // mouseXY["Y"] += mouseXY["gapY"] * 0.1; 
+            
+            // console.log(mouseXY["gapX"], mouseXY["gapY"]);
+            
+        }          
+                
+
+        
+        var vertex_data = [];       
+        var index_data = [];
+        var uv_data = [];
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create2();
+        
+        // var p_data = [0.8021504282951355,0,0,0,  0,1.4281480312347412,0,0,   0,0,-1.0020020008087158,-1,     0,0,-0.20020020008087158,0];
+        // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
+        
+        uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
+        index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
+        vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
+
+
+        // mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
+        mat4.perspective2(70, width / height, 0.1, 100.0, pMatrix);
+        // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
+        // mat4.fromTranslation(mvMatrix, [0, 0, 0]);
+             
+                                
+        ctx.beginPath();
+        ctx.moveTo(30, 30);
+        ctx.lineTo(30, 100);
+        ctx.lineTo(100, 100);
+        ctx.lineTo(100, 30);
+        ctx.lineTo(100, 30);        
+        ctx.fillStyle = "#ff0000";
+//        ctx.fill();
+        ctx.stroke();
+
+/*                        
+        var x = y = 0;
+                
+        function start(){
+            x = -mouseXY["X"] * Math.PI / 180;
+            y = Math.max(-90, Math.min(-mouseXY["Y"], 90)) * Math.PI / 180;
+            
+            console.log(x, y);
+            
+            mat4.identity(mvMatrix);
+            mat4.rotatefX(mvMatrix, y);
+            mat4.rotatefY(mvMatrix, x);
+            
+           ctx.drawRect(0, 0, 300, 300);
+        }
+        */
+        
+    })(this, 512, 512);
+</script>
+</html>
