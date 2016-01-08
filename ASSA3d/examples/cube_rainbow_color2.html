@@ -18,7 +18,7 @@
 				text-align:center;
 			}
 			div{
-				width: 800px;
+				width: 512px;
 				margin: 0 auto;
 			}
 			canvas{
@@ -30,11 +30,9 @@
 		</style>
 	</head>
 	<body>
-		<h1>ASSA3d Rainbow Cubes</h1>
-		<p>cartoon</p>
 		<div>
-			<canvas id="test" width="800" height="600" style="background-color: black;"></canvas>
-		.</div>
+			<canvas id="test" width="512" height="512" style="background-color: black;"></canvas>
+		</div>
 		
 		<!-- 사용자 스크립트 -->
 		<script>
@@ -42,11 +40,11 @@
 			var scene = new ASSA3d.Scene();
 			
 			// 카메라를 생성한다.
-			var camera = new ASSA3d.Camera(100, 4/3, 0.1, 190);
+			var camera = new ASSA3d.Camera(45.0, 1, 0.1, 1000);
 			
 			// 카메라 위치 조정
 			camera.position.set(
-				0,0,-120
+				0,0,-1
 			);
 			
 			var step = 20; // 간격
@@ -57,7 +55,7 @@
 								
 			
 			var rainbow_colors = [
-				[255, 0, 0, .5],[255, 127, 0, 1.5],[255,255,0, 1.5],
+				[255, 0, 0, .1],[255, 127, 0, 1.5],[255,255,0, 1.5],
 				[0, 255, 0, .5],[0, 0, 255,   1.5],[0,0,127,   1.5],
 				[255,0,255, .5]
 			];
@@ -65,8 +63,9 @@
 			for(var i=0; i < 1; i++){
 				var cube = new ASSA3d.Cube(rainbow_colors[i], [64,64,64,1.0]);
 				// cube.position.set(2*i*(step+1) - 3*2*step,0,0);
+                cube.position.set(0,0,0);
 				
-				cube.mulScalar(step);
+				cube.mulScalar(0.2);
 				scene.add(cube);	
 			}
 			
@@ -111,10 +110,5 @@
 			
 			
 		</script>
-		<!---->
-		
-		<footer>
-			made by SKKUASSA
-		</footer>
 	</body>
 </html>

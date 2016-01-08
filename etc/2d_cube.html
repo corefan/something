@@ -108,7 +108,7 @@
         var index_data = [];
         var uv_data = [];
         var mvMatrix = mat4.create();
-        var pMatrix = mat4.create2();
+        var pMatrix = mat4.create();
         
         // var p_data = [0.8021504282951355,0,0,0,  0,1.4281480312347412,0,0,   0,0,-1.0020020008087158,-1,     0,0,-0.20020020008087158,0];
         // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
@@ -118,8 +118,8 @@
         vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
 
 
-        // mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
-        mat4.perspective2(45, width / height, 0.1, 10, pMatrix);
+        mat4.perspective(pMatrix, 45, width / height, 0.1, 10000.0);
+        // mat4.perspective2(45, width / height, 0.1, 100, pMatrix);
         // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
         // mat4.fromTranslation(mvMatrix, [0, 0, 0]);
 
@@ -134,36 +134,47 @@
             
             return v;            
         }
-            
-
+        
                    
                    
         // for(var i = 0, len = vertex_data.length; i < len; i+4){
+            
+            /*
             ctx.beginPath();
             ctx.closePath();
             ctx.moveTo(128, 128);
             ctx.lineTo(128, 256);
             ctx.lineTo(256, 256);
             ctx.lineTo(256, 128);
-            ctx.fillStyle = "#0000ff";
+            ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
             ctx.fill();
             ctx.stroke();
+            */
             
-                        
+//            mat4.identity(mvMatrix);
+            mat4.rotatefX(mvMatrix, 1);
+            mat4.rotatefY(mvMatrix, 1);
+//            mat4.rotateZ(mvMatrix, 1);
+            
+//            mat4.scalar.multiply(pMatrix, pMatrix , mvMatrix);
+            
+            ctx.fillStyle = "rgba(0, 0, 0, 1)";
+            ctx.rect(0, 0, width, height);
+            ctx.fill();
+            ctx.fillStyle = "rgba(1, 1, 1, 1)";
             ctx.beginPath();
-            var v3 = mat4Vec4(pMatrix, 128, 128, 10);
-            ctx.moveTo(v3["x"], v3["y"]);
-            v3 = mat4Vec4(pMatrix, 128, 256, 10);
-            ctx.lineTo(v3["x"], v3["y"]);
-            v3 = mat4Vec4(pMatrix, 256, 256, -10);
-            ctx.lineTo(v3["x"], v3["y"]);
-            v3 = mat4Vec4(pMatrix, 256, 128, -10);
-            ctx.lineTo(v3["x"], v3["y"]);            
+            var v3 = mat4Vec4(pMatrix, -1, 1, 1);
+            ctx.moveTo(v3["x"]*width/4 + width/2, height/2 - v3["y"]*height/4);
+            v3 = mat4Vec4(pMatrix, -1, -1, 1);
+            ctx.lineTo(v3["x"]*width/4 + width/2, height/2 - v3["y"]*height/4);
+            v3 = mat4Vec4(pMatrix, 1, -1, 1);
+            ctx.lineTo(v3["x"]*width/4 + width/2, height/2 - v3["y"]*height/4);
+            v3 = mat4Vec4(pMatrix, 1, 1, 1);
+            ctx.lineTo(v3["x"]*width/4 + width/2, height/2 - v3["y"]*height/4);
             ctx.closePath();
-            ctx.fillStyle = "#ff0000";
+            ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
             ctx.fill();
             ctx.stroke();
-            
             
         // }
 
