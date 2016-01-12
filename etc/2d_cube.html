@@ -152,16 +152,17 @@
             */
             
 //            mat4.identity(mvMatrix);
-            mat4.rotatefX(mvMatrix, 1);
+//            mat4.rotatefX(mvMatrix, 1);
             mat4.rotatefY(mvMatrix, 1);
 //            mat4.rotateZ(mvMatrix, 1);
             
-//            mat4.scalar.multiply(pMatrix, pMatrix , mvMatrix);
+           mat4.scalar.multiply(pMatrix, pMatrix , mvMatrix);
             
             ctx.fillStyle = "rgba(0, 0, 0, 1)";
             ctx.rect(0, 0, width, height);
             ctx.fill();
-            ctx.fillStyle = "rgba(1, 1, 1, 1)";
+            ctx.strokeStyle="#ffffff";
+            // ctx.lineWidth = 1;
             ctx.beginPath();
             var v3 = mat4Vec4(pMatrix, -1, 1, 1);
             ctx.moveTo(v3["x"]*width/4 + width/2, height/2 - v3["y"]*height/4);

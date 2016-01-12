@@ -62,7 +62,7 @@
 			for(var i=0; i < 7; i++){
 				var face = new ASSA3d.Face4(rainbow_color[i],'rgb(255,255,255)');
 				
-				// face.position.set(0,0, -3*step*i );				
+				face.position.set(0,0, -3*step*i );
 				// face.p1.mulScalar(3*step);
 				// face.p2.mulScalar(3*step);
 				// face.p3.mulScalar(3*step);
@@ -78,6 +78,7 @@
 			
 			}
 			
+            
 			var canvas = document.getElementById('test');
 			
 			// 렌더러를 생성

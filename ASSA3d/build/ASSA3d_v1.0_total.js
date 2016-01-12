@@ -1313,7 +1313,7 @@ ASSA3d.Camera = function(fov,aspect,near,far){
 	this.near = near || 0.1;
 	this.far = far || 1000;
 	
-	
+    this.at = new ASSA3d.Vec3(0,0,-1); // z 축	
 	
 };
 
