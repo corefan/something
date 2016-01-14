@@ -461,7 +461,7 @@ ASSA3d.Face4 = function(obj, p1, p2, p3, p4, faceColor, edgeColor){
 	
 	this.parent = obj;
 	this.visible = false;
-	
+	    
 	this.i1 = p1;
 	this.i2 = p2;
 	this.i3 = p3;
@@ -1194,6 +1194,30 @@ ASSA3d.Obj3d.prototype.addFace4= function( idx1, idx2, idx3, idx4 ,faceColor, ed
 	
 	this.atoms.push(new ASSA3d.Face4(this, idx1, idx2, idx3, idx4, faceColor, edgeColor));
 	
+};
+
+
+ASSA3d.Plate = function(color, edgeColor){
+	
+	ASSA3d.Obj3d.call(this);
+	// 점 8개 
+	this.addPoint(-1,-1, 0);
+	this.addPoint( 1,-1, 0);
+	this.addPoint( 1, 1, 0);
+	this.addPoint(-1, 1, 0);
+	
+	// 면 1개
+	this.addFace4(3,2,1,0, color, edgeColor);	
+};
+
+ASSA3d.Plate.prototype = new ASSA3d.Obj3d();
+ASSA3d.Plate.prototype.constructor = ASSA3d.Plate;
+
+ASSA3d.Plate.prototype.mulScalar = function( s ){
+	
+	for(var i=0; i < this.points.length; i++){
+		this.points[i].mulScalar(s);
+	}
 };
 
 

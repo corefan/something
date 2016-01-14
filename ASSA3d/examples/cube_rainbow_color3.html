@@ -6,19 +6,20 @@
 		
 		<!-- 스크립트 파일 추가하는 부분 -->
 		<script src="../build/ASSA3d_v1.0_total.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../webGL/js/glMatrix/gl-matrix.js" type="text/javascript" charset="utf-8"></script>
 		
 		<!-- -->
 		
 		<style>
 			body{
-				background-color: black;
+				background-color: #ffffff;
 				color: #CCCCCC;
 			}
 			h1,p{
 				text-align:center;
 			}
 			div{
-				width: 800px;
+				width: 512px;
 				margin: 0 auto;
 			}
 			canvas{
@@ -31,7 +32,7 @@
 	</head>
 	<body>
 		<div>
-			<canvas id="test" width="800" height="600" style="background-color: black;"></canvas>
+			<canvas id="test" width="512" height="512" style="background-color: black;"></canvas>
 		</div>
 		
 		<!-- 사용자 스크립트 -->
@@ -40,12 +41,14 @@
 			var scene = new ASSA3d.Scene();
 			
 			// 카메라를 생성한다.
-			var camera = new ASSA3d.Camera(45.0,4/3,0.1, 1000);
+			var camera = new ASSA3d.Camera(45.0, 1, 0.1, 100);
 			
 			// 카메라 위치 조정
 			camera.position.set(
-				0,0,200
+				// -3,3,-5
+				0,0,5
 			);
+            camera.lookAt(0, 0, 0);
 			
 			var step = 20; // 간격
 			var num = 6; // 개수
@@ -55,29 +58,53 @@
 								
 			
 			var rainbow_colors = [
-				[255, 0, 0, .5],[255, 127, 0, 1.5],[255,255,0, 1.5],
+				[255, 0, 0, .1],[255, 127, 0, 1.5],[255,255,0, 1.5],
 				[0, 255, 0, .5],[0, 0, 255,   1.5],[0,0,127,   1.5],
 				[255,0,255, .5]
 			];
 			
-			for(var i=0; i < 7; i++){
+            function mat4MultiVec4(mtx, v){
+                var vw = 1;
+                v.x = mtx[0]*v.x + mtx[1]*v.y + mtx[2]*v.z + mtx[3]*vw;
+                v.y = mtx[4]*v.x + mtx[5]*v.y + mtx[6]*v.z + mtx[7]*vw;
+                v.z = mtx[8]*v.x + mtx[9]*v.y + mtx[10]*v.z + mtx[11]*vw;
+                v.w = mtx[12]*v.x + mtx[13]*v.y + mtx[14]*v.z + mtx[15]*vw;
+                
+                return v;
+            }
+            
+			for(var i=0; i < 1; i++){
 				var cube = new ASSA3d.Cube(rainbow_colors[i], [64,64,64,1.0]);
-				cube.position.set(2*i*(step+1) - 3*2*step,0,0);
+				// cube.position.set(2*i*(step+1) - 3*2*step,0,0);
+                // cube.position.set(-i*2.5+3,0,0);
+                cube.position.set(0, 0, 0);
+                // cube.lookAt(Math.sin(45), 0, Math.cos(45));
+                // cube.lookAt(0, 0, Math.cos(45));
+                // cube.lookAt(Math.sin(60), 0, Math.cos(30));
+                
+                // var aaa = mat4.create();
+                // mat4.rotateY(aaa, aaa, 1.57);
+                // 
+                // for(var j = 0, len = cube.points.length; j < len; j++){
+                //     mat4MultiVec4(aaa, cube.points[j]);
+                // }
+
 				
-				cube.mulScalar(step);
-				scene.add(cube);	
+				// cube.mulScalar(0.2);
+				scene.add(cube);
 			}
 			
-			var light = new ASSA3d.Light();
-			light.position.set(4,5,-3);
-			scene.add(light);
+			// var light = new ASSA3d.Light();
+			// light.position.set(4,5,-3);
+			// scene.add(light);
 			
 						
 			var canvas = document.getElementById('test');
 			// 렌더러를 생성
 			var renderer = new ASSA3d.Renderer(canvas);
-			
-			
+			renderer.render(scene, camera);
+
+/*			
 			var mouseX=0;
 			var mouseY=0;
 			var halfX = canvas.width/2;
@@ -101,8 +128,9 @@
 				camera.up.set(0,1,0);
 				camera.lookAt(0,0,0);
 				
-				renderer.render(scene, camera);	
+				renderer.render(scene, camera);
 			},1000/60);
+            */
 			
 			
 			
