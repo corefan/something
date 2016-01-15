@@ -147,8 +147,14 @@
     	}
             
 
+        function setTranslation ( mvMatrix, v ){
+            mvMatrix[3] += v[0];
+            mvMatrix[7] += v[1];
+            mvMatrix[11] += v[2];                      
+        }
+
         // vertex_data = mat4MultiVec3Arr(mvMatrix, vertex_data);
-        mat4.scalar.translate(mvMatrix, mvMatrix, [0, 0, -5]);
+        setTranslation(mvMatrix, [0, 0, -5]);
         // mat4.scalar.rotateY(mvMatrix, mvMatrix, 1);
         // mat4.scalar.scale(mvMatrix, mvMatrix, [0.5, 0.5, 0.5]);
         perspective(pMatrix);
