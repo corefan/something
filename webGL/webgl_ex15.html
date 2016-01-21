@@ -48,7 +48,7 @@
                             "}" +
                             "void main (void){" +
                             "   vColor = aColor;" +
-                            "   gl_PointSize = 0.1;" +
+                            "   gl_PointSize = 3.0;" +
                             // "   gl_Position = vec4(aVertexPosition, 1.0);" +
                             // "   gl_Position = positionMTX(aPosition)*vec4(aVertexPosition, 1.0);" +
                             // "   gl_Position = scaleMTX(aScale)*vec4(aVertexPosition, 1.0);" +
@@ -72,7 +72,11 @@
                                 
                                 
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('GET', 'json/smith_head.json', true);
+        // xmlhttp.open('GET', 'json/smith_head.json', true);
+        // xmlhttp.open("GET", "../MoGL/showcase/lol/lol_Ahri.json", false);
+        xmlhttp.open("GET", "../MoGL/showcase/monkey/monkey.json", false);
+        // xmlhttp.open("GET", "json/smith_head.json", false);
+        // xmlhttp.open("GET", "json/sphere.json", false);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 start(JSON.parse(xmlhttp.responseText));
@@ -81,8 +85,9 @@
         xmlhttp.send(null);
         
         function start(json){
-            var vertices = json.vertices;
-            var faces = json.faces;
+            var vertices = json.meshes[0].vertices;
+            // var faces = json.faces;
+            var faces = json.meshes[0].indices;
             var vertexIndexData = [];
             var vertexData = [];
             var colorData = [];
@@ -92,19 +97,20 @@
             var rotationData = [];
             // var rotationInfo = [];
             
-            for (i = 0, len = vertices.length; i < len; i++) {
-                vertexData.push(vertices[i][0], vertices[i][1], vertices[i][2]);
-                positionData.push(0, -0.5, 0);
-                scaleData.push(3, 3, 3);
+            for (i = 0, len = vertices.length; i < len; i=i+3) {
+                vertexData.push(vertices[i], vertices[i+1], vertices[i+2]);
+                positionData.push(0, 0, 0);
+                scaleData.push(1, 1, 1);
                 rotationData.push(0, 0, 0);
                 
                 colorData.push(0, 1, 0);
                 colorData2.push(0.7, 0.7, 1);
             }
-            for (i = 0, len = faces.length; i < len; i++) {
-                vertexIndexData.push(faces[i][0], faces[i][1], faces[i][2]);
-                vertexIndexData.push(faces[i][0], faces[i][2], faces[i][3]);
-            }
+
+            vertexIndexData = faces;
+            
+            // vertexData = json.vertices;
+            // vertexIndexData = json.indices;
             
             var vertexShader = gl.createShader(gl.VERTEX_SHADER);
             gl.shaderSource(vertexShader, vertexShaderStr);
@@ -191,7 +197,6 @@
                 
                  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
                  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData2) , gl.STATIC_DRAW);
-                //  gl.drawElements(gl.POINTS, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
                  gl.drawElements(gl.LINES, vertexIndexData.length, gl.UNSIGNED_SHORT, 0);
                 
                 requestAnimationFrame(render);
