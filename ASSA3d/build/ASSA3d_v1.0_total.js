@@ -1253,7 +1253,6 @@ ASSA3d.Cube = function(color, edgeColor){
 	this.addFace4(0,4,7,3, color, edgeColor);
 	this.addFace4(2,3,7,6, color, edgeColor);
 	this.addFace4(0,1,5,4, color, edgeColor);
-	
 };
 
 ASSA3d.Cube.prototype = new ASSA3d.Obj3d();
@@ -1265,6 +1264,34 @@ ASSA3d.Cube.prototype.mulScalar = function( s ){
 		this.points[i].mulScalar(s);
 	}
 };
+
+
+ASSA3d.Cube2 = function(color, edgeColor){
+	
+	ASSA3d.Obj3d.call(this);
+	// 점 8개 
+	this.addPoint(-1,-1,-1);
+	this.addPoint( 1,-1,-1);
+	this.addPoint( 1, 1,-1);
+	this.addPoint(-1, 1,-1);
+	
+	this.addPoint(-1,-1, 1);
+	this.addPoint( 1,-1, 1);
+	this.addPoint( 1, 1, 1);
+	this.addPoint(-1, 1, 1);
+	
+	
+	// 면 6개 , CCW 순, 노말벡터가 바깥을 바라보도록한다.
+	this.addFace4(3,2,1,0, [color[0],color[1],color[2],0], edgeColor);
+	this.addFace4(4,5,6,7, [color[0],color[1],color[2],1], edgeColor);
+	this.addFace4(1,2,6,5, [color[0],color[1],color[2],2], edgeColor);
+	this.addFace4(0,4,7,3, [color[0],color[1],color[2],3], edgeColor);
+	this.addFace4(2,3,7,6, [color[0],color[1],color[2],4], edgeColor);
+	this.addFace4(0,1,5,4, [color[0],color[1],color[2],5], edgeColor);
+};
+
+ASSA3d.Cube2.prototype = new ASSA3d.Cube();
+ASSA3d.Cube2.prototype.constructor = ASSA3d.Cube2;
 
 /*
  * @author: SKKUASSA
@@ -1566,7 +1593,7 @@ ASSA3d.Renderer = function( elem ){
 
 						if(chkIntersection(	x, y, width + 1, y, // (-1, y) 에서 (x, y) 잇는 수평선
 											a.x, a.y, b.x, b.y  // Face4 외곽선중 직선 하나
-						)
+						,atom)
 						){
 							count++;
 						}
@@ -1588,7 +1615,7 @@ ASSA3d.Renderer = function( elem ){
 		return null;
 	};
 	
-	function chkIntersection(	x1,y1, x2,y2, x3,y3, x4,y4){
+	function chkIntersection(	x1,y1, x2,y2, x3,y3, x4,y4 , atom){
 		
 		var n = (y4-y3)*(x2-x1)-(x4-x3)*(y2-y1);
 		var t = (x4-x3)*(y1-y3)-(y4-y3)*(x1-x3);
@@ -1599,6 +1626,8 @@ ASSA3d.Renderer = function( elem ){
 		
 		if(t < 0 || t > 1) return false;
 		if(s < 0 || s > 1) return false;
+        
+        console.log(atom.faceColor[3]);
 		
 		return true;
 	};

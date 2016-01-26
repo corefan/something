@@ -27,6 +27,15 @@
     (function(win, width, height){        
         var cv = document.getElementById("stage");
         
+        // cv.addEventListener("click", function(evt){
+        //     trace(evt);
+        // }, false);
+        cv.width = width;
+        cv.height = height;
+        cv.parentNode.style.width = width + "px";
+        cv.parentNode.style.height = height + "px";
+        var ctx = cv.getContext("2d");
+        var is_pushed = false;
         var mouseX = 0;
         var mouseY = 0;
         window.addEventListener("mousedown", function(evt){
@@ -47,18 +56,11 @@
             }
             evt.offsetX = evt.offsetX || evt.pageX - this.offsetLeft;
             evt.offsetY = evt.offsetY || evt.pageY - this.offsetTop;
-            mouseX = evt.offsetX - w/2;
-            mouseY = evt.offsetY - h/2;
-        }, false);     
+            mouseX = evt.offsetX - width/2;
+            mouseY = evt.offsetY - height/2;
+        }, false); 
         
-        // cv.addEventListener("click", function(evt){
-        //     trace(evt);
-        // }, false);
-        cv.width = width;
-        cv.height = height;
-        cv.parentNode.style.width = width + "px";
-        cv.parentNode.style.height = height + "px";
-        var ctx = cv.getContext("2d");
+        
         var camera = {
                 fov : 45,
                 aspect : width / height,
@@ -68,7 +70,7 @@
         
         var xmlhttp = new XMLHttpRequest();
         // xmlhttp.open("GET", "../MoGL/showcase/lol/lol_Ahri.json", false);
-        xmlhttp.open("GET", "../webGL/json/smith_head.json", false);
+        xmlhttp.open("GET", "./json/monkey.json", false);
         // xmlhttp.open("GET", "../webGL/json/sphere.json", false);
         xmlhttp.onreadystatechange = function(){
             if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
@@ -76,17 +78,6 @@
             }
         };
         xmlhttp.send();
-                
-        // var p_data = [0.8021504282951355,0,0,0,  0,1.4281480312347412,0,0,   0,0,-1.0020020008087158,-1,     0,0,-0.20020020008087158,0];
-        // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
-        
-        // uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
-        // index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
-        // vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
-      
-        // mat4.perspective2(70, width / height, 0.1, 100.0, pMatrix);
-        // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
-        // mat4.fromTranslation(mvMatrix, [0, 0, 0]);
         
         
         function mat4MultiVec4(mtx, vx, vy, vz, vw){
@@ -201,47 +192,45 @@
         function start(json){
             var vertex_data = [], index_data = [], mvMatrix = mat4.create(), pMatrix = mat4.create();
             var vertices = json.vertices;
-            var faces = json.faces;
+            var indices = json.indices;
             
-            for (i = 0, len = vertices.length; i < len; i++) {
-                vertex_data.push(vertices[i][0], vertices[i][1], vertices[i][2]);
-            }
-            for (i = 0, len = faces.length; i < len; i++) {
-                index_data.push(faces[i][0], faces[i][1], faces[i][2]);
-                index_data.push(faces[i][0], faces[i][2], faces[i][3]);
-            }
-                                
-            
+            vertex_data = vertices;
+            index_data = indices;            
        
         
             function render(){
                 mat4.identity(mvMatrix);
                 // mat4.scalar.rotateX(mvMatrix, mvMatrix, -0.03*count++);
-                mat4.scalar.rotateY(mvMatrix, mvMatrix, -0.01*count++);
-                setTranslation(mvMatrix, [0, -0.2, -0.7]);
+                // mat4.scalar.rotateY(mvMatrix, mvMatrix, -0.01*count++);
+                mat4.lookAt(mvMatrix, [-mouseX*0.02, mouseY*0.02, 4], [0, 0, 0], [0, 1, 0]);
+                setTranslation(mvMatrix, [0, -0.2, -4.7]);  
                 vertex_data2 = mat4MultiVec3Arr(mvMatrix, vertex_data);
                 vertex_data2 = mat4MultiVec4Arr(pMatrix, vertex_data2);
                 divScalar(vertex_data2);        
                 var vertex_arr = point3dTo2d(vertex_data2);
-                ctx.clearRect(0, 0, width, height);
-                // ctx.beginPath();
-                // ctx.fillStyle = "#a070a0";
+                ctx.clearRect(0, 0, width, height);            
+                ctx.beginPath();
+                ctx.fillStyle = "#a070a0";
                 
-                for(var i = 0, len = vertex_arr.length; i < len; i+=2){
-                    // ctx.moveTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);
-                    ctx.fillRect(vertex_arr[i], vertex_arr[i+1], 1, 1);
-                    // ctx.fill();
+                for(var i = 0, len = index_data.length; i < len; i+=3){
+                    ctx.moveTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);
+                    ctx.lineTo(vertex_arr[index_data[i+1]*2], vertex_arr[index_data[i+1]*2+1]);
+                    ctx.lineTo(vertex_arr[index_data[i+2]*2], vertex_arr[index_data[i+2]*2+1]);
+                    ctx.lineTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);
+                    ctx.fill();
                 }
                 
                 
                 ctx.stroke();            
             }
 
+            // vertex_data = mat4MultiVec3Arr(mvMatrix, vertex_data);
+            // setTranslation(mvMatrix, [0, 0, -0.2]);        
+            // mat4.scalar.scale(mvMatrix, mvMatrix, [0.5, 0.5, 0.5]);
             perspective(pMatrix);
                     
-            // setTranslation(mvMatrix, [0, -0.2, -0.7]);                         
             // var vertex_data2 = mat4MultiVec3Arr(mvMatrix, vertex_data);
-            // vertex_data2 = mat4MultiVec4Arr(pMatrix, vertex_data2);                 
+            // vertex_data2 = mat4MultiVec4Arr(pMatrix, vertex_data2);
             // divScalar(vertex_data2);
             // render();
         
