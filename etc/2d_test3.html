@@ -210,7 +210,9 @@
             }
             for (i = 0, len = faces.length; i < len; i++) {
                 index_data.push(faces[i][0], faces[i][1], faces[i][2]);
-                index_data.push(faces[i][0], faces[i][2], faces[i][3]);
+                if(faces[i].length > 3){
+                    index_data.push(faces[i][0], faces[i][2], faces[i][3]);
+                }
             }
                                 
             
