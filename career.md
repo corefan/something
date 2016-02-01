@@ -1,7 +1,7 @@
 #Career
 
 ##TOBESOFT UI component & framework
-- sample - http://pparkssi.github.io/something/webGL/webgl_360image_01.html
+- sample - http://172.10.12.71:8080/Career/index.html
 
 ##Opensource & etc
 - 360 degree image - http://pparkssi.github.io/something/webGL/webgl_360image_01.html
