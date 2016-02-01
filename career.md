@@ -7,7 +7,7 @@
 - ahri_sample - http://172.10.11.34:9090/git/something/MoGL/showcase/lol_ahri.html
 - astro_sample - 
 
-##Opensource & etc
+etc
 - 360 degree image - http://pparkssi.github.io/something/webGL/webgl_360image_01.html
 - 360 degree video - http://pparkssi.github.io/something/webGL/webgl_360video_01.html
 - draw smith - http://pparkssi.github.io/something/etc/2d_test.html
