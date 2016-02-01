@@ -4,7 +4,8 @@
 - sample - http://121.134.99.171:8080/Career/index.html
 
 ##Opensource
-- ahri_sample - http://172.10.11.34:9090/git/something/MoGL/showcase/lol_ahri.html
+- ahri_sample - http://pparkssi.github.io/something/MoGL/showcase/lol_ahri.html
+                http://pparkssi.github.io/something/MoGL/showcase/lol_test.html
 - astro_sample - 
 
 etc
