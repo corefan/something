@@ -428,7 +428,8 @@ var Matrix = (function () {
             'up:Array - [x, y, z] 형태의 up 벡터'
         ],
         value:function matLookAt(eye, center, up) {
-            var a = rawInit(this), x0, x1, x2, y0, y1, y2, z0, z1, z2, len, 
+            //var a = rawInit(this)
+            var a = this, x0, x1, x2, y0, y1, y2, z0, z1, z2, len, 
                 eyex = eye[0], eyey = eye[1], eyez = eye[2], 
                 upx = up[0], upy = up[1], upz = up[2], 
                 centerx = center[0], centery = center[1], centerz = center[2];
