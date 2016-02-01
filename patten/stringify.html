@@ -100,12 +100,36 @@
             
         var my = stringify(test_obj);
         var origin = JSON.stringify(test_obj);
-        console.log('========== my stringify ============');
-        console.log(my);
-        console.log('========== origin stringify ============');
-        console.log(origin);
-        console.log('========== (my == origin) ============');
-        console.log(my == origin);
+        var str = "원본 객체<br/>" +
+        "{<br/>"+
+        "&nbsp; &nbsp; 'name' : 'grandfather',<br/>"+
+        "&nbsp; &nbsp; 'age': 58,<br/>"+
+        "&nbsp; &nbsp; 'birthday': new Date(1958, 5, 5),<br/>"+
+        "&nbsp; &nbsp; 'sub_obj' : {<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; 'name' : 'father',<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; 'age': 33,<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; 'birthday': new Date(1983, 7, 15),<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; 'arr' : [3, [1,2,3,6], 9],<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; 'arr2' : [3, {'val' : 6}, 9],<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; 'subsub_obj' : {<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'name' : 'son',<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'age': 1,<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'birthday': new Date(2015, 1, 20),<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'arr' : [1, [1,2], 9],<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'arr' : [1, {'val' : 2}, 3]<br/>"+
+        "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}<br/>"+
+        "&nbsp; &nbsp; }<br/>"+
+        "&nbsp; &nbsp; 'arr' : [-1, [-1, 0, 1], 1],<br/>"+
+        "&nbsp; &nbsp; 'arr2' : [-1, {'val' : 0}, 1]<br/>"+
+        "}<br/>"
+        str += '<br/><br/>========== my stringify ============<br/>';
+        str += my;
+        str += '<br/><br/>========== origin stringify ============<br/>';
+        str += origin;
+        str += '<br/><br/>========== (my == origin) ===========<br/>';
+        str += my == origin;
+        
+        document.body.innerHTML = str;
     </script>
 </body>
 </html>
