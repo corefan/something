@@ -6,7 +6,6 @@
 ##Opensource
 - ahri_sample - http://pparkssi.github.io/something/MoGL/showcase/lol_ahri.html
                 http://pparkssi.github.io/something/MoGL/showcase/lol_test.html
-- astro_sample - 
 
 etc
 - 360 degree image - http://pparkssi.github.io/something/webGL/webgl_360image_01.html
