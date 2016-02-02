@@ -11,6 +11,6 @@
 - mini 2d render - http://pparkssi.github.io/something/webGL/2dmini.html
 - 360 degree image - http://pparkssi.github.io/something/webGL/webgl_360image_01.html
 - 360 degree video - http://pparkssi.github.io/something/webGL/webgl_360video_01.html
-- draw 2d - http://pparkssi.github.io/something/etc/2d_test.html
-- http://pparkssi.github.io/something/etc/2d_cube2.html
+- draw 2d - http://pparkssi.github.io/something/etc/2d_test.html  
+            http://pparkssi.github.io/something/etc/2d_cube2.html
 - iterative - http://pparkssi.github.io/something/patten/stringify.html
