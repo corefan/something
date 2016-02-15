@@ -1,0 +1,70 @@
+<html lang="ko">
+<head>
+	<script>
+        'use strict';
+
+        /*
+        var obj = {
+            val: 'val',
+            func: function func(){
+                setTimeout(() => {
+                    console.log(this.val);
+                    }, 1000);
+                }
+            };
+            obj.func();
+            */
+        /*
+        for(let i = 0; i < 5; i++){
+            setTimeout(function timer(){
+                console.log(i);
+                }, i * 1000);
+        }
+        
+        for(var i = 0; i < 5; i++){
+            setTimeout(function timer(){
+                console.log(i);
+                }, i * 1000);
+        }
+        */
+        
+        /*
+        function f1(x, ...y) {  // y is an Array
+            return x * y.length;
+        }
+        console.log(f1(3, "hello", true) == 6);
+        
+        function f2(x, y, z) {
+          return x + y + z;
+        }
+        // Pass each elem of array as argument
+        console.log(f2(...[1,2,3]) == 6);  
+        */
+               
+        let fibonacci = {
+            [Symbol.iterator]() {
+                let pre = 0, cur = 1, temp;
+                return {
+                    next() {
+                        temp = pre;
+                        pre = cur;
+                        cur = cur + temp;
+                        return { done: false, value: cur }
+                    }
+                }
+            }
+        }
+
+        for (var n of fibonacci) {  
+        // truncate the sequence at 1000
+            if (n > 1000)
+                break;
+            console.log(n);
+        }
+
+	</script>
+</head>
+<body>
+</body>
+
+</html>

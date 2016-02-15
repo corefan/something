@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>2d_rect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+    <script src="../webGL/js/glMatrix/f_gl-matrix.js"></script>
+</head>
+<body>
+<div style="position: absolute; left:0px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
+	<canvas id="stage" width="512" height="512">
+	</canvas>
+</div>
+<div style="position: absolute; left:515px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
+	<canvas id="backstage" width="512" height="512">
+	</canvas>
+</div>
+<!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
+    <video id="video" width="400px" height="300px"></video>
+</div>-->
+</body>
+<script>
+    (function(win, width, height){
+        var cv = document.getElementById("stage");
+        var b_cv = document.getElementById("backstage");
+        
+        var is_pushed = false;
+        var mouseX = 0;
+        var mouseY = 0;
+        cv.addEventListener("mousedown", function(evt){
+            console.log(ctx.getImageData(evt.clientX,evt.clientY,1,1).data.join(""));
+        }, false);
+
+        cv.addEventListener("mousemove", function(evt){
+            
+        }, false); 
+        cv.width = width;
+        cv.height = height;
+        cv.parentNode.style.width = width + "px";
+        cv.parentNode.style.height = height + "px";
+        var ctx = cv.getContext("2d");
+        var b_ctx = b_cv.getContext("2d");
+           
+        var vertex_data = [];       
+        var index_data = [];
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create();
+        
+        // var p_data = [0.8021504282951355,0,0,0,  0,1.4281480312347412,0,0,   0,0,-1.0020020008087158,-1,     0,0,-0.20020020008087158,0];
+        // var mv_data = [-0.0019187201978638768, -0, -0.999998152256012, -0, 0, 1, 0, 0, 0.999998152256012, 0, -0.0019187201978638768, 0, 0, 0, 0, 1];
+        
+        // uv_data.push(0.001666666666666668,0.5025,0.33166666666666667,0.5025,0.33166666666666667,0.9975,0.001666666666666668,0.9975,0.33499999999999996,0.5025,0.665,0.5025,0.665,0.9975,0.33499999999999996,0.9975,0.6683333333333332,0.5025,0.9983333333333333,0.5025,0.9983333333333333,0.9975,0.6683333333333332,0.9975,0.001666666666666668,0.0025000000000000022,0.33166666666666667,0.0025000000000000022,0.33166666666666667,0.4975,0.001666666666666668,0.4975,0.33499999999999996,0.0025000000000000022,0.665,0.0025000000000000022,0.665,0.4975,0.33499999999999996,0.4975,0.6683333333333332,0.0025000000000000022,0.9983333333333333,0.0025000000000000022,0.9983333333333333,0.4975,0.6683333333333332,0.4975);
+        // index_data.push(0,2,1,0,3,2,4,6,5,4,7,6,8,10,9,8,11,10,12,14,13,12,15,14,16,18,17,16,19,18,20,22,21,20,23,22);
+        // vertex_data.push(1,-1,1,-1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1,1,1,-1,1,1,1,-1,1,1,-1,1,-1,-1,-1,-1,-1,-1,1,1,-1,1,1,-1,-1,1,-1,-1,1,-1,1,1,1,1,1,1,-1,-1,-1,1,-1,-1,-1,-1,1,-1,-1,1,1);
+      
+        // mat4.perspective2(70, width / height, 0.1, 100.0, pMatrix);
+        // mat4.fromTranslation(mvMatrix, [0.8021504282951355, 1.4281480312347412, -1.0020020008087158]);
+        // mat4.fromTranslation(mvMatrix, [0, 0, 0]);
+        
+        
+        function mat4MultiVec4(mtx, vx, vy, vz, vw){
+            var v = {}
+            v.x = mtx[0]*vx + mtx[1]*vy + mtx[2]*vz + mtx[3]*vw;
+            v.y = mtx[4]*vx + mtx[5]*vy + mtx[6]*vz + mtx[7]*vw;
+            v.z = mtx[8]*vx + mtx[9]*vy + mtx[10]*vz + mtx[11]*vw;
+            v.w = mtx[12]*vx + mtx[13]*vy + mtx[14]*vz + mtx[15]*vw;
+            
+            return v;            
+        }
+        
+        function mat4MultiVec4Arr(mtx, arr){
+            var retVec4Arr = [];       
+            for(var i = 0, len = arr.length; i < len; i=i+4){
+                retVec4Arr[i] = mtx[0]*arr[i] + mtx[1]*arr[i+1] + mtx[2]*arr[i+2] + mtx[3]*arr[i+3];
+                retVec4Arr[i+1] = mtx[4]*arr[i] + mtx[5]*arr[i+1] + mtx[6]*arr[i+2] + mtx[7]*arr[i+3];
+                retVec4Arr[i+2] = mtx[8]*arr[i] + mtx[9]*arr[i+1] + mtx[10]*arr[i+2] + mtx[11]*arr[i+3];
+                retVec4Arr[i+3] = mtx[12]*arr[i] + mtx[13]*arr[i+1] + mtx[14]*arr[i+2] + mtx[15]*arr[i+3];
+            }            
+            return retVec4Arr;
+        }
+        
+        
+        function mat4MultiVec3Arr(mtx, arr){
+            var retVec4Arr = [];
+            
+            for(var i = 0, j = 0, len = arr.length; i < len; i=i+3, j=j+4){
+                retVec4Arr[j] = mtx[0]*arr[i] + mtx[1]*arr[i+1] + mtx[2]*arr[i+2] + mtx[3];
+                retVec4Arr[j+1] = mtx[4]*arr[i] + mtx[5]*arr[i+1] + mtx[6]*arr[i+2] + mtx[7];
+                retVec4Arr[j+2] = mtx[8]*arr[i] + mtx[9]*arr[i+1] + mtx[10]*arr[i+2] + mtx[11];
+                retVec4Arr[j+3] = mtx[12]*arr[i] + mtx[13]*arr[i+1] + mtx[14]*arr[i+2] + mtx[15];                
+            }            
+            return retVec4Arr;
+        }
+        
+        function pointX3dTo2d (width, x){            
+            return width/2*(1 + x);
+        }
+        
+        function pointY3dTo2d (height, y){            
+            return height/2*(1 - y);
+        }
+        
+        function point3dTo2d (arr){
+            var ret_arr = [];
+            for(var i = 0, len = arr.length; i < len; i=i+4){
+                ret_arr.push(width/2*(1 + arr[i]));
+                ret_arr.push(height/2*(1 - arr[i+1]));
+            }
+            return ret_arr;
+        }
+        
+        vertex_data.push(
+            -1,1,0,
+            -1,-1,0,
+            1,-1,0,
+            1,1,0
+            );
+         
+        index_data.push(
+            0,1,3,
+            1,2,3
+        );    
+            
+            
+            
+        var camera = {
+            fov : 45,
+            aspect : width / height,
+            near : 0.1,
+            far : 100                        
+        };         
+            
+        function perspective(out){		
+            var n = camera.near;
+            var f = camera.far;
+            var t = n * Math.tan(camera.fov * Math.PI/360.0);
+            var b = -t;
+            var l = b * camera.aspect;
+            var r = t * camera.aspect;
+            
+            var rl = 1 / (r - l),
+                tb = 1 / (t - b),
+                nf = 1 / (n - f);
+            out[0] = (n * 2) * rl;
+            out[1] = 0;
+            out[2] = 0;
+            out[3] = 0;
+            out[4] = 0;
+            out[5] = (n * 2) * tb;
+            out[6] = 0;
+            out[7] = 0;
+            out[8] = (r + l) * rl;
+            out[9] = (t + b) * tb;
+            out[10] = (f + n) * nf;
+            out[11] = (f * n * 2) * nf;
+            out[12] = 0;
+            out[13] = 0;
+            out[14] = -1
+            out[15] = 0;
+            return out;
+    	}
+        
+        function divScalar( arr ){
+            for(var i = 0, len = arr.length; i < len; i=i+4){
+                var s = arr[i+3];
+                if(s){
+                    arr[i] /= s;
+                    arr[i+1] /= s;
+                    arr[i+2] /= s;
+                }else{
+                    arr[i] = 0;
+                    arr[i+1] = 0;
+                    arr[i+2] = 0;
+                }
+            }            
+     	}
+            
+
+        function setTranslation ( mvMatrix, v ){
+            mvMatrix[3] += v[0];
+            mvMatrix[7] += v[1];
+            mvMatrix[11] += v[2];                      
+        }
+
+        function setRotateY ( mvMatrix, v ){
+            mvMatrix[3] += v[0];
+            mvMatrix[7] += v[1];
+            mvMatrix[11] += v[2];                      
+        }
+        
+        function render(){
+            mat4.identity(mvMatrix);
+            // mat4.scalar.rotateX(mvMatrix, mvMatrix, -0.03*count++);
+            // mat4.scalar.rotateY(mvMatrix, mvMatrix, -0.02*count++);
+            setTranslation(mvMatrix, [0, 0, -5]);
+            vertex_data2 = mat4MultiVec3Arr(mvMatrix, vertex_data);
+            vertex_data2 = mat4MultiVec4Arr(pMatrix, vertex_data2);
+            divScalar(vertex_data2);        
+            var vertex_arr = point3dTo2d(vertex_data2);
+            ctx.clearRect(0, 0, width, height);
+            b_ctx.clearRect(0, 0, width, height);
+            ctx.beginPath();
+            b_ctx.beginPath();
+            
+            for(var i = 0, len = index_data.length; i < len; i+=3){
+                ctx.moveTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);
+                ctx.lineTo(vertex_arr[index_data[i+1]*2], vertex_arr[index_data[i+1]*2+1]);
+                ctx.lineTo(vertex_arr[index_data[i+2]*2], vertex_arr[index_data[i+2]*2+1]);
+                ctx.lineTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);
+                
+                b_ctx.moveTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);
+                b_ctx.lineTo(vertex_arr[index_data[i+1]*2], vertex_arr[index_data[i+1]*2+1]);
+                b_ctx.lineTo(vertex_arr[index_data[i+2]*2], vertex_arr[index_data[i+2]*2+1]);
+                b_ctx.lineTo(vertex_arr[index_data[i]*2], vertex_arr[index_data[i]*2+1]);                                
+            }
+            
+            ctx.fillStyle = "#ff0000";
+            b_ctx.fillStyle = "#000000";
+            ctx.fill();
+            ctx.stroke();
+            b_ctx.fill();
+            b_ctx.stroke();            
+            
+        }
+
+        // vertex_data = mat4MultiVec3Arr(mvMatrix, vertex_data);
+        // setTranslation(mvMatrix, [0, 0, -5]);        
+        // mat4.scalar.scale(mvMatrix, mvMatrix, [0.5, 0.5, 0.5]);
+        perspective(pMatrix);
+                
+        var vertex_data2 = mat4MultiVec3Arr(mvMatrix, vertex_data);
+        vertex_data2 = mat4MultiVec4Arr(pMatrix, vertex_data2);                 
+        divScalar(vertex_data2);
+        render();
+        
+        // var count = 0;                    
+        // setInterval(render, 32);
+        
+        
+    })(this, 512, 512);
+</script>
+</html>
