@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>stringify</title>
+<script>
+    var test_obj = {
+        'name' : 'grandfather',
+        'age': 58,
+        'birthday': new Date(1958, 5, 5),
+        'sub_obj' : {
+            'name' : 'father',
+            'age': 33,
+            'birthday': new Date(1983, 7, 15),
+            'arr' : [3, [1,2,3,6], 9],
+            'arr2' : [3, {"val" : 6}, 9],
+            'subsub_obj' : {
+                'name' : 'son',
+                'age': 1,
+                'birthday': new Date(2015, 1, 20),
+                'arr' : [1, [1,2], 9],
+                'arr' : [1, {"val" : 2}, 3]
+            }
+        },
+        'arr' : [-1, [-1, 0, 1], 1],
+        'arr2' : [-1, {"val" : 0}, 1]
+    };
+</script>        
+</head>
+<body>
+    <script>
+
+function dateReviver(key, value) {
+    var a;
+    if (typeof value === 'string') {        
+        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+        if (a) {
+                return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
+                                +a[5], +a[6]));
+        }else{            
+            a = /^function/.exec(value);
+            if (a) {
+                return eval(a);
+            }            
+        }
+    }    
+    return value;
+};
+        
+var jsontext = '{ "hiredate": "2008-01-01T12:00:00Z", "birthdate": "2008-12-25T12:00:00Z" }';
+
+var tmp_str = JSON.stringify(test_obj);
+var dates = JSON.parse(tmp_str, dateReviver);
+document.write(dates.birthdate);
+
+    </script>
+</body>
+</html>

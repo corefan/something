@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="578" height="200" style="border:1px solid red";></canvas>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      var x = canvas.width / 4;
+      var y = canvas.height / 2;
+
+      context.strokeStyle="red";
+      context.moveTo(5,100);
+      context.lineTo(395,100);
+      context.stroke();
+      
+      context.font = '30pt Calibri';
+      context.font = 'bold 36pt Verdana';
+      context.textAlign = 'right';
+      context.textBaseline = 'bottom';
+      context.fillStyle = 'blue';
+      context.fillText('WHZTN', x, y);
+      
+      context.font = '30pt Calibri';
+      context.font = 'bold 36pt Verdana';      
+      context.textAlign = 'left';
+      context.textBaseline = 'middle';
+      context.fillStyle = 'green';
+      context.fillText('WHZTN', x, y);
+    </script>
+  </body>
+</html>      

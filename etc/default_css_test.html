@@ -1,0 +1,89 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>default css test</title>
+<style>
+    div, p{
+        border : 1px solid red;
+    }
+    .lh100{
+        line-height: 100%;
+    }
+    .lh16pt{
+        line-height: 16pt;
+    }
+    
+    .arial{
+        font-family: Arial;
+    }
+    .gothic{
+        font-family: Gothic;
+    }
+    .Georgia{
+        font-family: Georgia;
+    }
+    .Impact{
+        font-family: Impact;
+    }
+    .Verdana{
+        font-family: Verdana;
+    }
+    .initial{
+        font-family: initial;
+    }    
+        
+    
+</style>
+<script>    
+    function getDefaultStyle(evt){
+        var default_style_obj = window.getComputedStyle(evt.target, null );
+        var arr = "fontFamily,fontSize,lineHeight".split(",");
+        for(var i = 0, len = arr.length; i < len; i++){
+            ta.value += arr[i] + " : " + default_style_obj[arr[i]] + "\n";
+        }
+        ta.value += "\n";
+    }
+</script>
+</head>
+<body style="position:absolute; width:98%; height:95%;">
+
+    
+    <div style="position:absolute; top:5px; width:60%; height:300px; border: 3px solid green;">
+        << lineHeight: normal >>        
+        <div id="d0">default: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="arial" id="d1">arial: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="gothic" id="d2">gothic: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Georgia" id="d3">Georgia: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Impact" id="d4">Impact: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Verdana" id="d5">Verdana: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="initial" id="d5">initial: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+    </div>
+    <div class="lh100" style="position:absolute; top:350px; width:60%; height:250px; border: 3px solid blue;">
+        << lineHeight: 100% >>
+        <div id="d0">default: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="arial" id="d1">arial: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="gothic" id="d2">gothic: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Georgia" id="d3">Georgia: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Impact" id="d4">Impact: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Verdana" id="d5">Verdana: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="initial" id="d5">initial: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+    </div>
+    
+    <div class="lh16pt" style="position:absolute; top:650px; width:60%; height:320px; border: 3px solid black;">
+        << lineHeight: 16pt >>
+        <div id="d0">default: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="arial" id="d1">arial: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="gothic" id="d2">gothic: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Georgia" id="d3">Georgia: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Impact" id="d4">Impact: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="Verdana" id="d5">Verdana: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+        <div class="initial" id="d5">initial: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</div><br>
+    </div>
+    
+    <textarea id="ta" style="position:absolute; left:61%; width:30%; height:100%" ></textarea>
+</body>
+<script>
+    document.body.addEventListener("click", getDefaultStyle, false);    
+</script>
+</html>
