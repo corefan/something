@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+        #myCanvas{
+            border : 1px solid red;
+        }
+        #hiddenDiv{
+            position: absolute;
+            border : 1px solid blue;
+            left: -1700px;
+            top: -1700px;                        
+        }
+    </style>
+    <script>
+        function down(){
+            var imgData = context.getImageData(150, 150, 200, 200);
+            hiddenCV.width = 200;
+            hiddenCV.height = 200;            
+            var ctx = hiddenCV.getContext("2d");
+            ctx.putImageData(imgData, 0, 0);
+            imgdown.download = "suji_face";
+            imgdown.href = hiddenCV.toDataURL("image/jpeg");
+            imgdown.click();
+        }
+        
+        function colorReverse(){
+            var imgData = context.getImageData(150, 150, 200, 200);
+            for(var i = 0, len = imgData.data.length; i < len; i += 4){
+                imgData.data[i] = 255 - imgData.data[i];
+                imgData.data[i+1] = 255 - imgData.data[i+1];
+                imgData.data[i+2] = 255 - imgData.data[i+2];
+                imgData.data[i+3] = 255;
+            }
+            context.putImageData(imgData, 150, 150);
+        }
+    </script>
+</head>
+<body>
+    <div id="hiddenDiv">
+        <canvas id="hiddenCV" width="100" height="100"></canvas>
+        <a id='imgdown' href='#' download=''></a>        
+    </div>
+
+    <img src='http://172.10.14.81:9090/releaseTest/sj.jpg'><img>
+    <canvas id="myCanvas" width="512" height="512"></canvas><br><br>
+    <button onclick="down()">image down</button>
+    <button onclick="colorReverse()">color reverse</button>
+        
+    
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      var imageObj = new Image();
+
+      imageObj.onload = function() {
+        // draw cropped image
+        // var sourceX = 150;
+        // var sourceY = 0;
+        // var sourceWidth = 150;
+        // var sourceHeight = 150;
+        // var destWidth = sourceWidth;
+        // var destHeight = sourceHeight;
+        // var destX = canvas.width / 2 - destWidth / 2;
+        // var destY = canvas.height / 2 - destHeight / 2;
+
+        context.drawImage(imageObj, 250, 10, 200, 200, 150, 150, 200, 200);
+//        context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+      };
+      imageObj.src = 'http://172.10.14.81:9090/releaseTest/sj.jpg';
+    </script>
+</body>
+</html>  
