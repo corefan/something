@@ -17274,7 +17274,7 @@
         }
     };
 
-    function Uj(a, b, c, d, e)  // pss_render
+    function Uj(a, b, c, d, e)  // pss : render
     {
         // console.log("Uj");
         null === a.Nb && v.k("No div specified");
@@ -22042,15 +22042,25 @@
             var c = b.hy,
                 d = b.gy;
             d > c ? (a.scale(c / d, 1), a.translate((d - c) / 2, 0)) : c > d && (a.scale(1, d / c), a.translate(0, (c - d) / 2));
-            a.nu ? a.clip() : a.fill();
+            if(a.nu){
+                a.clip();
+            }else{
+                a.fill();
+            }                
             d > c ? (a.translate(-(d - c) / 2, 0), a.scale(1 / (c / d), 1)) : c > d && (a.translate(0, -(c - d) / 2), a.scale(1, 1 / (d / c)))
         } else {
-            a.nu ? a.clip() : a.fill();
+            if(a.nu){
+                a.clip();
+            }else{
+                console.log(a.filltype);
+                a.fill();
+            }
         }
     }
 
-    function Rl(a) // line
+    function Rl(a) // pss : line
     {
+//        console.log(a);
 //        a.nu || a.stroke()
     }
 
@@ -23871,7 +23881,7 @@
         G.prototype.Bv.call(this, a);
         for (var b = this.ya.n, c = b.length, d = 0; d < c; d++) b[d].Bv(a)
     };
-    g.ak = function (a, b)  // pss_render
+    g.ak = function (a, b)  // pss : render
     {
         // console.log("g.ak");
         if (this.ja === rj)
@@ -23957,7 +23967,7 @@
         }
     };
 
-    function Xm(a, b, c, d)  // pss_render
+    function Xm(a, b, c, d)  // pss : render
     {
         // console.log("Xm");
         for (var e = d.length, f = a.Z, h = c ? a.ed(0) : a.dd(0), k = 0; k < e; k++)
@@ -26562,7 +26572,7 @@
             v.sa(u)
         }
     }
-    X.prototype.ak = function (a, b)  // pss_render
+    X.prototype.ak = function (a, b)  // pss : render
     {
         // console.log("X.prototype.ak");
         if (null !== this.Bc || null !== this.sd)
@@ -28158,7 +28168,7 @@
         var c = a.Jg;
         null !== c && b.mu !== c && (b.font = c, b.mu = c)
     }
-    Bf.prototype.ak = function (a, b)  // pss_render
+    Bf.prototype.ak = function (a, b)  // pss : render
     {
         // console.log("Bf.prototype.ak");
         if (null !== this.Bc && 0 !== this.ke.length && null !== this.Jg)
