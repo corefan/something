@@ -2,7 +2,7 @@
 
 ##TOBESOFT UI component & framework
 - sample - http://121.134.99.171:8080/Career/index.html
--          예비 - http://121.134.99.168:9090/Career/index.html
+          예비 - http://121.134.99.168:9090/Career/index.html
 -          
 rolling button - http://121.134.99.168/Roller/index.html
 
