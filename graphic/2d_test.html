@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="ko">
+    <meta charset="UTF-8">
+    <title>2d cube</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=high-dpi "/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div style="position: absolute; left:0px; top:0px; width: 512px; height: 512px; border: 3px solid #eeeeee; overflow:hidden;">    
+	<canvas id="stage" width="512" height="512">
+	</canvas>
+</div>
+<!--<div style="position: absolute; left:30px; top:300px; width: 400px; height: 300px; border: 3px solid #eeeeee;">    
+    <video id="video" width="400px" height="300px"></video>
+</div>-->
+</body>
+<script>
+    (function(win, width, height){
+        var cv = document.getElementById("stage");
+        cv.width = width;
+        cv.height = height;
+        cv.parentNode.style.width = width + "px";
+        cv.parentNode.style.height = height + "px";
+
+        function getRotatePoint(angle, x, y){
+            x = x - Math.sin(angle/180*Math.PI)*x;
+            y = y - Math.cos(angle/180*Math.PI)*y;
+            
+            return {
+                "x" : x,
+                "y" : y
+            };        
+        }
+        var radian = Math.PI/180; 
+
+        var ctx = cv.getContext("2d");
+            
+
+        // ctx.transform(1, 30*radian, -30*radian, 1, 0, 0);
+        var sin, cos, angle;
+        angle = 30;
+        sin = Math.sin(angle/180*Math.PI);
+        cos = Math.cos(angle/180*Math.PI);
+
+
+        ctx.save();
+        ctx.translate(100, 100);
+        ctx.rotate(30*radian);
+        ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+        ctx.fillRect(0, 0, 100, 100);
+        ctx.restore();
+        
+        ctx.save();
+        ctx.translate(200, 200);
+        ctx.rotate(60*radian);
+        ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
+        ctx.fillRect(0, 0, 100, 100);
+        ctx.restore();
+
+
+        ctx.save();
+        ctx.transform(cos, sin, -sin, cos, 100, 100);
+        ctx.transform(cos, sin, -sin, cos, 0, 0);
+        ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
+        ctx.fillRect(0, 0, 100, 100);
+        ctx.restore();
+
+
+        angle = 60;
+        sin = Math.sin(angle/180*Math.PI);
+        cos = Math.cos(angle/180*Math.PI);
+        ctx.save();        
+        ctx.transform(cos, sin, -sin, cos, 200, 200);
+        ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
+        ctx.fillRect(0, 0, 100, 100);
+        ctx.restore();       
+        
+        ctx.save();
+        var rs = getRotatePoint(30, 256, 256);
+        ctx.fillStyle = "rgba(0, 192, 128, 0.5)";
+        ctx.fillRect(rs.x, rs.y, 100, 100);
+        ctx.restore();
+        
+        
+    })(this, 512, 512);
+</script>
+</html>

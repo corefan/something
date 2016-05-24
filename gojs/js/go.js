@@ -22052,7 +22052,6 @@
             if(a.nu){
                 a.clip();
             }else{
-                console.log(a.filltype);
                 a.fill();
             }
         }
@@ -26699,6 +26698,7 @@
                                     v.k("Segment not of valid type: " + x.ja)
                             }
                             x.Hh && a.closePath();
+                            console.log(x);                            
                             u = x
                         }
                         e ? (t = s = p = 0, m.ao ? (!0 === m.$l && null !== this.sd ? (Pl(a, this.sd), f = !0) : f = !1, 0 !== c && null !== this.Bc && (f && (p = a.shadowOffsetX, s = a.shadowOffsetY, t = a.shadowBlur, a.shadowOffsetX = 0, a.shadowOffsetY =
@@ -28822,8 +28822,20 @@
     function N(a, b, c, d, e, f)
     {
         null === a.o && v.k("StreamGeometryContext has been closed");
-        void 0 !== e && !0 === e ? (null === a.Tb && v.k("Need to call beginFigure first"), d = new Ed(rd), d.I = b, d.J = c, a.Tb.wb.add(d)) : (a.Tb = new Qc, a.Tb.Aa = b, a.Tb.xa = c, a.Tb.tt = d, a.o.Wb.add(a.Tb));
-        void 0 !== f && (a.Tb.ao = f)
+        if(void 0 !== e && !0 === e){
+            null === a.Tb && v.k("Need to call beginFigure first");
+            d = new Ed(rd);
+            d.I = b;
+            d.J = c;
+            a.Tb.wb.add(d);
+        } else{
+          a.Tb = new Qc;
+          a.Tb.Aa = b;
+          a.Tb.xa = c;
+          a.Tb.tt = d;
+          a.o.Wb.add(a.Tb);  
+        } 
+        void 0 !== f && (a.Tb.ao = f);
     }
 
     function P(a)
@@ -29017,7 +29029,10 @@
     };
     K.hl = function (a)
     {
-        for (var b = v.lb(), c = 1.5 * Math.PI, d = 0, e = 0; e < a; e++) d = 2 * Math.PI / a * e + c, b[e] = new w(.5 + .5 * Math.cos(d), .5 + .5 * Math.sin(d));
+        for (var b = v.lb(), c = 1.5 * Math.PI, d = 0, e = 0; e < a; e++){
+            d = 2 * Math.PI / a * e + c;
+            b[e] = new w(.5 + .5 * Math.cos(d), .5 + .5 * Math.sin(d));
+        }
         b.push(b[0]);
         return b
     };
@@ -29272,12 +29287,21 @@
             return b
         },
         DataTransmission: "Hexagon",
-        Hexagon: function (a, b, c)
+        Hexagon: function (a, b, c) // b - x size , c - y size
         {
-            var d = K.hl(6);
+            var d = K.hl(6); // make point
             a = v.q();
             N(a, d[0].x * b, d[0].y * c, !0);
-            for (var e = 1; 6 > e; e++) a.lineTo(d[e].x * b, d[e].y * c);
+            var pss = [];
+            for (var i = 0; i < 6; i++) {
+                pss.push(d[i].x * b, d[i].y * c);
+            }
+            // console.log(pss);
+            
+            for (var e = 1; 6 > e; e++) {
+                a.lineTo(d[e].x * b, d[e].y * c);
+
+            }
             v.sa(d);
             P(a);
             b = a.o;
